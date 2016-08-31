@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Quick Test Example" parallel="tests" thread-count="1">
+	<parameter name="browserUnderTest" value="chrome" />
+	<parameter name="environment" value="test" />
+	<parameter name="runLocation" value="local" />
+	<parameter name="browserVersion" value="" />
+	<parameter name="operatingSystem" value="windows" />
+ 	<test name="SampleTest">
+		<classes>
+			<class name="sandbox.SampleTest" />
+		</classes>
+	</test> 
+</suite> <!-- Suite -->

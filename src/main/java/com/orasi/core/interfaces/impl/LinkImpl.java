@@ -56,10 +56,12 @@ public class LinkImpl extends ElementImpl implements Link {
 		return getWrappedElement().getAttribute("href");
 	}
 
+	/*
 	@Override
 	public OrasiDriver getWrappedDriver() {
 		if (driver == null)
 			return getWrappedDriver();
 		return driver;
 	}
+	*/
 }
