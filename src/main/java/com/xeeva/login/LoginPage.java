@@ -26,9 +26,11 @@ public class LoginPage {
 	
 	public void verifyPageIsLoaded(){
 		
+		
+			
 	}
 	
 	public void login(){
-		
+			
 	}
 }
