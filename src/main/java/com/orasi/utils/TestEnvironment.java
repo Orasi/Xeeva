@@ -68,28 +68,6 @@ public class TestEnvironment {
 	 */
 	protected String seleniumHubURL = "http://10.238.242.50:4444/wd/hub";
 
-	/*
-	 * Sauce Labs Fields
-	 */
-
-	/**
-	 * Constructs a {@link com.saucelabs.common.SauceOnDemandAuthentication}
-	 * instance using the supplied user name/access key. To use the
-	 * authentication supplied by environment variables or from an external
-	 * file, use the no-arg
-	 * {@link com.saucelabs.common.SauceOnDemandAuthentication} constructor.
-	 */
-
-	protected SauceOnDemandAuthentication authentication = new SauceOnDemandAuthentication(
-			Base64Coder.decodeString(appURLRepository.getString("SAUCELABS_USERNAME")),
-			Base64Coder.decodeString(appURLRepository.getString("SAUCELABS_KEY")));
-
-	protected String sauceLabsURL = "http://" + authentication.getUsername() + ":" + authentication.getAccessKey()
-			+ "@ondemand.saucelabs.com:80/wd/hub";
-
-	/*
-	 * Constructors for TestEnvironment class
-	 */
 
 	public TestEnvironment() {
 	};
@@ -241,12 +219,7 @@ public class TestEnvironment {
 	 * Getter and setter for the Selenium Hub URL
 	 */
 	public String getRemoteURL() {
-		if (getRunLocation().equalsIgnoreCase("sauce") | getRunLocation().equalsIgnoreCase("remote"))
-			return sauceLabsURL;
-		else if (getRunLocation().equalsIgnoreCase("grid"))
-			return seleniumHubURL;
-		else
-			return "";
+		return seleniumHubURL;
 	}
 
 	protected void setSeleniumHubURL(String url) {
@@ -357,10 +330,6 @@ public class TestEnvironment {
 	 * test if reporting to sauce labs
 	 */
 	protected void endTest(String testName, ITestResult testResults) {
-		if (runLocation.equalsIgnoreCase("remote") | runLocation.equalsIgnoreCase("sauce")) {
-			endSauceTest(testResults.getStatus());
-		}
-
 		endTest(testName);
 	}
 
@@ -369,32 +338,9 @@ public class TestEnvironment {
 	 * before closing test if reporting to sauce labs
 	 */
 	protected void endTest(String testName, ITestContext testResults) {
-		if (runLocation.equalsIgnoreCase("remote") | runLocation.equalsIgnoreCase("sauce")) {
-			if (testResults.getFailedTests().size() == 0) {
-				endSauceTest(ITestResult.SUCCESS);
-			} else {
-				endSauceTest(ITestResult.FAILURE);
-			}
-		}
 		endTest(testName);
 	}
 
-	/*
-	 * Report end of run status to Sauce LAbs
-	 */
-	private void endSauceTest(int result) {
-		Map<String, Object> updates = new HashMap<String, Object>();
-		updates.put("name", getTestName());
-
-		if (result == ITestResult.FAILURE) {
-			updates.put("passed", false);
-		} else {
-			updates.put("passed", true);
-		}
-
-		SauceREST client = new SauceREST(authentication.getUsername(), authentication.getAccessKey());
-		client.updateJobInfo(driver.getSessionId().toString(), updates);
-	}
 
 	/**
 	 * Sets up the driver type, location, browser under test, os
@@ -434,7 +380,7 @@ public class TestEnvironment {
 				// Chrome
 				else if (getBrowserUnderTest().equalsIgnoreCase("Chrome")) {
 					file = new File(
-							this.getClass().getResource(Constants.DRIVERS_PATH_LOCAL + "ChromeDriver.exe").getPath());
+							this.getClass().getResource(Constants.DRIVERS_PATH_LOCAL + "chromedriver.exe").getPath());
 					System.setProperty("webdriver.chrome.driver", file.getAbsolutePath());
 					caps = DesiredCapabilities.chrome();
 
@@ -443,19 +389,7 @@ public class TestEnvironment {
 				else if (getBrowserUnderTest().equalsIgnoreCase("html")) {
 					caps = DesiredCapabilities.htmlUnitWithJs();
 				}
-				/*
-				 * else if (getBrowserUnderTest().equalsIgnoreCase("phantom")) {
-				 * caps = DesiredCapabilities.phantomjs();
-				 * caps.setCapability("ignoreZoomSetting", true);
-				 * caps.setCapability("enablePersistentHover", false); file =
-				 * new File(this.getClass().getResource(Constants.
-				 * DRIVERS_PATH_LOCAL+ "phantomjs.exe").getPath());
-				 * caps.setCapability(PhantomJSDriverService.
-				 * PHANTOMJS_EXECUTABLE_PATH_PROPERTY , file.getAbsolutePath());
-				 * driver = new PhantomJSDriver(caps);
-				 * 
-				 * }
-				 */
+
 				// Safari
 				else if (getBrowserUnderTest().equalsIgnoreCase("safari")) {
 					caps = DesiredCapabilities.safari();
@@ -547,33 +481,7 @@ public class TestEnvironment {
 				e.printStackTrace();
 			}
 
-		} else if (getRunLocation().equalsIgnoreCase("remote") | getRunLocation().equalsIgnoreCase("sauce")) {
-
-			caps = new DesiredCapabilities();
-			caps.setCapability(CapabilityType.BROWSER_NAME, getBrowserUnderTest());
-			if (getBrowserVersion() != null) {
-				caps.setCapability(CapabilityType.VERSION, getBrowserVersion());
-			}
-			caps.setCapability(CapabilityType.PLATFORM, getOperatingSystem());
-
-			if (getBrowserUnderTest().toLowerCase().contains("ie")
-					|| getBrowserUnderTest().toLowerCase().contains("iexplore")) {
-				caps.setCapability("ignoreZoomSetting", true);
-			}
-			caps.setCapability("name", getTestName());
-			URL sauceURL = null;
-			try {
-				sauceURL = new URL("http://" + authentication.getUsername() + ":" + authentication.getAccessKey()
-						+ "@ondemand.saucelabs.com:80/wd/hub");
-			} catch (MalformedURLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-			caps.setCapability("name", getTestName());
-			setDriver(new OrasiDriver(caps, sauceURL));
-
-		} else {
+		}  else {
 			throw new RuntimeException(
 					"Parameter for run [Location] was not set to 'Local', 'Grid', 'Sauce', or 'Remote'");
 		}

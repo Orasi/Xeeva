@@ -11,11 +11,11 @@ public class Constants {
     final static public int CURRENT_DAY = Calendar.getInstance().get(Calendar.DATE);
 	
     /** Location of the environment URLs properties file */
-    final static public String ENVIRONMENT_URL_PATH = "EnvironmentURLs";
+    final static public String ENVIRONMENT_URL_PATH = "environment_URL";
    		
     
     /** Location of the user credentials properties file */
-    final static public String USER_CREDENTIALS_PATH = "UserCredentials";
+    final static public String USER_CREDENTIALS_PATH = "user_credentials";
     
     final static public String SANDBOX_PATH = "/sandbox/";
     
