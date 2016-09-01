@@ -19,15 +19,14 @@ import com.xeeva.navigation.MainNav;
 
 
 public class SampleTest extends TestEnvironment{
-	
+
 	// **************
 	// Data Provider
 	// **************
 	@DataProvider(name = "dataScenario")
 	public Object[][] scenarios() {
 		try {
-			Object[][] excelData = new ExcelDataProvider("/datasheets/SampleTest.xlsx",
-					"Data").getTestData();
+			Object[][] excelData = new ExcelDataProvider("/datasheets/SampleTest.xlsx","Data").getTestData();
 			return excelData;
 		}
 		catch (RuntimeException e){
@@ -35,12 +34,10 @@ public class SampleTest extends TestEnvironment{
 		}
 		return new Object[][] {{}};
 	}
-	
-    @BeforeTest
-    @Parameters({ "runLocation", "browserUnderTest", "browserVersion",
-	    "operatingSystem", "environment" })
-    public void setup(@Optional String runLocation, String browserUnderTest,
-	    String browserVersion, String operatingSystem, String environment) {
+
+	@BeforeTest
+	@Parameters({ "runLocation", "browserUnderTest", "browserVersion","operatingSystem", "environment" })
+	public void setup(@Optional String runLocation, String browserUnderTest,String browserVersion, String operatingSystem, String environment) {
 		setApplicationUnderTest("XEEVA");
 		setBrowserUnderTest(browserUnderTest);
 		setBrowserVersion(browserVersion);
@@ -49,21 +46,21 @@ public class SampleTest extends TestEnvironment{
 		setTestEnvironment(environment);
 		testStart("Sample Test");
 	}
-    
-    @AfterTest
-    public void close(ITestContext testResults){
-    	endTest("TestAlert", testResults);
-    }
 
-    @Test(dataProvider = "dataScenario")
-    public void exampleMethod(String role, String location){
-    	
-    	LoginPage loginPage = new LoginPage(getDriver());
-    	loginPage.loginWithCredentials(role,location);
-    	
-    	MainNav mainNav = new MainNav(getDriver());
-    	TestReporter.assertTrue(mainNav.isLogoutDisplayed(), "Verify user is successfully logged in");
-    }
-    
+	@AfterTest
+	public void close(ITestContext testResults){
+		endTest("TestAlert", testResults);
+	}
+
+	@Test(dataProvider = "dataScenario")
+	public void exampleMethod(String role, String location){
+
+		LoginPage loginPage = new LoginPage(getDriver());
+		loginPage.loginWithCredentials(role,location);
+
+		MainNav mainNav = new MainNav(getDriver());
+		TestReporter.assertTrue(mainNav.isLogoutDisplayed(), "Verify user is successfully logged in");
+	}
+
 
 }

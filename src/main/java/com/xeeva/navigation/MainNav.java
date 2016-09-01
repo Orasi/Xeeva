@@ -26,6 +26,12 @@ public class MainNav {
 	/**Page Interactions**/
 	
 	public boolean isLogoutDisplayed(){
-		return lnkLogout.syncVisible(10, false);
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return lnkLogout.syncVisible(20, false);
 	}
 }
