@@ -2,6 +2,7 @@ package com.xeeva.navigation;
 
 import org.openqa.selenium.support.FindBy;
 
+import com.orasi.core.interfaces.Button;
 import com.orasi.core.interfaces.Link;
 import com.orasi.core.interfaces.Textbox;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
@@ -15,6 +16,8 @@ public class MainNav {
 	/**Page Elements**/
 	
 	@FindBy(linkText = "Logout") private Link lnkLogout;
+	@FindBy(id = "btnSaveCart") private Button btnSaveCart;
+	
 	
 	/**Constructor**/
 	
@@ -33,5 +36,18 @@ public class MainNav {
 			e.printStackTrace();
 		}
 		return lnkLogout.syncVisible(20, false);
+	}
+	
+	 // Method for Application Logout 
+		public void SaveCart(){
+			btnSaveCart.click();
+		}
+	
+	
+	 // Method for Application Logout 
+	public void clickLogout(){
+		isLogoutDisplayed();
+		lnkLogout.click();
+		SaveCart();
 	}
 }
