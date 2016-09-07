@@ -7,6 +7,7 @@ import com.orasi.core.interfaces.Link;
 import com.orasi.core.interfaces.Textbox;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
 import com.orasi.utils.OrasiDriver;
+import com.orasi.utils.TestReporter;
 
 public class MainNav {
 	
@@ -40,7 +41,12 @@ public class MainNav {
 	
 	 // Method for Application Logout 
 		public void SaveCart(){
-			btnSaveCart.click();
+			
+			if(btnSaveCart.isDisplayed()){
+				btnSaveCart.click();
+			}else{
+				TestReporter.logStep("Cart Empty to Save");
+			}
 		}
 	
 	
