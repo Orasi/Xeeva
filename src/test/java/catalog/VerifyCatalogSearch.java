@@ -23,6 +23,7 @@ import com.xeeva.navigation.MainNav;
  * @author  Lalitha Banda
  * @date 	06/09/2016
  *
+ *
  */
 
 public class VerifyCatalogSearch extends TestEnvironment {
