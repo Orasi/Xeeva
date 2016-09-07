@@ -56,6 +56,9 @@ public class RequisitioningPage {
 
 	// Cart Item  
 	@FindBy(xpath = ".//*[@id='tblMultiline']/tbody/tr[4]/td[1]/span")	private WebElement cartItem;
+	@FindBy(xpath = ".//*[@id='gvLocalSearch']/tbody/tr/td[2]/span/span")	private WebElement searchItem_local;
+	@FindBy(xpath = ".//*[@id='gvGlobalSearch']/tbody/tr/td[2]/span/span")	private WebElement searchItem_global;
+	@FindBy(xpath = ".//*[@id='gvBPOSearch']/tbody/tr/td[2]/span/span")	private WebElement searchItem_bpo;
 	
 	//Recent Orders,Rejected Orders tabs
 	@FindBy(id="aTab1") private Label lblRecentOrders;
@@ -66,6 +69,11 @@ public class RequisitioningPage {
 	
 	//RecentOrders table.
 	@FindBy(className="Datagridborder mainRecentOdersGrid") private Webtable tblRecentOrdersGrid;
+	@FindBy(id = "aSearchButton") private Link searchButton;
+	
+	// search tabs
+	@FindBy(id = "aTab2")	private Link globalItemsTab;
+	@FindBy(id = "aTab3")	private Link bpoItemsTab;
 	
 	/**Constructor**/
 	public RequisitioningPage(OrasiDriver driver){
@@ -168,4 +176,51 @@ public class RequisitioningPage {
 		
 		driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
 	}
+	
+	// Method to read // Clicks on Global Item Tab  from Search Result 
+	public String  get_SearchResultItem(WebElement inputElement){
+	  return inputElement.getText();
+	}
+	 
+	// This method to performs catalog search 
+	public void  perform_CatalogSearch(String searchItem){
+		catalogSearch.clear();
+		catalogSearch.safeSet(searchItem);
+		searchButton.click();
+		Sleeper.sleep(5000);
+
+	}
+	
+	// Method to Verify catalog Search Functionality
+		public void verify_SearchItems(String ItemType,String ItemNumber){
+			switch(ItemType){
+
+			case "local":
+				perform_CatalogSearch(ItemNumber);
+				System.out.println("Local : "+ItemNumber+":"+get_SearchResultItem(searchItem_local));
+				TestReporter.assertTrue(get_SearchResultItem(searchItem_local).trim().equalsIgnoreCase(ItemNumber), "Local Search Item verified !!");
+				break;
+
+			case "global": 
+				perform_CatalogSearch(ItemNumber);
+				globalItemsTab.syncVisible(5, false);
+				globalItemsTab.click();
+				System.out.println( "Global : " + ItemNumber+":"+get_SearchResultItem(searchItem_global));
+				TestReporter.assertTrue(get_SearchResultItem(searchItem_global).trim().equalsIgnoreCase(ItemNumber), "Global Search Item verified !!");
+				break;
+
+			case "bpo":
+				perform_CatalogSearch(ItemNumber);
+				bpoItemsTab.syncVisible(5, false);
+				bpoItemsTab.click();
+				System.out.println( "BPO : " +ItemNumber+":"+get_SearchResultItem(searchItem_bpo));
+				TestReporter.assertTrue(get_SearchResultItem(searchItem_bpo).trim().equalsIgnoreCase(ItemNumber), "BPO Search Item verified !!");
+				break;
+
+			default : System.out.println();
+
+			}
+		}
+	
+	
 }
