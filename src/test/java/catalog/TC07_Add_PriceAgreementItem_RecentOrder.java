@@ -8,6 +8,7 @@ import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
+import com.orasi.utils.Sleeper;
 import com.orasi.utils.TestEnvironment;
 import com.orasi.utils.TestReporter;
 import com.orasi.utils.dataProviders.ExcelDataProvider;
@@ -87,7 +88,8 @@ import com.xeeva.navigation.MainNav;
 			// Navigating to Recent Order Info page - to click on Requistion Cart link
 			RecentOrderInformationPage recentOrderInfoPage = new RecentOrderInformationPage(getDriver());
 			TestReporter.logStep("Navigating to Recent Order Information page.");
-			recentOrderInfoPage.clickItemNumberLink();
+			//recentOrderInfoPage.clickItemNumberLink();
+			Sleeper.sleep(8000);
 			
 			// Navigating to Item Details page - to add the Item to cart.
 			ItemDetailsPage itemDetailsPage = new ItemDetailsPage(getDriver());
