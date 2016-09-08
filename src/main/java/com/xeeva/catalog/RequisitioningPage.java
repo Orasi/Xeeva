@@ -26,6 +26,7 @@ public class RequisitioningPage {
 	private ResourceBundle userCredentialRepo = ResourceBundle.getBundle(Constants.USER_CREDENTIALS_PATH);
 
 	/**Page Elements**/
+	@FindBy(linkText = "Requisitioning")	private Link ReqTab;
 	@FindBy(id = "txtBasicSearchCriteria")	private Textbox catalogSearch;
 	@FindBy(id = "lnkCatalog")	private Link lnkCatalog;
 	@FindBy(id = "aSearchButton")	private Link searchButton;
@@ -45,6 +46,11 @@ public class RequisitioningPage {
 	@FindBy(id = "txtQuantity")	private Textbox txtQuantity;
 	@FindBy(id = "ddlUOM")	private Listbox unitOfMeasure;
 	@FindBy(id = "txtUnitPrice")private Textbox txtUnitPrice;
+	@FindBy(id = "txtUNSPSCCODE")private Textbox txtUNSPS;
+	@FindBy(id = "txtSuggestedSupplier")private Textbox txtSS;
+	@FindBy(id = "txtManufacturer")private Textbox txtMN;
+	@FindBy(id = "txtManufacturerPart")private Textbox txtMPN;
+	//txtManufacturer
 
 	// Cart Item  
 	@FindBy(xpath = ".//*[@id='tblMultiline']/tbody/tr[4]/td[1]/span")	private WebElement cartItem;
@@ -55,6 +61,7 @@ public class RequisitioningPage {
 	// search tabs
 	@FindBy(id = "aTab2")	private Link globalItemsTab;
 	@FindBy(id = "aTab3")	private Link bpoItemsTab;
+
 	/**Constructor**/
 
 	public RequisitioningPage(OrasiDriver driver){
@@ -67,6 +74,12 @@ public class RequisitioningPage {
 	}
 
 	/**Page Interactions**/
+
+	public void clcik_ReqTab(){
+		ReqTab.syncVisible(10, false);
+		ReqTab.click();
+		Sleeper.sleep(2000);
+	}
 
 	// Method to click on CreateSmartForm Link 
 	private void click_SmartFormRequest(){
@@ -99,12 +112,17 @@ public class RequisitioningPage {
 	}
 
 	// Method For Material Request Form
-	private void createMaterialRequest(String ID,String CategoryType ,String Category,String SubCategory,
-			String Quantity,String UOM,String Price){
+	private void createMaterialRequest(String ID,String UNSPS,String SS,String CategoryType ,String Category,String SubCategory,
+			String MN,String MPN,String Quantity,String UOM,String Price){
 		itemDescription.sendKeys(ID);
+		txtUNSPS.safeSet(UNSPS);
+		txtSS.safeSet(SS);
 		categoryType.select(CategoryType);
 		category.select(Category);
 		subCategory.select(SubCategory);
+		txtMN.safeSet(MN);
+		txtMN.click();
+		txtMPN.safeSet(MPN);
 		txtQuantity.safeSet(Quantity);
 		unitOfMeasure.select(UOM);
 		txtUnitPrice.safeSet(Price);
@@ -112,19 +130,21 @@ public class RequisitioningPage {
 
 
 	// This Method Generates Smart form Request
-	public void createSmartFormRequest(String RequisitionType,String ItemDescription,
-			String CategoryType,String Category,String SubCategory,String Quantity,String UnitofMeasure,String UnitPrice){
+	public void createSmartFormRequest(String RequisitionType,String ItemDescription,String UNSPS,String SS,
+			String CategoryType,String Category,String SubCategory,String MN,String MPN,String Quantity,String UnitofMeasure,String UnitPrice){
+		clcik_ReqTab();
 		click_SmartFormRequest();
 		selectRequisitionType(RequisitionType);
-		createMaterialRequest(ItemDescription,CategoryType,Category,SubCategory,Quantity,UnitofMeasure,UnitPrice );
+		createMaterialRequest(ItemDescription,UNSPS,SS,CategoryType,Category,SubCategory,MN,MPN,Quantity,UnitofMeasure,UnitPrice );
 		click_Submit();
+
 	}
 
-	// This Method Verifies Smart Form Item
+	/*// This Method Verifies Smart Form Item
 	public void Verify_SmartFormItem(String ItemDescription){
 		TestReporter.logStep("Expected : "+"["+cartItem.getText().trim()+"]"+"Actual : "+"["+ItemDescription.trim() +"]");
 		TestReporter.assertTrue(cartItem.getText().trim().contains(ItemDescription.trim()), "Smart Form Item is Verified !!");
-	}
+	}*/
 
 
 	// This method to performs catalog search 
@@ -136,7 +156,7 @@ public class RequisitioningPage {
 
 	}
 
-	// Method to read // Clicks on Global Item Tab  from Search Result 
+	 // Clicks on Global Item Tab  from Search Result 
 	public String  get_SearchResultItem(WebElement inputElement){
 		return inputElement.getText();
 	}
