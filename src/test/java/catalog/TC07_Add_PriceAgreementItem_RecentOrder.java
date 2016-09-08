@@ -32,7 +32,7 @@ import com.xeeva.navigation.MainNav;
 		@DataProvider(name = "dataScenario")
 		public Object[][] scenarios() {
 			try {
-				Object[][] excelData = new ExcelDataProvider("/datasheets/Catalog.xlsx","AddPriceAgreement").getTestData();
+				Object[][] excelData = new ExcelDataProvider("/datasheets/Catalog.xlsx","AddPriceAgrmnt_RecentOrder").getTestData();
 				return excelData;
 			}
 			catch (RuntimeException e){
@@ -88,8 +88,8 @@ import com.xeeva.navigation.MainNav;
 			// Navigating to Recent Order Info page - to click on Requistion Cart link
 			RecentOrderInformationPage recentOrderInfoPage = new RecentOrderInformationPage(getDriver());
 			TestReporter.logStep("Navigating to Recent Order Information page.");
-			//recentOrderInfoPage.clickItemNumberLink();
-			Sleeper.sleep(8000);
+			recentOrderInfoPage.clickItemNumberLink();
+			//Sleeper.sleep(8000);
 			
 			// Navigating to Item Details page - to add the Item to cart.
 			ItemDetailsPage itemDetailsPage = new ItemDetailsPage(getDriver());
