@@ -79,7 +79,7 @@ public class CreateSmartFormRequest extends TestEnvironment{
 		RequisitioningPage reqPage = new RequisitioningPage(getDriver());
 
 		TestReporter.logStep("Navigating to requisition Tab");
-		reqPage.clcik_ReqTab();
+		reqPage.click_ReqTab();
 
 		TestReporter.logStep("Creating Smart Form Request");
 		reqPage.createSmartFormRequest( RequisitionType,ItemDescription, UNSPSCCode,SS,CategoryType, Category, SubCategory,MN,MPN, 

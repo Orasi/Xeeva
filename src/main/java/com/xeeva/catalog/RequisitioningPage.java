@@ -1,13 +1,17 @@
 package com.xeeva.catalog;
 
+import java.util.List;
 import java.util.ResourceBundle;
-
+import java.util.concurrent.TimeUnit;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import com.orasi.core.interfaces.Button;
+import com.orasi.core.interfaces.Label;
 import com.orasi.core.interfaces.Link;
 import com.orasi.core.interfaces.Listbox;
 import com.orasi.core.interfaces.Textbox;
+import com.orasi.core.interfaces.Webtable;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
 import com.orasi.utils.Constants;
 import com.orasi.utils.OrasiDriver;
@@ -25,7 +29,7 @@ public class RequisitioningPage {
 	private OrasiDriver driver = null;
 	private ResourceBundle userCredentialRepo = ResourceBundle.getBundle(Constants.USER_CREDENTIALS_PATH);
 
-	/**Page Elements**/
+	//**Page Elements**//*
 	@FindBy(linkText = "Requisitioning")	private Link ReqTab;
 	@FindBy(id = "txtBasicSearchCriteria")	private Textbox catalogSearch;
 	@FindBy(id = "lnkCatalog")	private Link lnkCatalog;
@@ -62,7 +66,14 @@ public class RequisitioningPage {
 	@FindBy(id = "aTab2")	private Link globalItemsTab;
 	@FindBy(id = "aTab3")	private Link bpoItemsTab;
 
-	/**Constructor**/
+	//RecentOrders table.
+	@FindBy(className="Datagridborder mainRecentOdersGrid") private Webtable tblRecentOrdersGrid;
+
+	//Recent Orders,Rejected Orders tabs
+	@FindBy(id="aTab1") private Label lblRecentOrders;
+	@FindBy(id="aTab5") private Label lblRejectedOrders;
+
+	//**Constructor**//*
 
 	public RequisitioningPage(OrasiDriver driver){
 		this.driver = driver;
@@ -73,9 +84,9 @@ public class RequisitioningPage {
 		catalogSearch.syncVisible(20, false);
 	}
 
-	/**Page Interactions**/
+	//**Page Interactions**//*
 
-	public void clcik_ReqTab(){
+	public void click_ReqTab(){
 		ReqTab.syncVisible(10, false);
 		ReqTab.click();
 		Sleeper.sleep(2000);
@@ -132,7 +143,7 @@ public class RequisitioningPage {
 	// This Method Generates Smart form Request
 	public void createSmartFormRequest(String RequisitionType,String ItemDescription,String UNSPS,String SS,
 			String CategoryType,String Category,String SubCategory,String MN,String MPN,String Quantity,String UnitofMeasure,String UnitPrice){
-		clcik_ReqTab();
+		click_ReqTab();
 		click_SmartFormRequest();
 		selectRequisitionType(RequisitionType);
 		createMaterialRequest(ItemDescription,UNSPS,SS,CategoryType,Category,SubCategory,MN,MPN,Quantity,UnitofMeasure,UnitPrice );
@@ -140,11 +151,11 @@ public class RequisitioningPage {
 
 	}
 
-	/*// This Method Verifies Smart Form Item
+	// This Method Verifies Smart Form Item
 	public void Verify_SmartFormItem(String ItemDescription){
 		TestReporter.logStep("Expected : "+"["+cartItem.getText().trim()+"]"+"Actual : "+"["+ItemDescription.trim() +"]");
 		TestReporter.assertTrue(cartItem.getText().trim().contains(ItemDescription.trim()), "Smart Form Item is Verified !!");
-	}*/
+	}
 
 
 	// This method to performs catalog search 
@@ -156,7 +167,7 @@ public class RequisitioningPage {
 
 	}
 
-	 // Clicks on Global Item Tab  from Search Result 
+	// Clicks on Global Item Tab  from Search Result 
 	public String  get_SearchResultItem(WebElement inputElement){
 		return inputElement.getText();
 	}
@@ -193,5 +204,35 @@ public class RequisitioningPage {
 		}
 	}
 
+	
+	// This method clicks on Recent Orders tab. - Author[Praveen]
+	public void clickRecentOrdersTab(){
+		lblRecentOrders.syncVisible(5, false);
+		lblRecentOrders.click();
+	}
+
+	// This method clicks on Requisition cart link # which has only REQ Number. - Author[Praveen]
+	public void clickRequisitionCartLink(){
+		clickRecentOrdersTab();
+		tblRecentOrdersGrid.syncVisible();
+		List<WebElement> getRows = driver.findElements(By.xpath("//*[@class='Datagridborder mainRecentOdersGrid']/tbody/tr"));
+		int rowsCount = getRows.size();
+		System.out.println("Total rows in RecentOrders Grid table: "+ rowsCount);
+
+		for(int row=1; row<=rowsCount; row++){
+			String getRFQValue = driver.findElement(By.xpath("//*[@id='gvRecentOdersGrid']/tbody/tr["+ row +"]/td[4]/span")).getText();
+			System.out.println("RFQ Value is: " + getRFQValue);
+
+			if(getRFQValue.isEmpty()){
+				System.out.println("Clicked on the cart link which has no RFQ value.");
+				driver.findElement(By.xpath("//*[@id='gvRecentOdersGrid']/tbody/tr["+ row +"]/td[1]")).click();
+				break;
+			}
+		}
+
+		driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+	}
+
 
 }
+
