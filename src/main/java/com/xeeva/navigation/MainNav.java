@@ -21,7 +21,7 @@ public class MainNav {
 	private OrasiDriver driver = null;
 
 	/**Page Elements**/
-	
+
 	@FindBy(linkText = "Logout") private Link lnkLogout;
 	@FindBy(id = "btnSaveCart") private Button btnSaveCart;
 	@FindBy(id = "lnkShowPopup") private Link lnkCartItem;
@@ -32,6 +32,12 @@ public class MainNav {
 	@FindBy(id = "txtUnitPrice")private Textbox txtUnitPrice;
 	@FindBy(id = "btnSubmit")	private Button btnSubmit;
 	@FindBy(xpath = ".//*[@id='txtItem']")	private Textbox itemDescription;
+
+	// Update Cart Items - before adding to cart
+	@FindBy(xpath = ".//*[@id='tblItemDetails']/tbody/tr[2]/td[2]/input") private Textbox txtQuantityRFQ;
+	@FindBy(xpath = ".//*[@id='tblItemDetails']/tbody/tr[1]/td[4]/select") private Listbox unitOfMeasureRFQ;
+	@FindBy(xpath = ".//*[@id='tblItemDetails']/tbody/tr[1]/td[2]/input[1]")private Textbox txtUnitPriceRFQ;
+	@FindBy(xpath = ".//*[@id='tblItemDetails']/tbody/tr[2]/td[2]/a/div") private Button btnAddToCart;
 
 
 	/**Constructor**/
@@ -127,6 +133,7 @@ public class MainNav {
 
 		// Verification - Smart Form Item Added to Cart
 		verify_CartItem(ItemDescription,cartItemRows.size());
+
 		// Verification - Smart form Item Updated with Quantity, UOM and UnitPrice
 		verify_UpdateCart(UnitPrice,UOM,Quantity,cartItemRows.size() );
 
@@ -139,4 +146,6 @@ public class MainNav {
 		lnkLogout.click();
 		SaveCart();
 	}
+
+
 }

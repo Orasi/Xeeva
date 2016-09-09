@@ -72,6 +72,8 @@ public class RequisitioningPage {
 	//Recent Orders,Rejected Orders tabs
 	@FindBy(id="aTab1") private Label lblRecentOrders;
 	@FindBy(id="aTab5") private Label lblRejectedOrders;
+	@FindBy(xpath="//tr/td/table/tbody/tr/td/table/tbody/tr/td[4]/a") private List<WebElement> ItemLinks;
+	//
 
 	//**Constructor**//*
 
@@ -204,7 +206,7 @@ public class RequisitioningPage {
 		}
 	}
 
-	
+
 	// This method clicks on Recent Orders tab. - Author[Praveen]
 	public void clickRecentOrdersTab(){
 		lblRecentOrders.syncVisible(5, false);
@@ -212,7 +214,9 @@ public class RequisitioningPage {
 	}
 
 	// This method clicks on Requisition cart link # which has only REQ Number. - Author[Praveen]
-	public void clickRequisitionCartLink(){
+	// Updated - by adding method argument (ItemType) - lalitha
+
+	public void clickRequisitionCartLink(String ItemTpye){
 		clickRecentOrdersTab();
 		tblRecentOrdersGrid.syncVisible();
 		List<WebElement> getRows = driver.findElements(By.xpath("//*[@class='Datagridborder mainRecentOdersGrid']/tbody/tr"));
@@ -223,15 +227,22 @@ public class RequisitioningPage {
 			String getRFQValue = driver.findElement(By.xpath("//*[@id='gvRecentOdersGrid']/tbody/tr["+ row +"]/td[4]/span")).getText();
 			System.out.println("RFQ Value is: " + getRFQValue);
 
-			if(getRFQValue.isEmpty()){
+			if(getRFQValue.isEmpty()&& ItemTpye.equalsIgnoreCase("PAI")){
 				System.out.println("Clicked on the cart link which has no RFQ value.");
 				driver.findElement(By.xpath("//*[@id='gvRecentOdersGrid']/tbody/tr["+ row +"]/td[1]")).click();
 				break;
+
+			}else if(getRFQValue!=null && !getRFQValue.isEmpty() && ItemTpye.equalsIgnoreCase("NPAI")){
+				driver.findElement(By.xpath("//*[@id='gvRecentOdersGrid']/tbody/tr["+ row +"]/td[1]")).click();
+				break;
+			}else{
+				TestReporter.logStep("Selected item having no REQ orRFQ values !!");
 			}
 		}
 
 		driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
 	}
+
 
 
 }
