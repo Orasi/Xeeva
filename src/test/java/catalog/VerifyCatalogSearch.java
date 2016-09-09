@@ -72,6 +72,7 @@ public class VerifyCatalogSearch extends TestEnvironment {
 		// Perform catalog Search 
 		TestReporter.logStep("Navigating to Requisitioning Page to Perform Catalog Search");
 		RequisitioningPage reqPage = new RequisitioningPage(getDriver());
+		reqPage.click_ReqTab();
 		reqPage.perform_CatalogSearch(searchItem);
 
 		// Navigating to Local Items Tab 
