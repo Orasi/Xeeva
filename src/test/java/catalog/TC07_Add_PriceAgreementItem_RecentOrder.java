@@ -72,7 +72,7 @@ import com.xeeva.navigation.MainNav;
 		 * @param role,location,selectUOM
 		 */
 		@Test(dataProvider = "dataScenario")
-		public void smartForm(String role, String location,String selectUOM){
+		public void smartForm(String role, String location,String selectUOM,String PAItem,String NPAItem,String ID,String UP,String Qty ){
 			
 			// Application Login 
 			LoginPage loginPage = new LoginPage(getDriver());
@@ -83,7 +83,7 @@ import com.xeeva.navigation.MainNav;
 			RequisitioningPage reqPage = new RequisitioningPage(getDriver());
 			TestReporter.logStep("Navigating to the Requisitioning Page.");
 			reqPage.click_ReqTab();
-			reqPage.clickRequisitionCartLink();
+			reqPage.clickRequisitionCartLink(PAItem);
 			
 			// Navigating to Recent Order Info page - to click on Requistion Cart link
 			RecentOrderInformationPage recentOrderInfoPage = new RecentOrderInformationPage(getDriver());
