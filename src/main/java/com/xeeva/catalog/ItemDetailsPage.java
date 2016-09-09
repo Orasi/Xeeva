@@ -43,7 +43,10 @@ import com.orasi.utils.TestReporter;
 
 		/**Page Interactions**/
 
-		//Method to click on ItemNumber link
+		/**
+		 * @summary: Method to click on ItemNumber link
+		 * @author: Praveen Namburi, @version: Created 08-09-2016,@param strUOMValue
+		 */
 		public void selectUOMValueAndAddItemToCart(String strUOMValue){
 			lstSelectUOM.select(strUOMValue);
 			btnAddToCart.syncEnabled();
@@ -51,7 +54,7 @@ import com.orasi.utils.TestReporter;
 			Sleeper.sleep(2000);
 			lblCartItemAddedMessage.syncVisible(15, false);
 			String getCartItemAddedMessage = lblCartItemAddedMessage.getText();
-			//System.out.println("Message after adding item to cart : "+ getCartItemAddedMessage);
+			System.out.println("Message after adding item to cart : "+ getCartItemAddedMessage);
 			TestReporter.assertTrue(getCartItemAddedMessage.contains("Item added successfully!"), "Item added to the cart.");
 		}
 		

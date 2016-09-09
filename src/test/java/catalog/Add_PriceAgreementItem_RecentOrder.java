@@ -22,7 +22,7 @@ import com.xeeva.navigation.MainNav;
  * @Summary: To verify that requestor is able to add the price agreement item from recent order list. 
  * @author praveen varma, @version: Created 07-09-2016
  */
- public class TC07_Add_PriceAgreementItem_RecentOrder extends TestEnvironment{
+ public class Add_PriceAgreementItem_RecentOrder extends TestEnvironment{
 		
 	 public String RequisitionType = "serviceRequestGeneral";
 		
@@ -68,11 +68,11 @@ import com.xeeva.navigation.MainNav;
 		}
 		
 		/**
-		 * @Description: Main business-logic of the application resides here.
+		 * @Description: Main business-logic of the test-case resides here.
 		 * @param role,location,selectUOM
 		 */
 		@Test(dataProvider = "dataScenario")
-		public void smartForm(String role, String location,String selectUOM){
+		public void add_PriceAgreementItem_RecentOrder(String role, String location,String selectUOM){
 			
 			// Application Login 
 			LoginPage loginPage = new LoginPage(getDriver());
