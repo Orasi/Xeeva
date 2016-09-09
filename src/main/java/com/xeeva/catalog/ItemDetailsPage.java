@@ -44,9 +44,12 @@ public class ItemDetailsPage {
 
 	/**Page Interactions**/
 
-	//Method to click on ItemNumber link
+
+	/**
+	 * @summary: Method to click on ItemNumber link
+	 * @author: Praveen Namburi, @version: Created 08-09-2016,@param strUOMValue
+	 */
 	public void selectUOMValueAndAddItemToCart(String strUOMValue){
-		// Verifies UOM before adding item to cart
 		if(lstSelectUOM.isDisplayed()){
 			lstSelectUOM.select(strUOMValue);
 			btnAddToCart.jsClick();
@@ -57,9 +60,10 @@ public class ItemDetailsPage {
 			TestReporter.assertTrue(getCartItemAddedMessage.contains("added successfully!"), "Item added to the cart.");
 		}else{
 			TestReporter.logStep("Selected Item is Price aggrement Item!!");
+
 		}
 
+
+
 	}
-
 }
-
