@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
 
-import org.omg.CORBA.LocalObject;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -78,6 +77,7 @@ public class RequisitioningPage {
 	//Recent Orders,Rejected Orders tabs
 	@FindBy(id="aTab1") private Label lblRecentOrders;
 	@FindBy(id="aTab5") private Label lblRejectedOrders;
+	@FindBy(xpath="//tr/td/table/tbody/tr/td/table/tbody/tr/td[4]/a") private List<WebElement> ItemLinks;
 
 	//SelectUOMValue,AddToCartItemsGrid
 	@FindBy(xpath="//select[@class='textFieldList width90Px']") private Listbox lstSelectUOMValue;
@@ -86,7 +86,7 @@ public class RequisitioningPage {
 	@FindBy(xpath="//table[@id='gvGlobalSearch']/tbody/tr/td[2]/span") private List<WebElement> globalItemsGrid;
 	@FindBy(xpath="//a[@id='aTab1']/span[2]") private Label lblLocalItems;
 	@FindBy(xpath="//a[@id='aTab2']/span") private Label lblGlobalItems;
-	
+		
 	//**Constructor**//*
 
 	public RequisitioningPage(OrasiDriver driver){
@@ -103,7 +103,7 @@ public class RequisitioningPage {
 	public void click_ReqTab(){
 		ReqTab.syncVisible(10, false);
 		ReqTab.click();
-		Sleeper.sleep(3000);
+		Sleeper.sleep(2000);
 	}
 
 	// Method to click on CreateSmartForm Link 
@@ -218,7 +218,7 @@ public class RequisitioningPage {
 		}
 	}
 
-	
+
 	// This method clicks on Recent Orders tab. - Author[Praveen]
 	public void clickRecentOrdersTab(){
 		lblRecentOrders.syncVisible(5, false);
@@ -226,7 +226,9 @@ public class RequisitioningPage {
 	}
 
 	// This method clicks on Requisition cart link # which has only REQ Number. - Author[Praveen]
-	public void clickRequisitionCartLink(){
+	// Updated - by adding method argument (ItemType) - lalitha
+
+	public void clickRequisitionCartLink(String ItemTpye){
 		clickRecentOrdersTab();
 		tblRecentOrdersGrid.syncVisible();
 		List<WebElement> getRows = driver.findElements(By.xpath("//*[@class='Datagridborder mainRecentOdersGrid']/tbody/tr"));
@@ -237,10 +239,16 @@ public class RequisitioningPage {
 			String getRFQValue = driver.findElement(By.xpath("//*[@id='gvRecentOdersGrid']/tbody/tr["+ row +"]/td[4]/span")).getText();
 			System.out.println("RFQ Value is: " + getRFQValue);
 
-			if(getRFQValue.isEmpty()){
+			if(getRFQValue.isEmpty()&& ItemTpye.equalsIgnoreCase("PAI")){
 				System.out.println("Clicked on the cart link which has no RFQ value.");
 				driver.findElement(By.xpath("//*[@id='gvRecentOdersGrid']/tbody/tr["+ row +"]/td[1]")).click();
 				break;
+
+			}else if(getRFQValue!=null && !getRFQValue.isEmpty() && ItemTpye.equalsIgnoreCase("NPAI")){
+				driver.findElement(By.xpath("//*[@id='gvRecentOdersGrid']/tbody/tr["+ row +"]/td[1]")).click();
+				break;
+			}else{
+				TestReporter.logStep("Selected item having no REQ orRFQ values !!");
 			}
 		}
 
@@ -319,25 +327,6 @@ public class RequisitioningPage {
 		}else{
 			TestReporter.log(" 'No Records Found !!' in Global Items tab.");
 		}
-		
-		/*String localvalue = getLocalItemsCount.replaceAll("()", "");
-		System.out.println(localvalue);*/
-
-		/*driver.findElement(By.id("aTab1")).click();
-		
-		List<WebElement> localItems= driver.findElements(By.xpath(".//*[@id='gvLocalSearch']/tbody/tr/td/span"));
-		if(localItems.size()>0){
-			for(WebElement inputItem :localItems){
-				ItemNumber = inputItem.getText();
-				break;
-			}
-		}else{
-			TestReporter.logStep("No Records Found !!");
-		}
-		*/
-			
-		
-		//System.out.println(""+getLocalItemsNum);
 		
 	}
 }

@@ -8,7 +8,6 @@ import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-import com.orasi.utils.Sleeper;
 import com.orasi.utils.TestEnvironment;
 import com.orasi.utils.TestReporter;
 import com.orasi.utils.dataProviders.ExcelDataProvider;
@@ -19,12 +18,14 @@ import com.xeeva.login.LoginPage;
 import com.xeeva.navigation.MainNav;
 
 /**
- * @Summary: To verify that requestor is able to add the price agreement item from recent order list. 
- * @author praveen varma, @version: Created 07-09-2016
+ * @summary Test To add non price agreement from recent orders list
+ * @author  Lalitha Banda
+ * @version	08/09/2016
+ * *
  */
-public class Add_PriceAgreementItem_RecentOrder extends TestEnvironment{
 
-	public String RequisitionType = "serviceRequestGeneral";
+public class AddNonPriceAgreementItem_FromRecentOrders extends TestEnvironment{
+
 
 	// **************
 	// Data Provider
@@ -41,11 +42,7 @@ public class Add_PriceAgreementItem_RecentOrder extends TestEnvironment{
 		return new Object[][] {{}};
 	}
 
-	/**
-	 * @description: To initialize the driver and setup the environment.
-	 * @param runLocation,browserUnderTest,@param browserVersion
-	 * @param operatingSystem,@param environment
-	 */
+
 	@BeforeTest
 	@Parameters({ "runLocation", "browserUnderTest", "browserVersion","operatingSystem", "environment" })
 	public void setup(@Optional String runLocation, String browserUnderTest,String browserVersion, String operatingSystem, String environment) {
@@ -55,50 +52,40 @@ public class Add_PriceAgreementItem_RecentOrder extends TestEnvironment{
 		setOperatingSystem(operatingSystem);
 		setRunLocation(runLocation);
 		setTestEnvironment(environment);
-		testStart("Add_PriceAgreementItem_InCart");
+		testStart("AddingNonPriceAgreement");
 	}
 
-	/**
-	 * @description: Close the driver instance.
-	 * @param testResults
-	 */
 	@AfterTest
 	public void close(ITestContext testResults){
 		endTest("TestAlert", testResults);
 	}
 
-	/**
-	 * @Description: Main business-logic of the test-case resides here.
-	 * @param role,location,selectUOM
-	 */
 	@Test(dataProvider = "dataScenario")
-	public void add_PriceAgreementItem_RecentOrder(String role, String location,String selectUOM,String PAI,String NPAI,String ID,String UP,String Qty){
+	public void smartForm(String role, String location,String selectUOM,String PAItem,String NPAItem,String ID,String UP,String Qty){
 
 		// Application Login 
+		TestReporter.logStep("Login into application");
 		LoginPage loginPage = new LoginPage(getDriver());
-		TestReporter.logStep("Launch the application and Login with valid Requestor credentials");
 		loginPage.loginWithCredentials(role,location);
 
 		// Requisition Page  - Navigating to requisition page to create Smart Form Request
 		RequisitioningPage reqPage = new RequisitioningPage(getDriver());
 		TestReporter.logStep("Navigating to the Requisitioning Page.");
 		reqPage.click_ReqTab();
-		reqPage.clickRequisitionCartLink(PAI);
+		reqPage.clickRequisitionCartLink(NPAItem);
 
-		// Navigating to Recent Order Info page - to click on Requistion Cart link
 		RecentOrderInformationPage recentOrderInfoPage = new RecentOrderInformationPage(getDriver());
 		TestReporter.logStep("Navigating to Recent Order Information page.");
-		recentOrderInfoPage.clickItemNumberLink();
-		//Sleeper.sleep(8000);
+		recentOrderInfoPage.clcik_RecentOrderItemLink();
 
 		// Navigating to Item Details page - to add the Item to cart.
 		ItemDetailsPage itemDetailsPage = new ItemDetailsPage(getDriver());
 		TestReporter.logStep("Navigating to Item Details page.");
 		itemDetailsPage.selectUOMValueAndAddItemToCart(selectUOM);
 
-		// Application Logout
+	    // Application Logout
+		TestReporter.logStep("Application Logout");
 		MainNav mainNav = new MainNav(getDriver());
-		TestReporter.logStep("Log-Out of the application.");
 		mainNav.clickLogout();
 
 	}
