@@ -72,8 +72,10 @@ public class RequisitioningPage {
 	//Recent Orders,Rejected Orders tabs
 	@FindBy(id="aTab1") private Label lblRecentOrders;
 	@FindBy(id="aTab5") private Label lblRejectedOrders;
-	@FindBy(xpath="//tr/td/table/tbody/tr/td/table/tbody/tr/td[4]/a") private List<WebElement> ItemLinks;
-	//
+	@FindBy(xpath="//tr/td/table/tbody/tr/td/table/tbody/tr/td[4]/a") 
+	private List<WebElement> ItemLinks;
+	
+	
 
 	//**Constructor**//*
 
