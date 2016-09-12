@@ -67,6 +67,7 @@ public class MainNav {
 	public void clickCartItemsLink(){
 		Sleeper.sleep(2000);
 		lnkCartItem.syncVisible(10, false);
+		lnkCartItem.isEnabled();
 		lnkCartItem.click();
 		Sleeper.sleep(2000);
 	}
