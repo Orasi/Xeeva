@@ -50,24 +50,45 @@ public class ItemDetailsPage {
 
 	/**Page Interactions**/
 
-
-	/**
-	 * @summary: Method to click on ItemNumber link
-	 * @author: Praveen Namburi, @version: Created 08-09-2016,@param strUOMValue
-	 */
-	public void selectUOMValueAndAddItemToCart(String strUOMValue){
-		if(lstSelectUOM.isDisplayed()){
-			lstSelectUOM.select(strUOMValue);
-			btnAddToCart.jsClick();
-			Sleeper.sleep(2000);
-			lblCartItemAddedMessage.syncVisible(15, false);
-			String getCartItemAddedMessage = lblCartItemAddedMessage.getText();
-			TestReporter.logStep("Message after adding item to cart : "+ getCartItemAddedMessage);
-			TestReporter.assertTrue(getCartItemAddedMessage.contains("added successfully!"), "Item added to the cart.");
-		}else{
-			TestReporter.logStep("Selected Item is Price aggrement Item!!");
-
+		/**
+		 * @summary: Method to add Price Agreement Item to Cart.
+		 * @author: Praveen Namburi, @version: Created 08-09-2016
+		 */
+		public void addPriceAgrmntItemToCart(){
+			btnAddToCart.syncEnabled();
+			btnAddToCart.click();
 		}
+		public void selectUOMValueAndAddItemToCart(String strUOMValue){
+			if(lstSelectUOM.isDisplayed()){
+				lstSelectUOM.select(strUOMValue);
+				btnAddToCart.jsClick();
+				Sleeper.sleep(2000);
+				lblCartItemAddedMessage.syncVisible(15, false);
+				String getCartItemAddedMessage = lblCartItemAddedMessage.getText();
+				System.out.println("Message after adding item to cart : "+ getCartItemAddedMessage);
+				TestReporter.assertTrue(getCartItemAddedMessage.contains("added successfully!"), "Item added to the cart.");
+		}
+		
+		/**
+		  * @summary: Method to select UOMValue and Add-Item-To-Cart for Non-Price agreement item.
+		  * @author: Praveen Namburi, @version: Created 09-09-2016,@param strUOMValue
+		  *//*
+		 public void selectUOMValueAndAddItemToCart(String strUOMValue){
+		  if(lstSelectUOM.isDisplayed()){
+			   lstSelectUOM.select(strUOMValue);
+			   btnAddToCart.jsClick();
+			   Sleeper.sleep(2000);
+			   lblCartItemAddedMessage.syncVisible(15, false);
+			   String getCartItemAddedMessage = lblCartItemAddedMessage.getText();
+			   TestReporter.logStep("Message after adding item to cart : "+ getCartItemAddedMessage);
+			   TestReporter.assertTrue(getCartItemAddedMessage.contains("added successfully!"), "Item added to the cart.");
+		  }else{
+			   TestReporter.logStep("Selected Item is Price aggrement Item!!");
+
+		  }
+		
+	     }*/
+		 
 	}
 
 	// Method modify Item details - Global Search Records

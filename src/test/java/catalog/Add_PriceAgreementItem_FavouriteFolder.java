@@ -1,29 +1,23 @@
 package catalog;
 
-import org.testng.ITestContext;
-import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-import com.orasi.utils.Sleeper;
 import com.orasi.utils.TestEnvironment;
 import com.orasi.utils.TestReporter;
 import com.orasi.utils.dataProviders.ExcelDataProvider;
-import com.xeeva.catalog.ItemDetailsPage;
-import com.xeeva.catalog.RecentOrderInformationPage;
 import com.xeeva.catalog.RequisitioningPage;
 import com.xeeva.login.LoginPage;
-import com.xeeva.navigation.MainNav;
 
 /**
- * @Summary: To verify that requestor is able to add the price agreement item from recent order list. 
- * @author praveen varma, @version: Created 07-09-2016
+ * @Summary: To verify that requestor is able to add the non price agreement item from favorite list. 
+ * @author praveen varma, @version: Created 08-09-2016
  */
- public class TC07_Add_PriceAgreementItem_RecentOrder extends TestEnvironment{
-		
+ public class Add_PriceAgreementItem_FavouriteFolder extends TestEnvironment {
+			
 	 public String RequisitionType = "serviceRequestGeneral";
 		
 		// **************
@@ -32,7 +26,7 @@ import com.xeeva.navigation.MainNav;
 		@DataProvider(name = "dataScenario")
 		public Object[][] scenarios() {
 			try {
-				Object[][] excelData = new ExcelDataProvider("/datasheets/Catalog.xlsx","AddPriceAgrmnt_RecentOrder").getTestData();
+				Object[][] excelData = new ExcelDataProvider("/datasheets/Catalog.xlsx","AddPriceAgrmnt_FavFolder").getTestData();
 				return excelData;
 			}
 			catch (RuntimeException e){
@@ -62,17 +56,17 @@ import com.xeeva.navigation.MainNav;
 		 * @description: Close the driver instance.
 		 * @param testResults
 		 */
-		@AfterTest
+		/*@AfterTest
 		public void close(ITestContext testResults){
 			endTest("TestAlert", testResults);
-		}
+		}*/
 		
 		/**
-		 * @Description: Main business-logic of the application resides here.
+		 * @Description: Main business-logic of the test-case resides here.
 		 * @param role,location,selectUOM
 		 */
 		@Test(dataProvider = "dataScenario")
-		public void smartForm(String role, String location,String selectUOM,String PAItem,String NPAItem,String ID,String UP,String Qty ){
+		public void addPriceAgreementItemInCompareScreen(String role, String location,String strUOMValue){
 			
 			// Application Login 
 			LoginPage loginPage = new LoginPage(getDriver());
@@ -81,26 +75,17 @@ import com.xeeva.navigation.MainNav;
 			
 			// Requisition Page  - Navigating to requisition page to create Smart Form Request
 			RequisitioningPage reqPage = new RequisitioningPage(getDriver());
-			TestReporter.logStep("Navigating to the Requisitioning Page.");
+			TestReporter.logStep("Navigate to Requisitioning Page and add Price agreement items"
+					+ " from Favourite folder.");
 			reqPage.click_ReqTab();
-			reqPage.clickRequisitionCartLink(PAItem);
-			
-			// Navigating to Recent Order Info page - to click on Requistion Cart link
-			RecentOrderInformationPage recentOrderInfoPage = new RecentOrderInformationPage(getDriver());
-			TestReporter.logStep("Navigating to Recent Order Information page.");
-			recentOrderInfoPage.clickItemNumberLink();
-			//Sleeper.sleep(8000);
-			
-			// Navigating to Item Details page - to add the Item to cart.
-			ItemDetailsPage itemDetailsPage = new ItemDetailsPage(getDriver());
-			TestReporter.logStep("Navigating to Item Details page.");
-			itemDetailsPage.selectUOMValueAndAddItemToCart(selectUOM);
-			
-			// Application Logout
+			reqPage.clickShowFavouriteItems();
+			reqPage.addPriceAgreementItemsFromFavFolder(strUOMValue);
+
+			/*// Application Logout
 			MainNav mainNav = new MainNav(getDriver());
 			TestReporter.logStep("Log-Out of the application.");
-			mainNav.clickLogout();
+			mainNav.clickLogout();*/
 			
 		}
-		
-	}
+			
+   }
