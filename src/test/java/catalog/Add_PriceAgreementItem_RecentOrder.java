@@ -95,7 +95,8 @@ public class Add_PriceAgreementItem_RecentOrder extends TestEnvironment{
 		// Navigating to Item Details page - to add the Item to cart.
 		ItemDetailsPage itemDetailsPage = new ItemDetailsPage(getDriver());
 		TestReporter.logStep("Navigating to Item Details page.");
-		itemDetailsPage.selectUOMValueAndAddItemToCart(selectUOM);
+		TestReporter.logStep("Add price agreement to cart and Verify it.");
+		itemDetailsPage.addPriceAgreementItemToCart_And_Verify();
 
 		// Application Logout
 		MainNav mainNav = new MainNav(getDriver());

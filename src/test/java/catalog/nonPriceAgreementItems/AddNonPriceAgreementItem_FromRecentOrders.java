@@ -81,7 +81,7 @@ public class AddNonPriceAgreementItem_FromRecentOrders extends TestEnvironment{
 		// Navigating to Item Details page - to add the Item to cart.
 		ItemDetailsPage itemDetailsPage = new ItemDetailsPage(getDriver());
 		TestReporter.logStep("Navigating to Item Details page.");
-		itemDetailsPage.selectUOMValueAndAddItemToCart(selectUOM);
+		itemDetailsPage.selectUOMValueAndAddNonPriceItemToCart(selectUOM);
 
 	    // Application Logout
 		TestReporter.logStep("Application Logout");
