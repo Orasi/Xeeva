@@ -80,31 +80,7 @@ import com.xeeva.login.LoginPage;
 			reqPage.click_ReqTab();
 			reqPage.clickShowFavouriteItems();
 			reqPage.addPriceAgreementItemsFromFavFolder(strUOMValue);
-			
-			//reqPage.perform_CatalogSearch(searchItem);
-			//reqPage.verify_SearchItems(ItemType, itemNumber);
-			
-			/*//Navigate to Local-Items page and Add-Item to Cart.
-			LocalItemsTab localItemsPage = new LocalItemsTab(getDriver());
-			TestReporter.logStep("Navigate to Local-Items page and Add-Item-To-Cart.");
-			localItemsPage.addItemToCartAndVerify();
-			localItemsPage.clickCartItemsLink();*/
-			
-			/*//Navigate to CartInformation page and Verify Added item Unit-Price is not editable.
-			CartInformationPage cartInfoPage = new CartInformationPage(getDriver());
-			TestReporter.logStep("Navigate to Local-Items page and Add-Item-To-Cart.");
-			cartInfoPage.verifyUnitPriceIsNotEditable(itemNumber);*/
-			
-		/*	// Navigating to Recent Order Info page - to click on Requistion Cart link
-			RecentOrderInformationPage recentOrderInfoPage = new RecentOrderInformationPage(getDriver());
-			TestReporter.logStep("Navigating to Recent Order Information page.");
-			//recentOrderInfoPage.clickItemNumberLink();
-			
-			// Navigating to Item Details page - to add the Item to cart.
-			ItemDetailsPage itemDetailsPage = new ItemDetailsPage(getDriver());
-			TestReporter.logStep("Navigating to Item Details page.");
-			itemDetailsPage.selectUOMValueAndAddItemToCart(selectUOM);*/
-			
+
 			/*// Application Logout
 			MainNav mainNav = new MainNav(getDriver());
 			TestReporter.logStep("Log-Out of the application.");

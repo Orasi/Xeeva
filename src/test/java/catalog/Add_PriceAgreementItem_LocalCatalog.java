@@ -93,16 +93,6 @@ import com.xeeva.login.LoginPage;
 			TestReporter.logStep("Navigate to Local-Items page and Add-Item-To-Cart.");
 			cartInfoPage.verifyUnitPriceIsNotEditable(itemNumber);
 			
-		/*	// Navigating to Recent Order Info page - to click on Requistion Cart link
-			RecentOrderInformationPage recentOrderInfoPage = new RecentOrderInformationPage(getDriver());
-			TestReporter.logStep("Navigating to Recent Order Information page.");
-			//recentOrderInfoPage.clickItemNumberLink();
-			
-			// Navigating to Item Details page - to add the Item to cart.
-			ItemDetailsPage itemDetailsPage = new ItemDetailsPage(getDriver());
-			TestReporter.logStep("Navigating to Item Details page.");
-			itemDetailsPage.selectUOMValueAndAddItemToCart(selectUOM);*/
-			
 			/*// Application Logout
 			MainNav mainNav = new MainNav(getDriver());
 			TestReporter.logStep("Log-Out of the application.");
