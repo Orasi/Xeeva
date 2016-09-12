@@ -24,7 +24,7 @@ import com.xeeva.catalog.SearchItems.GlobalItemsTab;
 import com.xeeva.catalog.SearchItems.LocalItemsTab;
 
 
-*//**
+ *//**
  * @summary This page contains requisitioning page objects
  * @author  Lalitha Banda
  *
@@ -87,7 +87,7 @@ public class RequisitioningPage {
 	@FindBy(xpath="//table[@id='gvGlobalSearch']/tbody/tr/td[2]/span") private List<WebElement> globalItemsGrid;
 	@FindBy(xpath="//a[@id='aTab1']/span[2]") private Label lblLocalItems;
 	@FindBy(xpath="//a[@id='aTab2']/span") private Label lblGlobalItems;
-		
+
 	//**Constructor**//*
 
 	public RequisitioningPage(OrasiDriver driver){
@@ -256,7 +256,7 @@ public class RequisitioningPage {
 		driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
 	}
 
-	*//**
+	 *//**
 	 * @summary: Method to click on Show Favourite items.
 	 * @author: Praveen Namburi, @version: Created 09-09-2016
 	 *//*
@@ -266,25 +266,25 @@ public class RequisitioningPage {
 		Sleeper.sleep(4000);
 	}
 
-	*//**
-	 * @summary: Method to add price agreement from favourite folder.
-	 * @author: Praveen Namburi,@version: Created 09-09-2016
-	 * @param strUOMValue
-	 *//*
+	  *//**
+	  * @summary: Method to add price agreement from favourite folder.
+	  * @author: Praveen Namburi,@version: Created 09-09-2016
+	  * @param strUOMValue
+	  *//*
 	public void addPriceAgreementItemsFromFavFolder(String strUOMValue){
 		String getLocalItemsCount = lblLocalItems.getText();
 		TestReporter.log("Local-Items Count is: "+ getLocalItemsCount);
-		
+
 		String getGlobalItemsCount = lblGlobalItems.getText();
 		TestReporter.log("Global-Items Count is: "+ getGlobalItemsCount);
-		
+
 		if(!getLocalItemsCount.contains("0")){
 			TestReporter.log("Click on Local-Items tab.");
 			LocalItemsTab localItem = new LocalItemsTab(driver);
 			localItem.click_localItemsTab();
 			String itemNumber = null;
 			List<WebElement> localItems = localItemsGrid;
-			
+
 			for(WebElement inputItem : localItems){
 				  itemNumber = inputItem.getText();
 				  System.out.println("Item number is: "+itemNumber);
@@ -302,12 +302,12 @@ public class RequisitioningPage {
 		}else if(getLocalItemsCount.contains("0")){
 			TestReporter.log(" 'No Records Found !!' in Local Items tab. "
 					+ "Searching for Global items.");
-			
+
 		}else if(!getGlobalItemsCount.contains("0")){
 			TestReporter.log("Click on Global-Items tab.");
 			GlobalItemsTab globalItem = new GlobalItemsTab(driver);
 			globalItem.click_GlobalItemsTab();
-			
+
 			String itemNumber = null;
 			List<WebElement> globalItems = globalItemsGrid;
 			for(WebElement inputItem : globalItems){
@@ -324,11 +324,11 @@ public class RequisitioningPage {
 					}
 				  break;
 			}
-			
+
 		}else{
 			TestReporter.log(" 'No Records Found !!' in Global Items tab.");
 		}
-		
+
 	}
 }
 
@@ -422,12 +422,12 @@ public class RequisitioningPage {
 	@FindBy(xpath="//a[@id='aTab1']/span[2]") private Label lblLocalItems;
 	@FindBy(xpath="//a[@id='aTab2']/span") private Label lblGlobalItems;
 	@FindBy(xpath="//*[@class='Datagridborder mainRecentOdersGrid']/tbody/tr") private List<WebElement> mainRecentOdersGrid;
-	
+
 	@FindBy(linkText = "lnkShowPopup") private Link lnkCartItem;
 	@FindBy(xpath = "//*[@class='RecentOrderDetailsGrid ']/tbody/tr[2]/td[4]/a") private Link lnkItemNumber;
 	@FindBy(xpath = ".//*[@class='RecentOrderDetailsGrid']/tbody/tr") private List<WebElement> RecentOrderDetailsGrid;
 	@FindBy(name = "ButtonClose") private Button btnBack;
-			
+
 	/*//**Page Elements**//*
 	@FindBy(linkText = "Requisitioning")	private Link ReqTab;
 	@FindBy(id = "txtBasicSearchCriteria")	private Textbox catalogSearch;
@@ -472,7 +472,7 @@ public class RequisitioningPage {
 	@FindBy(id="aTab1") private Label lblRecentOrders;
 	@FindBy(id="aTab5") private Label lblRejectedOrders;
 	@FindBy(xpath="//tr/td/table/tbody/tr/td/table/tbody/tr/td[4]/a") private List<WebElement> ItemLinks;*/
-	
+
 
 	//**Constructor**//*
 
@@ -605,33 +605,46 @@ public class RequisitioningPage {
 		}
 	}
 
-
-	// This method clicks on Recent Orders tab. - Author[Praveen]
+	/**
+	 * @summary: Method to click on Recent Orders tab.
+	 * @Author: Praveen Namburi,@version: Created 07-09-2016
+	 */
 	public void clickRecentOrdersTab(){
 		lblRecentOrders.syncVisible(5, false);
 		lblRecentOrders.click();
 	}
 
-	// This method clicks on Requisition cart link # which has only REQ Number. - Author[Praveen]
-	// Updated - by adding method argument (ItemType) - lalitha
-
-	public void clickRequisitionCartLink(String ItemTpye){
+	/**
+	 * @summary: Method to click on Requisition cart link # which has only REQ Number.
+	 * @Author: Praveen Namburi,@version: Created 07-09-2016
+	 * @param ItemTpye
+	 * @return getREQValue
+	 */
+	public String  clickRequisitionCartLink(String ItemTpye){
+		String returnValue = null;
 		clickRecentOrdersTab();
 		tblRecentOrdersGrid.syncVisible();
-		List<WebElement> getRows = mainRecentOdersGrid;
+		List<WebElement> getRows = driver.findElements(By.xpath("//*[@class='Datagridborder mainRecentOdersGrid']/tbody/tr"));
 		int rowsCount = getRows.size();
 		System.out.println("Total rows in RecentOrders Grid table: "+ rowsCount);
 
 		for(int row=1; row<=rowsCount; row++){
-			String getRFQValue = driver.findElement(By.xpath("//*[@id='gvRecentOdersGrid']/tbody/tr["+ row +"]/td[4]/span")).getText();
+			String getRFQValue = driver.findElement(By.xpath("//*[@id='gvRecentOdersGrid']/tbody/"
+					+ "tr["+ row +"]/td[4]/span")).getText();
 
 			if(getRFQValue.isEmpty()&& ItemTpye.equalsIgnoreCase("PAI")){
+				String getREQValue = driver.findElement(By.xpath("//*[@id='gvRecentOdersGrid']/tbody"
+						+ "/tr["+ row +"]/td[3]/span")).getText();
+
 				System.out.println("Clicked on the cart link which has no RFQ value.");
-				driver.findElement(By.xpath("//*[@id='gvRecentOdersGrid']/tbody/tr["+ row +"]/td[1]")).click();
+				driver.findElement(By.xpath("//*[@id='gvRecentOdersGrid']/tbody/"
+						+ "tr["+ row +"]/td[1]")).click();
+				returnValue = getREQValue;
 				break;
 
 			}else if(getRFQValue!=null && !getRFQValue.isEmpty() && ItemTpye.equalsIgnoreCase("NPAI")){
-				driver.findElement(By.xpath("//*[@id='gvRecentOdersGrid']/tbody/tr["+ row +"]/td[1]")).click();
+				driver.findElement(By.xpath("//*[@id='gvRecentOdersGrid']/tbody/"
+						+ "tr["+ row +"]/td[1]")).click();
 				break;
 			}else{
 				TestReporter.logStep("Selected item having no REQ orRFQ values !!");
@@ -639,8 +652,10 @@ public class RequisitioningPage {
 		}
 
 		driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+
+		return returnValue;
 	}
-	
+
 	/**
 	 * @summary: Method to click on Show Favourite items.
 	 * @author: Praveen Namburi, @version: Created 09-09-2016
@@ -659,57 +674,57 @@ public class RequisitioningPage {
 	public void addPriceAgreementItemsFromFavFolder(String strUOMValue){
 		String getLocalItemsCount = lblLocalItems.getText();
 		TestReporter.log("Local-Items Count is: "+ getLocalItemsCount);
-		
+
 		String getGlobalItemsCount = lblGlobalItems.getText();
 		TestReporter.log("Global-Items Count is: "+ getGlobalItemsCount);
-		
+
 		if(!getLocalItemsCount.contains("0")){
 			TestReporter.log("Click on Local-Items tab.");
 			LocalItemsTab localItem = new LocalItemsTab(driver);
 			localItem.click_localItemsTab();
 			String itemNumber = null;
 			List<WebElement> localItems = localItemsGrid;
-			
+
 			for(WebElement inputItem : localItems){
-				  itemNumber = inputItem.getText();
-				  System.out.println("Item number is: "+itemNumber);
-				  lstSelectUOMValue.select(strUOMValue);
-				  List<WebElement> localAddToCartItemLinks = lstAddToCartItemsGrid;
-					if(localAddToCartItemLinks.size()>0){
-						for(WebElement linkAddToCartItem :localAddToCartItemLinks){
-							TestReporter.log("Click on 'Add-To-Cart' link.");
-							linkAddToCartItem.click();
-							break;
-						}
+				itemNumber = inputItem.getText();
+				System.out.println("Item number is: "+itemNumber);
+				lstSelectUOMValue.select(strUOMValue);
+				List<WebElement> localAddToCartItemLinks = lstAddToCartItemsGrid;
+				if(localAddToCartItemLinks.size()>0){
+					for(WebElement linkAddToCartItem :localAddToCartItemLinks){
+						TestReporter.log("Click on 'Add-To-Cart' link.");
+						linkAddToCartItem.click();
+						break;
 					}
-				  break;
+				}
+				break;
 			}
 		}else if(getLocalItemsCount.contains("0")){
 			TestReporter.log(" 'No Records Found !!' in Local Items tab. "
 					+ "Searching for Global items.");
-			
+
 		}else if(!getGlobalItemsCount.contains("0")){
 			TestReporter.log("Click on Global-Items tab.");
 			GlobalItemsTab globalItem = new GlobalItemsTab(driver);
 			globalItem.click_GlobalItemsTab();
-			
+
 			String itemNumber = null;
 			List<WebElement> globalItems = globalItemsGrid;
 			for(WebElement inputItem : globalItems){
-				  itemNumber = inputItem.getText();
-				  System.out.println("Item number is: "+itemNumber);
-				  lstSelectUOMValue.select(strUOMValue);
-				  List<WebElement> globalAddToCartItemLinks = lstAddToCartItemsGrid;
-					if(globalAddToCartItemLinks.size()>0){
-						for(WebElement linkAddToCartItem :globalAddToCartItemLinks){
-							TestReporter.log("Click on 'Add-To-Cart' link.");
-							linkAddToCartItem.click();
-							break;
-						}
+				itemNumber = inputItem.getText();
+				System.out.println("Item number is: "+itemNumber);
+				lstSelectUOMValue.select(strUOMValue);
+				List<WebElement> globalAddToCartItemLinks = lstAddToCartItemsGrid;
+				if(globalAddToCartItemLinks.size()>0){
+					for(WebElement linkAddToCartItem :globalAddToCartItemLinks){
+						TestReporter.log("Click on 'Add-To-Cart' link.");
+						linkAddToCartItem.click();
+						break;
 					}
-				  break;
+				}
+				break;
 			}				
-       }
-  
+		}
+
 	}
 }

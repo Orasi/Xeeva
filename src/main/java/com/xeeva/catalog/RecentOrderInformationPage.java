@@ -72,8 +72,8 @@ public class RecentOrderInformationPage {
 		//Method to click on ItemNumber link
 		public void clickItemNumberLink(){
 			pageLoaded();
-			lnkItemNumber.syncVisible(10, false);
-			//lnkItemNumber.isEnabled();
+			driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+			lnkItemNumber.syncVisible(5, false);
 			lnkItemNumber.click();
 			Sleeper.sleep(2000);
 			//driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
@@ -95,7 +95,7 @@ public class RecentOrderInformationPage {
 			}
 		}
 
-		//Method to click on ItemNumber link
+		/*//Method to click on ItemNumber link
 		public void clickItemNumbrLink(String itemNumber){
 			pageLoaded();
 			Sleeper.sleep(2000);
@@ -112,8 +112,37 @@ public class RecentOrderInformationPage {
 				break;
 			}
 			
+		}*/
+		
+		/**
+		 * @Summary: Method to click on Price Agreement Item link from Recent Orders page
+		 * @param REQValue
+		 */
+		public void clickPAItemLinkFromRecentOrders(String REQValue){
+			pageLoaded();
+			Sleeper.sleep(2000);
+			List<WebElement> getRecentOrderRows = driver.findElements(By.xpath("//table[@class='RecentOrderDetailsGrid ']/tbody/tr"));
+			int getRecentOrdRowsCount = getRecentOrderRows.size();
+			
+			for(int rows=2; rows<=getRecentOrdRowsCount; rows++){
+				List<WebElement> getREQValues = driver.findElements(By.xpath("//table[@class='RecentOrderDetailsGrid ']/tbody/tr[" + rows + "]/td[1]/span"));
+				for(WebElement getREQValue : getREQValues){
+					if(getREQValue.getText().trim().contains(REQValue)){
+						List<WebElement> itemNumberLinks = driver.findElements(By.xpath("//table[@class='RecentOrderDetailsGrid ']/tbody/tr[" + rows + "]/td[4]/a"));
+						for(WebElement itemNumLink : itemNumberLinks ){
+							String getItemNumLink = itemNumLink.getText();
+							TestReporter.log("Clicking on Item Number link for Price agreement item : " + getItemNumLink);
+							itemNumLink.click();
+							Sleeper.sleep(3000);
+							break;
+						}
+						break;
+					}
+				}
+			}
+			driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
 		}
-	
+			
 		/**
 		 * @summary: Method to click on Show Favourite items.
 		 * @author: Praveen Namburi, @version: Created 09-09-2016
