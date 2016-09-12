@@ -1,8 +1,11 @@
 package com.xeeva.catalog;
 
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import com.orasi.core.interfaces.Link;
@@ -11,6 +14,7 @@ import com.orasi.core.interfaces.impl.internal.ElementFactory;
 import com.orasi.utils.Constants;
 import com.orasi.utils.OrasiDriver;
 import com.orasi.utils.Sleeper;
+import com.orasi.utils.TestReporter;
 
 /**
  * @summary This page contains Recent Order Information page objects.
@@ -46,12 +50,21 @@ public class RecentOrderInformationPage {
 		}
 
 		//Method to click on ItemNumber link
-		public void clickItemNumberLink(){
+		public void clickItemNumberLink(String itemNumber){
 			pageLoaded();
-			lnkItemNumber.syncVisible(10, false);
-			//lnkItemNumber.isEnabled();
-			lnkItemNumber.click();
 			Sleeper.sleep(2000);
-			//driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+			List<WebElement> itemNumberLinks = driver.findElements(By.xpath("//td[@class='DataGridrowa whiteSpaceNoWrap']/a"));
+			int itemNumberLinksCount = itemNumberLinks.size();
+			System.out.println("Total no. of item number links found: "+itemNumberLinksCount);
+			
+			for(WebElement itemNumLink : itemNumberLinks ){
+				String getItemNumber = itemNumLink.getText();
+				TestReporter.log("Click on Item Number : "+getItemNumber);
+				if(getItemNumber.trim().equalsIgnoreCase(itemNumber))
+				itemNumLink.click();
+				Sleeper.sleep(3000);
+				break;
+			}
+			
 		}
 }
