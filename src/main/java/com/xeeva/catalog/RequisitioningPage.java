@@ -338,10 +338,13 @@ package com.xeeva.catalog;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+
 import com.orasi.core.interfaces.Button;
+import com.orasi.core.interfaces.Element;
 import com.orasi.core.interfaces.Label;
 import com.orasi.core.interfaces.Link;
 import com.orasi.core.interfaces.Listbox;
@@ -352,6 +355,8 @@ import com.orasi.utils.Constants;
 import com.orasi.utils.OrasiDriver;
 import com.orasi.utils.Sleeper;
 import com.orasi.utils.TestReporter;
+import com.xeeva.catalog.SearchItems.GlobalItemsTab;
+import com.xeeva.catalog.SearchItems.LocalItemsTab;
 
 
 /**
@@ -365,6 +370,65 @@ public class RequisitioningPage {
 	private ResourceBundle userCredentialRepo = ResourceBundle.getBundle(Constants.USER_CREDENTIALS_PATH);
 
 	//**Page Elements**//*
+	@FindBy(linkText = "Requisitioning")	private Link ReqTab;
+	@FindBy(id = "txtBasicSearchCriteria")	private Textbox catalogSearch;
+	@FindBy(id = "lnkCatalog")	private Link lnkCatalog;
+	@FindBy(id = "aSearchButton")	private Link searchButton;
+	@FindBy(xpath = ".//*[@id='searchBoxArea']/table/tbody/tr/td[3]/div[2]/a")	private Link smartFormRequest;
+	@FindBy(id = "btnSubmit")	private Button btnSubmit;
+	@FindBy(css=".fa.fa-star.fa-2x.cursor-pointer") private Link lnkShowFavItems;
+
+
+	// Requisition Type
+	@FindBy(linkText = "Catalog Spot Buy Request")	private Link catalogSpotBuyRequest;
+	@FindBy(linkText = "Service Request - General")	private Link serviceRequestGeneral;
+
+	// Material Request	
+	@FindBy(xpath = ".//*[@id='txtItem']")	private Textbox itemDescription;
+	@FindBy(id = "ddlMainCategory")	private Listbox categoryType;
+	@FindBy(id = "ddlCategory")	private Listbox category;
+	@FindBy(id = "ddlSubCategory")	private Listbox subCategory;
+	@FindBy(id = "txtQuantity")	private Textbox txtQuantity;
+	@FindBy(id = "ddlUOM")	private Listbox unitOfMeasure;
+	@FindBy(id = "txtUnitPrice")private Textbox txtUnitPrice;
+	@FindBy(id = "txtUNSPSCCODE")private Textbox txtUNSPS;
+	@FindBy(id = "txtSuggestedSupplier")private Textbox txtSS;
+	@FindBy(id = "txtManufacturer")private Textbox txtMN;
+	@FindBy(id = "txtManufacturerPart")private Textbox txtMPN;
+	//txtManufacturer
+
+	// Cart Item  
+	@FindBy(xpath = ".//*[@id='tblMultiline']/tbody/tr[4]/td[1]/span")	private WebElement cartItem;
+	@FindBy(xpath = ".//*[@id='gvLocalSearch']/tbody/tr/td[2]/span/span")	private WebElement searchItem_local;
+	@FindBy(xpath = ".//*[@id='gvGlobalSearch']/tbody/tr/td[2]/span/span")	private WebElement searchItem_global;
+	@FindBy(xpath = ".//*[@id='gvBPOSearch']/tbody/tr/td[2]/span/span")	private WebElement searchItem_bpo;
+
+	// search tabs
+	@FindBy(id = "aTab2")	private Link globalItemsTab;
+	@FindBy(id = "aTab3")	private Link bpoItemsTab;
+
+	//RecentOrders table.
+	@FindBy(className="Datagridborder mainRecentOdersGrid") private Webtable tblRecentOrdersGrid;
+
+	//Recent Orders,Rejected Orders tabs
+	@FindBy(id="aTab1") private Label lblRecentOrders;
+	@FindBy(id="aTab5") private Label lblRejectedOrders;
+
+	//SelectUOMValue,AddToCartItemsGrid
+	@FindBy(xpath="//select[@class='textFieldList width90Px']") private Listbox lstSelectUOMValue;
+	@FindBy(xpath="//td[@class='vAlignMiddle textAlignLeft']/a/div") private List<WebElement> lstAddToCartItemsGrid;
+	@FindBy(xpath="//table[@id='gvLocalSearch']/tbody/tr/td[2]/span") private List<WebElement> localItemsGrid;
+	@FindBy(xpath="//table[@id='gvGlobalSearch']/tbody/tr/td[2]/span") private List<WebElement> globalItemsGrid;
+	@FindBy(xpath="//a[@id='aTab1']/span[2]") private Label lblLocalItems;
+	@FindBy(xpath="//a[@id='aTab2']/span") private Label lblGlobalItems;
+	@FindBy(xpath="//*[@class='Datagridborder mainRecentOdersGrid']/tbody/tr") private List<WebElement> mainRecentOdersGrid;
+	
+	@FindBy(linkText = "lnkShowPopup") private Link lnkCartItem;
+	@FindBy(xpath = "//*[@class='RecentOrderDetailsGrid ']/tbody/tr[2]/td[4]/a") private Link lnkItemNumber;
+	@FindBy(xpath = ".//*[@class='RecentOrderDetailsGrid']/tbody/tr") private List<WebElement> RecentOrderDetailsGrid;
+	@FindBy(name = "ButtonClose") private Button btnBack;
+			
+	/*//**Page Elements**//*
 	@FindBy(linkText = "Requisitioning")	private Link ReqTab;
 	@FindBy(id = "txtBasicSearchCriteria")	private Textbox catalogSearch;
 	@FindBy(id = "lnkCatalog")	private Link lnkCatalog;
@@ -407,8 +471,8 @@ public class RequisitioningPage {
 	//Recent Orders,Rejected Orders tabs
 	@FindBy(id="aTab1") private Label lblRecentOrders;
 	@FindBy(id="aTab5") private Label lblRejectedOrders;
-	@FindBy(xpath="//tr/td/table/tbody/tr/td/table/tbody/tr/td[4]/a") private List<WebElement> ItemLinks;
-	//
+	@FindBy(xpath="//tr/td/table/tbody/tr/td/table/tbody/tr/td[4]/a") private List<WebElement> ItemLinks;*/
+	
 
 	//**Constructor**//*
 
@@ -554,7 +618,7 @@ public class RequisitioningPage {
 	public void clickRequisitionCartLink(String ItemTpye){
 		clickRecentOrdersTab();
 		tblRecentOrdersGrid.syncVisible();
-		List<WebElement> getRows = driver.findElements(By.xpath("//*[@class='Datagridborder mainRecentOdersGrid']/tbody/tr"));
+		List<WebElement> getRows = mainRecentOdersGrid;
 		int rowsCount = getRows.size();
 		System.out.println("Total rows in RecentOrders Grid table: "+ rowsCount);
 
@@ -575,5 +639,77 @@ public class RequisitioningPage {
 		}
 
 		driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+	}
+	
+	/**
+	 * @summary: Method to click on Show Favourite items.
+	 * @author: Praveen Namburi, @version: Created 09-09-2016
+	 */
+	public void clickShowFavouriteItems(){
+		lnkShowFavItems.syncVisible(15, false);
+		lnkShowFavItems.click();
+		Sleeper.sleep(4000);
+	}
+
+	/**
+	 * @summary: Method to add price agreement from favourite folder.
+	 * @author: Praveen Namburi,@version: Created 09-09-2016
+	 * @param strUOMValue
+	 */
+	public void addPriceAgreementItemsFromFavFolder(String strUOMValue){
+		String getLocalItemsCount = lblLocalItems.getText();
+		TestReporter.log("Local-Items Count is: "+ getLocalItemsCount);
+		
+		String getGlobalItemsCount = lblGlobalItems.getText();
+		TestReporter.log("Global-Items Count is: "+ getGlobalItemsCount);
+		
+		if(!getLocalItemsCount.contains("0")){
+			TestReporter.log("Click on Local-Items tab.");
+			LocalItemsTab localItem = new LocalItemsTab(driver);
+			localItem.click_localItemsTab();
+			String itemNumber = null;
+			List<WebElement> localItems = localItemsGrid;
+			
+			for(WebElement inputItem : localItems){
+				  itemNumber = inputItem.getText();
+				  System.out.println("Item number is: "+itemNumber);
+				  lstSelectUOMValue.select(strUOMValue);
+				  List<WebElement> localAddToCartItemLinks = lstAddToCartItemsGrid;
+					if(localAddToCartItemLinks.size()>0){
+						for(WebElement linkAddToCartItem :localAddToCartItemLinks){
+							TestReporter.log("Click on 'Add-To-Cart' link.");
+							linkAddToCartItem.click();
+							break;
+						}
+					}
+				  break;
+			}
+		}else if(getLocalItemsCount.contains("0")){
+			TestReporter.log(" 'No Records Found !!' in Local Items tab. "
+					+ "Searching for Global items.");
+			
+		}else if(!getGlobalItemsCount.contains("0")){
+			TestReporter.log("Click on Global-Items tab.");
+			GlobalItemsTab globalItem = new GlobalItemsTab(driver);
+			globalItem.click_GlobalItemsTab();
+			
+			String itemNumber = null;
+			List<WebElement> globalItems = globalItemsGrid;
+			for(WebElement inputItem : globalItems){
+				  itemNumber = inputItem.getText();
+				  System.out.println("Item number is: "+itemNumber);
+				  lstSelectUOMValue.select(strUOMValue);
+				  List<WebElement> globalAddToCartItemLinks = lstAddToCartItemsGrid;
+					if(globalAddToCartItemLinks.size()>0){
+						for(WebElement linkAddToCartItem :globalAddToCartItemLinks){
+							TestReporter.log("Click on 'Add-To-Cart' link.");
+							linkAddToCartItem.click();
+							break;
+						}
+					}
+				  break;
+			}				
+       }
+  
 	}
 }
