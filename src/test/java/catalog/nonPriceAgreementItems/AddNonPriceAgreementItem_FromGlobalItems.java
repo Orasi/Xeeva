@@ -1,4 +1,4 @@
-package catalog;
+package catalog.nonPriceAgreementItems;
 
 import org.testng.ITestContext;
 import org.testng.annotations.AfterTest;
@@ -7,25 +7,16 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
-
 import com.orasi.utils.TestEnvironment;
 import com.orasi.utils.TestReporter;
 import com.orasi.utils.dataProviders.ExcelDataProvider;
 import com.xeeva.catalog.ItemDetailsPage;
-import com.xeeva.catalog.RecentOrderInformationPage;
 import com.xeeva.catalog.RequisitioningPage;
+import com.xeeva.catalog.SearchItems.GlobalItemsTab;
 import com.xeeva.login.LoginPage;
 import com.xeeva.navigation.MainNav;
 
-/**
- * @summary Test To add non price agreement from recent orders list
- * @author  Lalitha Banda
- * @version	08/09/2016
- * *
- */
-
-public class AddNonPriceAgreementItem_FromRecentOrders extends TestEnvironment{
-
+public class AddNonPriceAgreementItem_FromGlobalItems extends TestEnvironment {
 
 	// **************
 	// Data Provider
@@ -33,7 +24,7 @@ public class AddNonPriceAgreementItem_FromRecentOrders extends TestEnvironment{
 	@DataProvider(name = "dataScenario")
 	public Object[][] scenarios() {
 		try {
-			Object[][] excelData = new ExcelDataProvider("/datasheets/Catalog.xlsx","AddPriceAgrmnt_RecentOrder").getTestData();
+			Object[][] excelData = new ExcelDataProvider("/datasheets/Catalog.xlsx","AddNonPriceAgr_GlobalCatalog").getTestData();
 			return excelData;
 		}
 		catch (RuntimeException e){
@@ -52,7 +43,7 @@ public class AddNonPriceAgreementItem_FromRecentOrders extends TestEnvironment{
 		setOperatingSystem(operatingSystem);
 		setRunLocation(runLocation);
 		setTestEnvironment(environment);
-		testStart("AddingNonPriceAgreement");
+		testStart("AddNonPriceAgreementItem_GlobalItem");
 	}
 
 	@AfterTest
@@ -61,33 +52,38 @@ public class AddNonPriceAgreementItem_FromRecentOrders extends TestEnvironment{
 	}
 
 	@Test(dataProvider = "dataScenario")
-	public void smartForm(String role, String location,String selectUOM,String PAItem,String NPAItem,String ID,String UP,String Qty){
+	public void smartForm(String role, String location,String GlobalItem,String ItemDescription,String Quantity,
+			String UnitofMeasure,String UnitPrice,String UpdatedUnitPrice,String UpdatedUnitofMeasure){
 
 		// Application Login 
-		TestReporter.logStep("Login into application");
+		TestReporter.logStep("Application Login");
 		LoginPage loginPage = new LoginPage(getDriver());
 		loginPage.loginWithCredentials(role,location);
 
-		// Requisition Page  - Navigating to requisition page to create Smart Form Request
+		// Requisition Page 
+		TestReporter.logStep("Navigating to requisition page to perform catalog search");
 		RequisitioningPage reqPage = new RequisitioningPage(getDriver());
-		TestReporter.logStep("Navigating to the Requisitioning Page.");
 		reqPage.click_ReqTab();
-		reqPage.clickRequisitionCartLink(NPAItem);
+		reqPage.perform_CatalogSearch(GlobalItem);
 
-		RecentOrderInformationPage recentOrderInfoPage = new RecentOrderInformationPage(getDriver());
-		TestReporter.logStep("Navigating to Recent Order Information page.");
-		recentOrderInfoPage.clcik_RecentOrderItemLink();
+		// GlobalItemsTab  - Clicking the GlobalItems Link
+		TestReporter.logStep("Clicking the GlobalItems Link");
+		GlobalItemsTab globalitems = new GlobalItemsTab(getDriver());
+		globalitems.click_GlobalItemsTab();
 
-		// Navigating to Item Details page - to add the Item to cart.
-		ItemDetailsPage itemDetailsPage = new ItemDetailsPage(getDriver());
-		TestReporter.logStep("Navigating to Item Details page.");
-		itemDetailsPage.selectUOMValueAndAddItemToCart(selectUOM);
+		//Modifying the ItemDetailsPage 
+		TestReporter.logStep("ItemDetailsPage  - Modifing Item Details");
+		ItemDetailsPage itemdetails = new ItemDetailsPage(getDriver());
+		itemdetails.modifyItemDetails(UnitPrice,Quantity,UnitofMeasure);
 
-	    // Application Logout
+		//Clicking Add To Cart Button
+		TestReporter.logStep("Clicking on Add To Cart Button - from Global Search Records");
+		globalitems.click_AddToCartButton();
+
+		// Application Logout
 		TestReporter.logStep("Application Logout");
 		MainNav mainNav = new MainNav(getDriver());
 		mainNav.clickLogout();
-
 	}
 
 }

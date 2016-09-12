@@ -8,7 +8,7 @@
 	<parameter name="operatingSystem" value="windows" />
   	<test name="AddNonPriceAgreementItem_FromRecentOrders">
 	    <classes>
-	      <class name="catalog.AddNonPriceAgreementItem_FromRecentOrders"/>
+	      <class name="catalog.nonPriceAgreementItems.AddNonPriceAgreementItem_FromRecentOrders"/>
 	    </classes>
   	</test> <!-- Test -->
 </suite> <!-- Suite -->

@@ -7,6 +7,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import com.orasi.core.interfaces.Button;
 import com.orasi.core.interfaces.Element;
 import com.orasi.core.interfaces.Label;
 import com.orasi.core.interfaces.Link;
@@ -34,6 +35,10 @@ public class GlobalItemsTab {
 	@FindBy(xpath = ".//*[@id='aTab1']/span[2]") private Label localCount;
 	@FindBy(xpath = ".//*[@id='gvGlobalSearch']/tbody/tr/td/span") private List<WebElement> globalItemsGrid;
 
+	// Global Search - Add to car
+	@FindBy(xpath = ".//*[@id='gvGlobalSearch']/tbody/tr[1]/td[3]/table/tbody/tr[7]/td/table/tbody/tr/td[4]/a/div") 
+	private Button AddToCart;
+
 	/**Constructor**/
 
 	public GlobalItemsTab(OrasiDriver driver){
@@ -57,7 +62,7 @@ public class GlobalItemsTab {
 	// Method to read global Item Numbers 	
 	public String  getGlobalItemNumber(){
 		String ItemNumber = null;
-		
+
 		click_GlobalItemsTab();
 		List<WebElement> localItems= globalItemsGrid;
 		if(localItems.size()>0){
@@ -68,5 +73,13 @@ public class GlobalItemsTab {
 		}
 		return ItemNumber;
 	}
+
+
+	//Method to click Add-To-Cart Button
+	 public void click_AddToCartButton(){
+	  AddToCart.syncVisible(10, false);
+	  AddToCart.click();
+	  Sleeper.sleep(2000);
+	 }
 
 }

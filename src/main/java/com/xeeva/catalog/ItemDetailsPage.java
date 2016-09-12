@@ -28,9 +28,15 @@ public class ItemDetailsPage {
 	@FindBy(xpath = "//select[@class='textFieldList width90Px']") private Listbox lstSelectUOM;
 	@FindBy(className="add-to-cart-box") private Button btnAddToCart;
 	@FindBy(xpath="//div[@id='divAppInfoMsg'][@class='addMessage']") private Label lblCartItemAddedMessage;
+	@FindBy(xpath = "//table/tbody/tr[6]/td/table/tbody/tr/td[4]/select") private Listbox lstunitofMeasure;
+
+	// global Items , UnitPrice ,Quantity
+	@FindBy(xpath = "//table/tbody/tr[6]/td/table/tbody/tr/td[2]/input") 
+	private Textbox txtunitPrice;
+	@FindBy(xpath = "//table/tbody/tr[7]/td/table/tbody/tr/td[4]/input") 
+	private Textbox txtQuantity;
 
 
-	@FindBy(xpath = "//[contains(@id,’ddlUOMGlobal’)]") private Listbox lstunitofMeasure;
 
 	/**Constructor**/
 	public ItemDetailsPage(OrasiDriver driver){
@@ -52,7 +58,6 @@ public class ItemDetailsPage {
 			btnAddToCart.syncEnabled();
 			btnAddToCart.click();
 		}
-		
 		public void selectUOMValueAndAddItemToCart(String strUOMValue){
 			if(lstSelectUOM.isDisplayed()){
 				lstSelectUOM.select(strUOMValue);
@@ -85,4 +90,25 @@ public class ItemDetailsPage {
 	     }*/
 		 
 	}
+
+	// Method modify Item details - Global Search Records
+	public void modifyItemDetails(String UnitPrice, String Quantity, String strUOMValue){
+		//pageLoaded();
+		System.out.println("unit price value: "+txtunitPrice.getText());
+		txtunitPrice.clear();
+		txtunitPrice.safeSet(UnitPrice);
+		txtQuantity.clear();
+		txtQuantity.safeSet(Quantity);
+		lstunitofMeasure.select(strUOMValue);
+		btnAddToCart.syncEnabled();
+		btnAddToCart.click();
+		Sleeper.sleep(3000);
+		lblCartItemAddedMessage.syncVisible(15, false);
+		String getCartItemAddedMessage = lblCartItemAddedMessage.getText();
+		//The item has been added successfully!
+		TestReporter.assertTrue(getCartItemAddedMessage.equalsIgnoreCase("The item has been added successfully!"), "Item added to the cart.");
+	}
+
+
+
 }
