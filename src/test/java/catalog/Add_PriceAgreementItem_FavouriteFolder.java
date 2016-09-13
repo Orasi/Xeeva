@@ -11,6 +11,7 @@ import com.orasi.utils.TestReporter;
 import com.orasi.utils.dataProviders.ExcelDataProvider;
 import com.xeeva.catalog.RequisitioningPage;
 import com.xeeva.login.LoginPage;
+import com.xeeva.navigation.MainNav;
 
 /**
  * @Summary: To verify that requestor is able to add the non price agreement item from favorite list. 
@@ -66,7 +67,8 @@ import com.xeeva.login.LoginPage;
 		 * @param role,location,selectUOM
 		 */
 		@Test(dataProvider = "dataScenario")
-		public void addPriceAgreementItemInCompareScreen(String role, String location,String strUOMValue){
+		public void addPriceAgreementItemInCompareScreen(String role, String location,String strUOMValue, 
+			String UpdatedUnitPrice, String UpdatedUnitofMeasure,String Quantity){
 			
 			// Application Login 
 			LoginPage loginPage = new LoginPage(getDriver());
@@ -80,7 +82,16 @@ import com.xeeva.login.LoginPage;
 			reqPage.click_ReqTab();
 			reqPage.clickShowFavouriteItems();
 			reqPage.addPriceAgreementItemsFromFavFolder(strUOMValue);
+/*
+			// Verifications for Cart Item 
+			TestReporter.logStep("Verifications for Cart Item ");
+			MainNav mainNav = new MainNav(getDriver());
+			mainNav.perform_CartItemVerifications(UpdatedUnitPrice, UpdatedUnitofMeasure, Quantity);
 
+			// Application Logout
+			TestReporter.logStep("Application Logout");
+			mainNav.clickLogout();*/
+			
 			/*// Application Logout
 			MainNav mainNav = new MainNav(getDriver());
 			TestReporter.logStep("Log-Out of the application.");
