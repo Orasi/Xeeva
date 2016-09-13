@@ -8,8 +8,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import com.orasi.core.interfaces.Element;
-import com.orasi.core.interfaces.Webtable;
-import com.orasi.core.interfaces.impl.WebtableImpl;
+import com.orasi.core.interfaces.Link;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
 import com.orasi.utils.Constants;
 import com.orasi.utils.OrasiDriver;
@@ -27,7 +26,8 @@ public class CartInformationPage {
 	/**Page Elements**/
 	@FindBy(css="#fancybox-outer") private Element eleCartInformationPage;	
 	@FindBy(xpath="//*[@id='tblCartInfo']/tbody") private WebElement tblCartInfo;
-
+	@FindBy(xpath="//a[@id='fancybox-close']") private Link lnkCloseCartInfo;
+	
 	/**Constructor**/
 	public CartInformationPage(OrasiDriver driver){
 		this.driver = driver;
@@ -47,23 +47,82 @@ public class CartInformationPage {
 	 */
 	public void verifyUnitPriceIsNotEditable(String itemNumber){
 		pageLoaded();
-		List<WebElement> itemNumLinks = driver.findElements(By.xpath("//*[@id='tblCartInfo']/tbody/tr"));
-		int getRowsCount = itemNumLinks.size();
-		System.out.println("Total no. of rows : " + getRowsCount);
+		List<WebElement> cartInfoTableRows = tblCartInfo.findElements(By.tagName("tr"));
+				//driver.findElements(By.xpath("//table[@id='tblCartInfo']/tbody/tr"));
+		int getRowsCount = cartInfoTableRows.size();
+		System.out.println("Total no. of rows in Cart Info table : " + getRowsCount);
 		
-		for(WebElement itemNumberLink : itemNumLinks){
-			System.out.println(itemNumberLink.findElement(By.tagName("td[1]")).getText().trim());
-			/*if(itemNumberLink.findElement(By.tagName("td[1]")).getText().trim().equalsIgnoreCase(itemNumber)){
-				List<WebElement> unitPriceItems = itemNumberLink.findElement(By.tagName("td[6]")).findElements(By.tagName("input"));
-				int itemsCount = unitPriceItems.size();
-				TestReporter.assertTrue(itemsCount==0, "Requestor is not able to change the price.");
-				break;
-			}*/
+		for(int rows=1; rows<=getRowsCount; rows++){
+			List<WebElement> itemNumLinks = driver.findElements(By.xpath("//table[@id='tblCartInfo']/tbody/tr["+ ((rows)+1) +"]/td[1]"));
+			for(WebElement itemNumLink : itemNumLinks){
+				//System.out.println(itemNumLink.getText().trim());
+				if(itemNumLink.getText().trim().equalsIgnoreCase(itemNumber)){
+					System.out.println(itemNumLink.getText().trim());
+				   List<WebElement> unitPriceItems = itemNumLink.findElements(By.tagName("td[6]"));
+				   for(WebElement unitPriceItem: unitPriceItems){
+					   if(unitPriceItem.findElement(By.tagName("input")).isDisplayed()){
+						  TestReporter.assertTrue(unitPriceItem.findElement(By.tagName("input")).isDisplayed(), 
+								"Requestor is not able to change the price for the added item.");
+					   }
+					   break;
+				   } 
+				   break;
+				}
+			}
+			
 		}
-		
-	 }	
+	}
 	
-}		
+	/**
+	 * @Summary: Method to verify Quantity before Adding Item To Cart.
+	 * @author: Praveen Namburi, @version: Created 12-09-2016
+	 * @param itemNumber
+	 */
+	public String verifyQuantitybeforeAddingItemToCart(String itemNumber){
+		String quantityValue = null;
+		pageLoaded();
+		List<WebElement> cartInfoTableRows = tblCartInfo.findElements(By.tagName("tr"));
+				//driver.findElements(By.xpath("//table[@id='tblCartInfo']/tbody/tr"));
+		int getRowsCount = cartInfoTableRows.size();
+		System.out.println("Total no. of rows in Cart Info table : " + getRowsCount);
+		
+		for(int rows=1; rows<=getRowsCount; rows++){
+			List<WebElement> itemNumLinks = driver.findElements(By.xpath("//table[@id='tblCartInfo']/"
+					+ "tbody/tr["+ ((rows)+1) +"]/td[1]"));
+			for(WebElement itemNumLink : itemNumLinks){
+				//System.out.println(itemNumLink.getText().trim());
+			    if(itemNumLink.getText().trim().equalsIgnoreCase(itemNumber)){
+				   TestReporter.log("Added Item number is: "+itemNumLink.getText().trim());
+				   List<WebElement> quantityCount = itemNumLink.findElements(By.tagName("td[5]"));
+				   for(WebElement quantity: quantityCount){
+					  if(quantity.findElement(By.tagName("input")).isDisplayed()){
+						  String getQuantitybeforeAddItemToCart = quantity.findElement(By.tagName("input")).getText();
+						  TestReporter.log("Captured Quantity value before adding item to cart : "+ getQuantitybeforeAddItemToCart );
+						  quantityValue = getQuantitybeforeAddItemToCart;
+					  }else{
+						  TestReporter.log("Item should be added to the cart for verifying the quantity value.");
+					  }
+					 break;
+				   } 
+				 break;
+			  }
+		    }		
+		  }
+		return quantityValue;
+	}
+	
+	/**
+	 * @Summary: Method to close the cart-Info page.
+	 * @author: Praveen Namburi, @version: Created 12-09-2016
+	 */
+	public void closeCartInfoPage(){
+		lnkCloseCartInfo.syncVisible(15, false);
+		lnkCloseCartInfo.click();
+	}
+	
+}
+	
+		
  
 
 

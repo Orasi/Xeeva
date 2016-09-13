@@ -83,18 +83,20 @@ public class Add_PriceAgreementItem_RecentOrder extends TestEnvironment{
 		RequisitioningPage reqPage = new RequisitioningPage(getDriver());
 		TestReporter.logStep("Navigating to the Requisitioning Page.");
 		reqPage.click_ReqTab();
-		reqPage.clickRequisitionCartLink(PAI);
-
+		String getREQValue = reqPage.clickRequisitionCartLink(PAI);
+		TestReporter.log("Captured REQ Value for Price Agreement item: " + getREQValue);
+		
 		// Navigating to Recent Order Info page - to click on Requistion Cart link
 		RecentOrderInformationPage recentOrderInfoPage = new RecentOrderInformationPage(getDriver());
 		TestReporter.logStep("Navigating to Recent Order Information page.");
-		recentOrderInfoPage.clickItemNumberLink();
-		//Sleeper.sleep(8000);
+		TestReporter.logStep("Clicking on Price Agreement from Recent Orders table.");
+		recentOrderInfoPage.clickPAItemLinkFromRecentOrders(getREQValue);
 
 		// Navigating to Item Details page - to add the Item to cart.
 		ItemDetailsPage itemDetailsPage = new ItemDetailsPage(getDriver());
 		TestReporter.logStep("Navigating to Item Details page.");
-		itemDetailsPage.selectUOMValueAndAddItemToCart(selectUOM);
+		TestReporter.logStep("Add price agreement to cart and Verify it.");
+		itemDetailsPage.addPriceAgreementItemToCart_And_Verify();
 
 		// Application Logout
 		MainNav mainNav = new MainNav(getDriver());

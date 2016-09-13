@@ -229,10 +229,18 @@ public class RequisitioningPage {
 		lblRecentOrders.click();
 	}
 
-	// This method clicks on Requisition cart link # which has only REQ Number. - Author[Praveen]
-	// Updated - by adding method argument (ItemType) - lalitha
-
-	public void clickRequisitionCartLink(String ItemTpye){
+	
+	
+	
+	
+	/**
+	 * @summary: Method to click on Requisition cart link # which has only REQ Number.
+	 * @Author: Praveen Namburi,@version: Created 07-09-2016
+	 * @param ItemTpye
+	 * @return getREQValue
+	 */
+	public String  clickRequisitionCartLink(String ItemTpye){
+		String returnValue = null;
 		clickRecentOrdersTab();
 		tblRecentOrdersGrid.syncVisible();
 		List<WebElement> getRows = driver.findElements(By.xpath("//*[@class='Datagridborder mainRecentOdersGrid']/tbody/tr"));
@@ -240,15 +248,22 @@ public class RequisitioningPage {
 		System.out.println("Total rows in RecentOrders Grid table: "+ rowsCount);
 
 		for(int row=1; row<=rowsCount; row++){
-			String getRFQValue = driver.findElement(By.xpath("//*[@id='gvRecentOdersGrid']/tbody/tr["+ row +"]/td[4]/span")).getText();
+			String getRFQValue = driver.findElement(By.xpath("//*[@id='gvRecentOdersGrid']/tbody/"
+					+ "tr["+ row +"]/td[4]/span")).getText();
 
 			if(getRFQValue.isEmpty()&& ItemTpye.equalsIgnoreCase("PAI")){
+				String getREQValue = driver.findElement(By.xpath("//*[@id='gvRecentOdersGrid']/tbody"
+						+ "/tr["+ row +"]/td[3]/span")).getText();
+
 				System.out.println("Clicked on the cart link which has no RFQ value.");
-				driver.findElement(By.xpath("//*[@id='gvRecentOdersGrid']/tbody/tr["+ row +"]/td[1]")).click();
+				driver.findElement(By.xpath("//*[@id='gvRecentOdersGrid']/tbody/"
+						+ "tr["+ row +"]/td[1]")).click();
+				returnValue = getREQValue;
 				break;
 
 			}else if(getRFQValue!=null && !getRFQValue.isEmpty() && ItemTpye.equalsIgnoreCase("NPAI")){
-				driver.findElement(By.xpath("//*[@id='gvRecentOdersGrid']/tbody/tr["+ row +"]/td[1]")).click();
+				driver.findElement(By.xpath("//*[@id='gvRecentOdersGrid']/tbody/"
+						+ "tr["+ row +"]/td[1]")).click();
 				break;
 			}else{
 				TestReporter.logStep("Selected item having no REQ orRFQ values !!");
@@ -256,8 +271,10 @@ public class RequisitioningPage {
 		}
 
 		driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-	}
 
+		return returnValue;
+	}
+	
 	/**
 	 * @summary: Method to click on Show Favourite items.
 	 * @author: Praveen Namburi, @version: Created 09-09-2016
