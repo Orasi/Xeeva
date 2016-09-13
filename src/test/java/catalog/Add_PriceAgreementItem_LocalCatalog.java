@@ -13,6 +13,7 @@ import com.xeeva.catalog.CartInformationPage;
 import com.xeeva.catalog.RequisitioningPage;
 import com.xeeva.catalog.SearchItems.LocalItemsTab;
 import com.xeeva.login.LoginPage;
+import com.xeeva.navigation.MainNav;
 
 /**
  * @Summary: To verify that requestor is able to add the item from local catalog. 
@@ -84,19 +85,32 @@ import com.xeeva.login.LoginPage;
 			
 			//Navigate to Local-Items page and Add-Item to Cart.
 			LocalItemsTab localItemsPage = new LocalItemsTab(getDriver());
-			TestReporter.logStep("Navigate to Local-Items page and Add-Item-To-Cart.");
-			localItemsPage.addItemToCartAndVerify();
+			TestReporter.logStep("Navigate to Local-Items page and Click on Cart-Items link.");
 			localItemsPage.clickCartItemsLink();
 			
 			//Navigate to CartInformation page and Verify Added item Unit-Price is not editable.
+			TestReporter.logStep("Navigating to CartInformation page.");
 			CartInformationPage cartInfoPage = new CartInformationPage(getDriver());
-			TestReporter.logStep("Navigate to Local-Items page and Add-Item-To-Cart.");
-			cartInfoPage.verifyUnitPriceIsNotEditable(itemNumber);
+			//Verify whether the quantity can be increased for already added item in the cart.
+			TestReporter.log("Verify whether the quantity can be increased for already added item in the cart.");
+			//String getQuantityBefore = cartInfoPage.verifyQuantitybeforeAddingItemToCart(itemNumber);
+			//TestReporter.log("Quantity value before addign item to cart : "+getQuantityBefore);
+			cartInfoPage.closeCartInfoPage();
 			
-			/*// Application Logout
+			//Navigate to Local-Items page and Add-Item-To-Cart.
+			TestReporter.logStep("Navigate to Local-Items page and Add-Item-To-Cart.");
+			localItemsPage.addLocalItemToCartAndVerify();
+			localItemsPage.clickCartItemsLink();
+			
+			//Validating that the Unit-Price is not editable for the added item in the cart.
+			TestReporter.log("Validating that the Unit-Price is not editable for the added item in the cart.");
+			cartInfoPage.verifyUnitPriceIsNotEditable(itemNumber);
+			cartInfoPage.closeCartInfoPage();
+			
+			// Application Logout
 			MainNav mainNav = new MainNav(getDriver());
 			TestReporter.logStep("Log-Out of the application.");
-			mainNav.clickLogout();*/
+			mainNav.clickLogout();
 			
 		}
 			

@@ -62,10 +62,10 @@ public class Add_PriceAgreementItem_RecentOrder extends TestEnvironment{
 	 * @description: Close the driver instance.
 	 * @param testResults
 	 */
-	/*@AfterTest
+	@AfterTest
 	public void close(ITestContext testResults){
 		endTest("TestAlert", testResults);
-	}*/
+	}
 
 	/**
 	 * @Description: Main business-logic of the test-case resides here.
