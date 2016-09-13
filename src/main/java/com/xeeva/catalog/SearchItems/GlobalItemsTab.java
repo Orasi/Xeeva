@@ -2,8 +2,10 @@ package com.xeeva.catalog.SearchItems;
 
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -32,10 +34,12 @@ public class GlobalItemsTab {
 
 	/**Page Elements**/
 	@FindBy(id = "aTab2")	private Link globalItemsTab;
-	@FindBy(xpath = ".//*[@id='aTab1']/span[2]") private Label localCount;
+	@FindBy(css = "#lblGlobalCount") private Label globalCount;
+	@FindBy(css = ".css-label") private List<WebElement> chkCompare;
+	@FindBy(xpath = ".//*[@id='divCompareGlobalItem']/table/tbody/tr[3]/td/input") private Button btnCompare;
 	@FindBy(xpath = ".//*[@id='gvGlobalSearch']/tbody/tr/td/span") private List<WebElement> globalItemsGrid;
 
-	// Global Search - Add to car
+	// Global Search - Add to cart
 	@FindBy(xpath = ".//*[@id='gvGlobalSearch']/tbody/tr[1]/td[3]/table/tbody/tr[7]/td/table/tbody/tr/td[4]/a/div") 
 	private Button AddToCart;
 
@@ -76,10 +80,23 @@ public class GlobalItemsTab {
 
 
 	//Method to click Add-To-Cart Button
-	 public void click_AddToCartButton(){
-	  AddToCart.syncVisible(10, false);
-	  AddToCart.click();
-	  Sleeper.sleep(2000);
-	 }
+	public void click_AddToCartButton(){
+		AddToCart.syncVisible(10, false);
+		AddToCart.click();
+		Sleeper.sleep(2000);
+	}
+
+	// Method to Read Number of Records from Global Table
+	public int read_GlobalItemsCount(){
+		return Integer.parseInt(globalCount.getText().replaceAll("\\D+", ""));
+	}
+
+	public void perform_ItemsComparison(){
+		TestReporter.assertTrue(read_GlobalItemsCount()>3, read_GlobalItemsCount() +" - Global Item Records available!!");
+		for(int i=0;i<3;i++){
+			driver.executeJavaScript("arguments[0].click();", chkCompare.get(i));
+		}
+		btnCompare.jsClick();
+	}
 
 }

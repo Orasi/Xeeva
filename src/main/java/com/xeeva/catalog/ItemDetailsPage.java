@@ -50,29 +50,30 @@ public class ItemDetailsPage {
 
 	/**Page Interactions**/
 
-		/**
-		 * @summary: Method to add Price Agreement Item to Cart.
-		 * @author: Praveen Namburi, @version: Created 08-09-2016
-		 */
-		public void addPriceAgrmntItemToCart(){
-			btnAddToCart.syncEnabled();
-			btnAddToCart.click();
+
+	/**
+	 * @summary: Method to add Price Agreement Item to Cart.
+	 * @author: Praveen Namburi, @version: Created 08-09-2016
+	 */
+	public void addPriceAgrmntItemToCart(){
+		btnAddToCart.syncEnabled();
+		btnAddToCart.click();
+	}
+	public void selectUOMValueAndAddItemToCart(String strUOMValue){
+		if(lstSelectUOM.isDisplayed()){
+			lstSelectUOM.select(strUOMValue);
+			btnAddToCart.jsClick();
+			Sleeper.sleep(2000);
+			lblCartItemAddedMessage.syncVisible(15, false);
+			String getCartItemAddedMessage = lblCartItemAddedMessage.getText();
+			System.out.println("Message after adding item to cart : "+ getCartItemAddedMessage);
+			TestReporter.assertTrue(getCartItemAddedMessage.contains("added successfully!"), "Item added to the cart.");
 		}
-		public void selectUOMValueAndAddItemToCart(String strUOMValue){
-			if(lstSelectUOM.isDisplayed()){
-				lstSelectUOM.select(strUOMValue);
-				btnAddToCart.jsClick();
-				Sleeper.sleep(2000);
-				lblCartItemAddedMessage.syncVisible(15, false);
-				String getCartItemAddedMessage = lblCartItemAddedMessage.getText();
-				System.out.println("Message after adding item to cart : "+ getCartItemAddedMessage);
-				TestReporter.assertTrue(getCartItemAddedMessage.contains("added successfully!"), "Item added to the cart.");
-		}
-		
+
 		/**
-		  * @summary: Method to select UOMValue and Add-Item-To-Cart for Non-Price agreement item.
-		  * @author: Praveen Namburi, @version: Created 09-09-2016,@param strUOMValue
-		  *//*
+		 * @summary: Method to select UOMValue and Add-Item-To-Cart for Non-Price agreement item.
+		 * @author: Praveen Namburi, @version: Created 09-09-2016,@param strUOMValue
+		 *//*
 		 public void selectUOMValueAndAddItemToCart(String strUOMValue){
 		  if(lstSelectUOM.isDisplayed()){
 			   lstSelectUOM.select(strUOMValue);
@@ -86,21 +87,21 @@ public class ItemDetailsPage {
 			   TestReporter.logStep("Selected Item is Price aggrement Item!!");
 
 		  }
-		
+
 	     }*/
-		 
+
 	}
 
 	// Method modify Item details - Global Search Records
 	public void modifyItemDetails(String UnitPrice, String Quantity, String strUOMValue){
 		//pageLoaded();
-		System.out.println("unit price value: "+txtunitPrice.getText());
+		//System.out.println("unit price value: "+txtunitPrice.getText());
 		txtunitPrice.clear();
 		txtunitPrice.safeSet(UnitPrice);
 		txtQuantity.clear();
 		txtQuantity.safeSet(Quantity);
 		lstunitofMeasure.select(strUOMValue);
-		btnAddToCart.syncEnabled();
+		btnAddToCart.isDisplayed();
 		btnAddToCart.click();
 		Sleeper.sleep(3000);
 		lblCartItemAddedMessage.syncVisible(15, false);
@@ -108,6 +109,7 @@ public class ItemDetailsPage {
 		//The item has been added successfully!
 		TestReporter.assertTrue(getCartItemAddedMessage.equalsIgnoreCase("The item has been added successfully!"), "Item added to the cart.");
 	}
+
 
 
 

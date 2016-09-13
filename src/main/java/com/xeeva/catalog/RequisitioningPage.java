@@ -88,6 +88,8 @@ public class RequisitioningPage {
 	@FindBy(xpath="//a[@id='aTab1']/span[2]") private Label lblLocalItems;
 	@FindBy(xpath="//a[@id='aTab2']/span") private Label lblGlobalItems;
 	@FindBy(xpath="//*[@class='Datagridborder mainRecentOdersGrid']/tbody/tr") private List<WebElement> mainRecentOdersGrid;
+	
+	
 
 	//**Constructor**//*
 
@@ -326,5 +328,13 @@ public class RequisitioningPage {
 			}				
 		}
 
+		
 	}
+	
+	
+	// Method to click on FavoriteItem Link 
+	  public void click_FavoriteItem(){
+	   pageLoaded();
+	   lnkShowFavItems.click();
+	  }
 }
