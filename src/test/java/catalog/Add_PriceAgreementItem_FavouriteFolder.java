@@ -1,5 +1,7 @@
 package catalog;
 
+import org.testng.ITestContext;
+import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Optional;
@@ -11,6 +13,7 @@ import com.orasi.utils.TestReporter;
 import com.orasi.utils.dataProviders.ExcelDataProvider;
 import com.xeeva.catalog.CartInformationPage;
 import com.xeeva.catalog.RequisitioningPage;
+import com.xeeva.catalog.SearchItems.LocalItemsTab;
 import com.xeeva.login.LoginPage;
 import com.xeeva.navigation.MainNav;
 
@@ -58,18 +61,18 @@ import com.xeeva.navigation.MainNav;
 		 * @description: Close the driver instance.
 		 * @param testResults
 		 */
-		/*@AfterTest
+		@AfterTest
 		public void close(ITestContext testResults){
 			endTest("TestAlert", testResults);
-		}*/
+		}
 		
 		/**
+		 * @param itemNumber 
 		 * @Description: Main business-logic of the test-case resides here.
 		 * @param role,location,selectUOM
 		 */
 		@Test(dataProvider = "dataScenario")
-		public void addPriceAgreementItemInCompareScreen(String role, String location,String strUOMValue,
-			String UpdatedUnitPrice,String UpdatedUnitofMeasure,String Quantity){
+		public void addPriceAgreementItemInCompareScreen(String role, String location,String strUOMValue){
 			
 			// Application Login 
 			LoginPage loginPage = new LoginPage(getDriver());
@@ -82,23 +85,47 @@ import com.xeeva.navigation.MainNav;
 					+ " from Favourite folder.");
 			reqPage.click_ReqTab();
 			reqPage.clickShowFavouriteItems();
+			String getItemNumValue = reqPage.getItemNumberFromCatalog();
+			TestReporter.log("Item-Number to be added to cart: "+ getItemNumValue);
 			reqPage.addPriceAgreementItemsFromFavFolder(strUOMValue);
-
-			// Navigating to cart info page and verify quantity increased. 
-			TestReporter.logStep("Navigating to cart information page.");
-			CartInformationPage cartInfopage = new CartInformationPage(getDriver());
-			TestReporter.log("Verify the quantity is increased for added item to cart.");
-			cartInfopage.perform_CartItemVerifications(Quantity);
-
+			
+			//Navigate to Local-Items page and Add-Item to Cart.
+			LocalItemsTab localItemsPage = new LocalItemsTab(getDriver());
+			TestReporter.logStep("Navigate to Local-Items page and Click on Cart-Items link.");
+			localItemsPage.clickCartItemsLink();
+			
+			//Navigate to Cart-Info page and grab the Quantity value before adding Item-To-Cart.
+			TestReporter.logStep("Navigate to Cart-Info page and grab the Quantity value "
+					+ "before adding Item-To-Cart.");
+			CartInformationPage cartInfoPage = new CartInformationPage(getDriver());
+			String getQuantityBefore = cartInfoPage.getQuantityForAddedItemToCart(getItemNumValue);
+			TestReporter.log("Quantity value before adding item to cart : "+getQuantityBefore);
+			
+			//Close cart-Info page.
+			TestReporter.logStep("Close Cart-Information page.");
+			cartInfoPage.closeCartInfoPage();
+			
+			//Navigate to Local-Items page and Add-Item-To-Cart.
+			TestReporter.logStep("Navigate to Local-Items page and Add-Item-To-Cart.");
+			localItemsPage.addLocalItemToCartAndVerify();
+			
+			//Navigate to Cart-Info page and grab the Quantity value after adding Item-To-Cart.
+			TestReporter.logStep("Navigate to Cart-Info page and grab the Quantity value "
+					+ "after adding Item-To-Cart.");
+			localItemsPage.clickCartItemsLink();
+			String getQuantityAfter = cartInfoPage.getQuantityForAddedItemToCart(getItemNumValue);
+			TestReporter.log("Quantity value after adding item to cart : "+getQuantityAfter);
+			//cartInfoPage.
+			
+			//Validating that the Unit-Price is not editable for the added item in the cart.
+			TestReporter.log("Verify that the Unit-Price is not editable for the added item in cart.");
+			cartInfoPage.verifyUnitPriceIsNotEditable(getItemNumValue);
+			cartInfoPage.closeCartInfoPage();
+			
 			// Application Logout
 			MainNav mainNav = new MainNav(getDriver());
-			TestReporter.logStep("Application Logout");
+			TestReporter.logStep("Navigate to Main-Tabs and Click on Log-Out link.");
 			mainNav.clickLogout();
-			
-			/*// Application Logout
-			MainNav mainNav = new MainNav(getDriver());
-			TestReporter.logStep("Log-Out of the application.");
-			mainNav.clickLogout();*/
 			
 		}
 			

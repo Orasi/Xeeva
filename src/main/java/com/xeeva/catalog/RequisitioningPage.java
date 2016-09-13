@@ -354,4 +354,34 @@ public class RequisitioningPage {
 	   pageLoaded();
 	   lnkShowFavItems.click();
 	  }
+	  
+	  /**
+	   * @summary: Method to get the Item Number from catalog table.
+	   * @author praveen namburi,@version: Created 13-09-2016
+	   * @return getItemNumber
+	   */
+	  public String  getItemNumberFromCatalog(){
+		  Sleeper.sleep(2000);
+		  String getItemNumber = null;
+		  String getLocalItemsCount = lblLocalItems.getText();
+		  TestReporter.log("Local-Items Count is: "+ getLocalItemsCount);
+		  
+		  if(!getLocalItemsCount.contains("0")){
+				TestReporter.log("Click on Local-Items tab.");
+				LocalItemsTab localItem = new LocalItemsTab(driver);
+				localItem.click_localItemsTab();
+				List<WebElement> localItems = localItemsGrid;
+				for(WebElement inputItem : localItems){
+					String itemNumber = inputItem.getText().trim();
+					getItemNumber = itemNumber;
+					break;
+				}
+		  }else if(getLocalItemsCount.contains("0")){
+				TestReporter.log(" 'No Records Found !!' in Local Items tab. ");
+		  }
+		return getItemNumber;
+	  
+	  }	
+	  
+	  
 }

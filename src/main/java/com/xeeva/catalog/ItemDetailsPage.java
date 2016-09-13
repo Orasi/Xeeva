@@ -59,18 +59,6 @@ public class ItemDetailsPage {
 		btnAddToCart.syncEnabled();
 		btnAddToCart.click();
 	}
-	/*public void selectUOMValueAndAddItemToCart(String strUOMValue){
-		if(lstSelectUOM.isDisplayed()){
-			lstSelectUOM.select(strUOMValue);
-			btnAddToCart.jsClick();
-			Sleeper.sleep(2000);
-			lblCartItemAddedMessage.syncVisible(15, false);
-			String getCartItemAddedMessage = lblCartItemAddedMessage.getText();
-			System.out.println("Message after adding item to cart : "+ getCartItemAddedMessage);
-			TestReporter.assertTrue(getCartItemAddedMessage.contains("added successfully!"), "Item added to the cart.");
-		}
-
-	}*/
 
 	public void selectUOMValueAndAddNonPriceItemToCart(String strUOMValue){
 		if(lstSelectUOM.isDisplayed()){
