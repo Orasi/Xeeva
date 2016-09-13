@@ -9,6 +9,7 @@ import org.testng.annotations.Test;
 import com.orasi.utils.TestEnvironment;
 import com.orasi.utils.TestReporter;
 import com.orasi.utils.dataProviders.ExcelDataProvider;
+import com.xeeva.catalog.CartInformationPage;
 import com.xeeva.catalog.RequisitioningPage;
 import com.xeeva.login.LoginPage;
 import com.xeeva.navigation.MainNav;
@@ -67,8 +68,8 @@ import com.xeeva.navigation.MainNav;
 		 * @param role,location,selectUOM
 		 */
 		@Test(dataProvider = "dataScenario")
-		public void addPriceAgreementItemInCompareScreen(String role, String location,String strUOMValue, 
-			String UpdatedUnitPrice, String UpdatedUnitofMeasure,String Quantity){
+		public void addPriceAgreementItemInCompareScreen(String role, String location,String strUOMValue,
+			String UpdatedUnitPrice,String UpdatedUnitofMeasure,String Quantity){
 			
 			// Application Login 
 			LoginPage loginPage = new LoginPage(getDriver());
@@ -82,15 +83,17 @@ import com.xeeva.navigation.MainNav;
 			reqPage.click_ReqTab();
 			reqPage.clickShowFavouriteItems();
 			reqPage.addPriceAgreementItemsFromFavFolder(strUOMValue);
-/*
-			// Verifications for Cart Item 
-			TestReporter.logStep("Verifications for Cart Item ");
-			MainNav mainNav = new MainNav(getDriver());
-			mainNav.perform_CartItemVerifications(UpdatedUnitPrice, UpdatedUnitofMeasure, Quantity);
+
+			// Navigating to cart info page and verify quantity increased. 
+			TestReporter.logStep("Navigating to cart information page.");
+			CartInformationPage cartInfopage = new CartInformationPage(getDriver());
+			TestReporter.log("Verify the quantity is increased for added item to cart.");
+			cartInfopage.perform_CartItemVerifications(Quantity);
 
 			// Application Logout
+			MainNav mainNav = new MainNav(getDriver());
 			TestReporter.logStep("Application Logout");
-			mainNav.clickLogout();*/
+			mainNav.clickLogout();
 			
 			/*// Application Logout
 			MainNav mainNav = new MainNav(getDriver());

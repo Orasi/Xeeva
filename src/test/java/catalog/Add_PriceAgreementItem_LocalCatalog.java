@@ -89,20 +89,23 @@ import com.xeeva.navigation.MainNav;
 			localItemsPage.clickCartItemsLink();
 			
 			//Navigate to CartInformation page and Verify Added item Unit-Price is not editable.
-			TestReporter.logStep("Navigating to CartInformation page.");
+			TestReporter.logStep("Navigating to Cart-Information page.");
 			CartInformationPage cartInfoPage = new CartInformationPage(getDriver());
 			//Verify whether the quantity can be increased for already added item in the cart.
-			//TestReporter.log("Verify whether the quantity can be increased for already added item in the cart.");
-			//String getQuantityBefore = cartInfoPage.verifyQuantitybeforeAddingItemToCart(itemNumber);
-			//TestReporter.log("Quantity value before addign item to cart : "+getQuantityBefore);
-			//cartInfoPage.closeCartInfoPage();
+			TestReporter.log("Verify whether the quantity can be increased for already added item in the cart.");
+			String getQuantityBefore = cartInfoPage.verifyQuantitybeforeAddingItemToCart(itemNumber);
+			TestReporter.log("Quantity value before addign item to cart : "+getQuantityBefore);
+			
+			//Close cart-Info page.
+			TestReporter.logStep("Close Cart-Information page.");
+			cartInfoPage.closeCartInfoPage();
 			
 			//Navigate to Local-Items page and Add-Item-To-Cart.
 			TestReporter.logStep("Navigate to Local-Items page and Add-Item-To-Cart.");
 			localItemsPage.addLocalItemToCartAndVerify();
 			localItemsPage.clickCartItemsLink();
 			
-			//Validating that the Unit-Price is not editable for the added item in the cart.
+			/*//Validating that the Unit-Price is not editable for the added item in the cart.
 			TestReporter.log("Validating that the Unit-Price is not editable for the added item in the cart.");
 			cartInfoPage.verifyUnitPriceIsNotEditable(itemNumber);
 			cartInfoPage.closeCartInfoPage();
@@ -110,7 +113,7 @@ import com.xeeva.navigation.MainNav;
 			// Application Logout
 			MainNav mainNav = new MainNav(getDriver());
 			TestReporter.logStep("Log-Out of the application.");
-			mainNav.clickLogout();
+			mainNav.clickLogout();*/
 			
 		}
 			
