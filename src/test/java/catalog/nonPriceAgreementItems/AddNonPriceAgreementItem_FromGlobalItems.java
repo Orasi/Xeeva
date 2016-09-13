@@ -80,9 +80,13 @@ public class AddNonPriceAgreementItem_FromGlobalItems extends TestEnvironment {
 		TestReporter.logStep("Clicking on Add To Cart Button - from Global Search Records");
 		globalitems.click_AddToCartButton();
 
+		// Verifications for Cart Item 
+		TestReporter.logStep("Verifications for Cart Item ");
+		MainNav mainNav = new MainNav(getDriver());
+		mainNav.perform_CartItemVerifications(UpdatedUnitPrice, UpdatedUnitofMeasure, Quantity);
+
 		// Application Logout
 		TestReporter.logStep("Application Logout");
-		MainNav mainNav = new MainNav(getDriver());
 		mainNav.clickLogout();
 	}
 
