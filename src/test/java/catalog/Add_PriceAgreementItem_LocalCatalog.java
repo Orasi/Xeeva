@@ -92,10 +92,10 @@ import com.xeeva.navigation.MainNav;
 			TestReporter.logStep("Navigating to CartInformation page.");
 			CartInformationPage cartInfoPage = new CartInformationPage(getDriver());
 			//Verify whether the quantity can be increased for already added item in the cart.
-			TestReporter.log("Verify whether the quantity can be increased for already added item in the cart.");
+			//TestReporter.log("Verify whether the quantity can be increased for already added item in the cart.");
 			//String getQuantityBefore = cartInfoPage.verifyQuantitybeforeAddingItemToCart(itemNumber);
 			//TestReporter.log("Quantity value before addign item to cart : "+getQuantityBefore);
-			cartInfoPage.closeCartInfoPage();
+			//cartInfoPage.closeCartInfoPage();
 			
 			//Navigate to Local-Items page and Add-Item-To-Cart.
 			TestReporter.logStep("Navigate to Local-Items page and Add-Item-To-Cart.");
