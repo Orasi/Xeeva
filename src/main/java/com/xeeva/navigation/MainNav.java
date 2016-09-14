@@ -7,6 +7,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import com.orasi.core.interfaces.Button;
+import com.orasi.core.interfaces.Element;
 import com.orasi.core.interfaces.Link;
 import com.orasi.core.interfaces.Listbox;
 import com.orasi.core.interfaces.Textbox;
@@ -21,7 +22,6 @@ public class MainNav {
 	private OrasiDriver driver = null;
 
 	/** Page Elements **/
-
 	@FindBy(linkText = "Logout") private Link lnkLogout;
 	@FindBy(id = "btnSaveCart")	private Button btnSaveCart;
 	@FindBy(id = "lnkShowPopup")	private Link lnkCartItem;
@@ -32,6 +32,8 @@ public class MainNav {
 	@FindBy(id = "txtUnitPrice")	private Textbox txtUnitPrice;
 	@FindBy(id = "btnSubmit")	private Button btnSubmit;
 	@FindBy(xpath = ".//*[@id='txtItem']")	private Textbox itemDescription;
+	@FindBy(xpath = ".//*[@id='spanCartValue']")	private Element lblCartValue;
+
 
 	// Update Cart Items - for non price agreement cart Items verifications
 	@FindBy(xpath = ".//*[@id='tblItemDetails']/tbody/tr[2]/td[2]/input")
@@ -66,16 +68,23 @@ public class MainNav {
 		return lnkLogout.syncVisible(20, false);
 	}
 
-	// Method to click on Cart-Items Link
+
+	/**
+	 * @summary  Method to click on Cart-Items Link
+	 * @author Lalitha Banda
+	 * @date 14/9/16
+	 **/
+
 	public void clickCartItemsLink() {
-		Sleeper.sleep(2000);
-		lnkCartItem.syncVisible(10, false);
-		lnkCartItem.isEnabled();
-		lnkCartItem.click();
-		Sleeper.sleep(2000);
+		driver.executeJavaScript("arguments[0].click();", lnkCartItem);
+		Sleeper.sleep(4000);
 	}
 
-	// Method for Application Logout
+	/**
+	 * @summary Method for Application Logout
+	 * @author Lalitha Banda
+	 * @date 14/9/16
+	 **/
 	public void SaveCart() {
 		if (btnSaveCart.isDisplayed()) {
 			btnSaveCart.click();
@@ -84,15 +93,33 @@ public class MainNav {
 		}
 	}
 
-	// Method to Click on Cart Item Edit icon
-	public void click_CartItemEdit(int cartItemRows) {
-		WebElement eleEdit = driver.findElement(	By.xpath(".//*[@id='tblCartInfo']/tbody/tr["
-				+ (cartItemRows - 1) + "]/td/div/a[2]"));
-		driver.executeJavaScript("arguments[0].click();", eleEdit);
-		Sleeper.sleep(3000);
+	/**
+	 * @summary  Method to Click on Cart Item Edit icon
+	 * @author Lalitha Banda
+	 * @date 14/9/16
+	 **/
+	public void click_CartItemEdit(String itemNumber) {
+		List<WebElement> cartRows = driver.findElements(By.xpath(".//*[@id='tblCartInfo']/tbody/tr"));
+		for(int row =1;row<cartRows.size();row++)
+			if(cartRows.get(row).getAttribute("id").contains("trItemRow_")){
+				List<WebElement> links =  cartRows.get(row).findElements(By.tagName("a"));
+				TestReporter.logStep( "Item Number Fronm Cart Rows : "+links.get(0).getText());
+				if(links.get(0).getText().equalsIgnoreCase(itemNumber)){
+					// clicking on Cart Item Edit
+					Sleeper.sleep(2000);
+					driver.executeJavaScript("arguments[0].click();", links.get(2));
+					break;
+				}
+			}
 	}
 
-	// Method to verify Smart Form Item Added to Cart
+
+
+	/**
+	 * @summary  Method to verify Smart Form Item Added to Cart
+	 * @author Lalitha Banda
+	 * @date 14/9/16
+	 **/
 	public void verify_CartItem(String ItemDescription, int cartItemRows) {
 
 		// Verifies Item added in the Cart
@@ -102,9 +129,13 @@ public class MainNav {
 		TestReporter.assertTrue(Expected.contains(ItemDescription),"Smart Form Item Verified!!");
 	}
 
+
+
 	/**
-	 * This Method Verifications For Smart Form Items updated with UOM
+	 * @summary This Method Verifications For Smart Form Items updated with UOM
 	 * Quantity,Unit Price
+	 * @author Lalitha Banda
+	 * @date 14/9/16
 	 **/
 	public void verify_UpdateCart(String UP, String UOM, String Qty,
 			int cartItemRows) {
@@ -136,7 +167,10 @@ public class MainNav {
 
 	}
 
-	/** This Method performs Verifications For Smart Form Items **/
+	/**@summary This Method performs Verifications For Smart Form Items 
+	 * @author Lalitha Banda
+	 * @date 14/9/16
+	 **/
 	public void verifyCartItem(String ItemDescription, String UnitPrice,
 			String UOM, String Quantity) {
 
@@ -150,18 +184,17 @@ public class MainNav {
 				+ (cartItemRows.size() - 1) + "]/td"));
 		TestReporter.logStep("Total Columns available in Cart :"+ cartItemCols.size());
 
-		// Verification - Smart Form Item Added to Cart
-		verify_CartItem(ItemDescription, cartItemRows.size());
-
 		// Verification - Smart form Item Updated with Quantity, UOM and UnitPrice
 		verify_UpdateCart(UnitPrice, UOM, Quantity, cartItemRows.size());
 
 	}
 
 	/**
-	 * This Method performs all Verifications For  Local,Global,Fav,ComparisonSceen Cart Items
+	 * @summary This Method performs all Verifications For  Local,Global,Favorite,ComparisonSceen Cart Items
+	 * @author Lalitha Banda
+	 * @date 14/9/16
 	 **/
-	public void perform_CartItemVerifications(String UnitPrice,String UOM,String Quantity) {
+	public void perform_CartItemVerifications(String UnitPrice,String UOM,String Quantity,String itemNumber) {
 		// clicking cart link
 		clickCartItemsLink();
 
@@ -171,15 +204,16 @@ public class MainNav {
 		TestReporter.logStep("Total Rows available in Cart :"+ cartItemRows.size());
 
 		// Click on Edit
-		click_CartItemEdit(cartItemRows.size());
+		click_CartItemEdit(itemNumber);
 
 		// Update - Unit Price , UOM
 		TestReporter.logStep("Item Qty befor Update : "+ txtItemQuantity.getAttribute("value"));
 		String actualQty = txtItemQuantity.getAttribute("value");
-		
+
+		Sleeper.sleep(3000);
 		txtItemUnitPrice.isDisplayed();
+		txtItemUnitPrice.clear();
 		txtItemUnitPrice.safeSet(UnitPrice);
-		txtItemUnitPrice.isDisplayed();
 		lstItemunitOfMeasure.select(UOM);
 
 		btnAddToCart.jsClick();
@@ -194,7 +228,7 @@ public class MainNav {
 		TestReporter.logStep("Item Qty after Update : "+ expectedQty);
 
 		// Click on Edit
-		click_CartItemEdit(cartItemRows.size());
+		click_CartItemEdit(itemNumber);
 
 		String expectedUP = txtItemUnitPrice.getAttribute("value");
 		String expectedUOM = lstItemunitOfMeasure.getFirstSelectedOption().getText();
@@ -210,7 +244,32 @@ public class MainNav {
 
 	}
 
-	// Method for Application Logout
+
+	/**
+	 * @summary Verify Cart Items 
+	 * @author Lalitha Banda
+	 * @date 14/9/16
+	 **/
+	public boolean verifyCartValue(String ItemType){
+		boolean statsuFlag = false;
+		lblCartValue.syncVisible(15, false);
+
+		TestReporter.logStep("Cart Having [" + lblCartValue.getText()+"] Items!!");
+		if(Integer.parseInt(lblCartValue.getText())>=2){
+			TestReporter.logStep("Cart Having [" + lblCartValue.getText()+"] Items!!");
+			statsuFlag = true;
+		}else{
+			statsuFlag = false;
+		}
+		return statsuFlag;
+	}
+
+
+	/**
+	 * @summary Method for Application Logout
+	 * @author Lalitha Banda
+	 * @date 14/9/16
+	 **/
 	public void clickLogout() {
 		isLogoutDisplayed();
 		lnkLogout.click();

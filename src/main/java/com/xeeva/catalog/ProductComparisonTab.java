@@ -2,10 +2,9 @@ package com.xeeva.catalog;
 
 import java.util.List;
 import java.util.ResourceBundle;
-
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-
+import com.orasi.core.interfaces.Element;
 import com.orasi.core.interfaces.Label;
 import com.orasi.core.interfaces.Listbox;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
@@ -13,7 +12,6 @@ import com.orasi.utils.Constants;
 import com.orasi.utils.OrasiDriver;
 import com.orasi.utils.Sleeper;
 import com.orasi.utils.TestReporter;
-
 
 
 /**
@@ -30,6 +28,7 @@ public class ProductComparisonTab {
 	@FindBy(xpath = "//i[@title='Add To Cart']") private List<WebElement> lstAddToCart;
 	@FindBy(xpath = "//select[@class='textFieldList width90Px']") private Listbox ddSelectUOM;
 	@FindBy(xpath="//div[@id='divAppInfoMsg'][@class='addMessage']") private Label lblCartItemAddedMessage;
+	@FindBy(xpath="//tbody/tr[4]/td/table/tbody/tr[3]/td[2]") private Element eleItemNumber;
 
 
 	/**Constructor**/
@@ -44,11 +43,31 @@ public class ProductComparisonTab {
 	}
 
 	/**Page Interactions**/
+
+	/**
+	 * @summary Method To select UOM vale in Product Comparision Screen 
+	 * @author Lalitha Banda
+	 * @date 14/9/16
+	 **/
 	public void select_UOM(String UOM){
 		ddSelectUOM.select(UOM);
 	}
 
-	// Method to Click on Add to Cart - Product Comparison Screen
+	/**
+	 * @summary Method To read Item Number before going to ADD item into Cart 
+	 * @author Lalitha Banda
+	 * @date 14/9/16
+	 **/
+	public String ReadItemNumber(){
+		TestReporter.logStep( "Item Number from Comparision Screen : "+eleItemNumber.getText());
+		return eleItemNumber.getText();
+	}
+
+	/**
+	 * @summary  Method to Click on Add to Cart - Product Comparison Screen
+	 * @author Lalitha Banda
+	 * @date 14/9/16
+	 **/
 	public void click_AddToCart(String UOM){
 		pageLoaded();
 		select_UOM(UOM);

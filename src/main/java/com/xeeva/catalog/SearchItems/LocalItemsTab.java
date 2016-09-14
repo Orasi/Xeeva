@@ -2,12 +2,9 @@ package com.xeeva.catalog.SearchItems;
 
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.concurrent.TimeUnit;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-
 import com.orasi.core.interfaces.Button;
 import com.orasi.core.interfaces.Label;
 import com.orasi.core.interfaces.Link;
@@ -31,14 +28,14 @@ public class LocalItemsTab {
 	@FindBy(id = "aTab1")	private Link localItemsTab;
 	@FindBy(xpath = ".//*[@id='aTab1']/span[2]") private Label localCount;
 	@FindBy(xpath = ".//*[@id='gvLocalSearch']/tbody/tr/td/span") private  List<WebElement> localItemsGrid;
-	
+
 	//Add-to-cart-Item button
 	@FindBy(xpath="//div[@class='add-to-cart-box']") private Button btnAddItemToCart;
 	@FindBy(xpath="//div[@id='divAppInfoMsg'][@class='addMessage']") private Label lblCartItemAddedMessage;
 
 	//Cart-Item link
 	@FindBy(css="#lnkShowPopup") private Link lnkCartItem;
-	
+
 	/**Constructor**/
 
 	public LocalItemsTab(OrasiDriver driver){
@@ -52,12 +49,20 @@ public class LocalItemsTab {
 
 	/**Page Interactions**/
 
-	// Clicks on local Item Tab 
+	/**
+	 * @summary Method to click on local Item Tab 
+	 * @author Lalitha Banda
+	 * @date 14/9/16
+	 **/
 	public void click_localItemsTab(){
 		localItemsTab.click();
 	}
 
-	// Method to read Local Item Numbers 	
+	/**
+	 * @summary Method to read Local Item Numbers 	
+	 * @author Lalitha Banda
+	 * @date 14/9/16
+	 **/
 	public String  getLocalItemNumber(){
 		String ItemNumber = null;
 
@@ -69,12 +74,12 @@ public class LocalItemsTab {
 				break;
 			}
 		}else{
-			TestReporter.logStep("No Records Found !!");
+			TestReporter.assertFalse(!(localItems.size()>0), "Local Items Count Empty!!");
 		}
 
 		return ItemNumber;
 	}
-	
+
 	/**
 	 * @summary: Method to add local-item to cart and verify.
 	 * @author: Praveen Namburi,@version: Created 08-09-2016.
@@ -90,23 +95,25 @@ public class LocalItemsTab {
 		}else{
 			TestReporter.logStep("No Records Found !!");
 		}
-		
+
 		//Handle Alert if present
 		if(AlertHandler.isAlertPresent(driver, 5)){
 			AlertHandler.handleAlert(driver, 5);
 		}
-		
+
 		Sleeper.sleep(2000);
 		lblCartItemAddedMessage.syncVisible(15, false);
 		String getCartItemAddedMessage = lblCartItemAddedMessage.getText();
 		System.out.println("Message after adding item to cart : "+ getCartItemAddedMessage);
 		TestReporter.assertTrue(getCartItemAddedMessage.contains("added successfully!"), "Item added to the cart.");
 	}
-	
+
 	public void clickCartItemsLink(){
-		lnkCartItem.syncVisible(5, false);
-		lnkCartItem.click();
-		Sleeper.sleep(1000);
-	}
+		  pageLoaded();
+		  lnkCartItem.syncVisible(5, false);
+		  lnkCartItem.click();
+		 }
+
+
 
 }
