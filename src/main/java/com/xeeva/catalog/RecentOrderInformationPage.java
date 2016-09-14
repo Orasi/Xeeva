@@ -115,7 +115,8 @@ public class RecentOrderInformationPage {
 		}*/
 		
 		/**
-		 * @Summary: Method to click on Price Agreement Item link from Recent Orders page
+		 * @Summary: Method to click on Price Agreement Item link from Recent Orders page.
+		 * @author: Praveen Namburi, @version: Created on 14-09-2016
 		 * @param REQValue
 		 */
 		public void clickPAItemLinkFromRecentOrders(String REQValue){
@@ -140,7 +141,6 @@ public class RecentOrderInformationPage {
 					}
 				}
 			}
-			driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
 		}
 			
 		/**

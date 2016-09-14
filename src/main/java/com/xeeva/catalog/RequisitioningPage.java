@@ -272,7 +272,7 @@ public class RequisitioningPage {
 			}
 		}
 
-		driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+		//driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
 
 		return returnValue;
 	}
@@ -284,7 +284,7 @@ public class RequisitioningPage {
 	public void clickShowFavouriteItems(){
 		lnkShowFavItems.syncVisible(15, false);
 		lnkShowFavItems.click();
-		Sleeper.sleep(4000);
+		
 	}
 
 	/**
@@ -345,6 +345,9 @@ public class RequisitioningPage {
 				}
 				break;
 			}				
+		}else if(getGlobalItemsCount.contains("0")){
+			TestReporter.log(" 'No Records Found !!' in Global Items tab.");
+			
 		}
 
 		

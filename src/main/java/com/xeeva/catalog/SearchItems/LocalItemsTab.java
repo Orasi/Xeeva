@@ -117,7 +117,6 @@ public class LocalItemsTab {
 		pageLoaded();
 		lnkCartItem.syncVisible(5, false);
 		lnkCartItem.click();
-		//Sleeper.sleep(1000);
 	}
 
 }
