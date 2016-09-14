@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.Select;
 
 import com.orasi.core.interfaces.Button;
 import com.orasi.core.interfaces.Label;
@@ -88,7 +89,7 @@ public class RequisitioningPage {
 	@FindBy(xpath="//a[@id='aTab1']/span[2]") private Label lblLocalItems;
 	@FindBy(xpath="//a[@id='aTab2']/span") private Label lblGlobalItems;
 	@FindBy(xpath="//*[@class='Datagridborder mainRecentOdersGrid']/tbody/tr") private List<WebElement> mainRecentOdersGrid;
-	
+	//@FindBy(xpath="//select[@class='textFieldList width90Px']") private Listbox lstSelUOMValue;
 	
 
 	//**Constructor**//*
@@ -293,6 +294,7 @@ public class RequisitioningPage {
 	 * @param strUOMValue
 	 */
 	public void addPriceAgreementItemsFromFavFolder(String strUOMValue){
+		pageLoaded();
 		String getLocalItemsCount = lblLocalItems.getText();
 		TestReporter.log("Local-Items Count is: "+ getLocalItemsCount);
 
@@ -302,14 +304,20 @@ public class RequisitioningPage {
 		if(!getLocalItemsCount.contains("0")){
 			TestReporter.log("Click on Local-Items tab.");
 			LocalItemsTab localItem = new LocalItemsTab(driver);
-			localItem.click_localItemsTab();
+			//localItem.click_localItemsTab();
+			
 			String itemNumber = null;
 			List<WebElement> localItems = localItemsGrid;
-
 			for(WebElement inputItem : localItems){
 				itemNumber = inputItem.getText();
-				System.out.println("Item number is: "+itemNumber);
-				lstSelectUOMValue.select(strUOMValue);
+				TestReporter.log("Item number is: "+itemNumber);
+				Sleeper.sleep(1000);
+				//Select the UOM option from the listbox.
+				List<WebElement> listboxUOMs = driver.findElements(By.xpath("//select[@class='textFieldList width90Px']"));
+				Select select = new Select(listboxUOMs.get(0));
+				select.selectByVisibleText(strUOMValue);
+				//new Select(listboxUOMs.get(0)).selectByVisibleText(strUOMValue);
+				//Click on Add-to-cart link.
 				List<WebElement> localAddToCartItemLinks = lstAddToCartItemsGrid;
 				if(localAddToCartItemLinks.size()>0){
 					for(WebElement linkAddToCartItem :localAddToCartItemLinks){
@@ -333,8 +341,11 @@ public class RequisitioningPage {
 			List<WebElement> globalItems = globalItemsGrid;
 			for(WebElement inputItem : globalItems){
 				itemNumber = inputItem.getText();
-				System.out.println("Item number is: "+itemNumber);
-				lstSelectUOMValue.select(strUOMValue);
+				TestReporter.log("Item number is: "+itemNumber);
+				//Select the UOM option from the listbox.
+				List<WebElement> listboxUOMs = driver.findElements(By.xpath("//select[@class='textFieldList']"));
+				new Select(listboxUOMs.get(0)).selectByVisibleText(strUOMValue);
+				//Click on Add-to-cart link.
 				List<WebElement> globalAddToCartItemLinks = lstAddToCartItemsGrid;
 				if(globalAddToCartItemLinks.size()>0){
 					for(WebElement linkAddToCartItem :globalAddToCartItemLinks){
@@ -346,7 +357,8 @@ public class RequisitioningPage {
 				break;
 			}				
 		}else if(getGlobalItemsCount.contains("0")){
-			TestReporter.log(" 'No Records Found !!' in Global Items tab.");
+			//If there are no records in both local & global items, then test should fail.
+			TestReporter.assertFalse(getGlobalItemsCount.contains("0"), " 'No Records Found !!' from Local & Global Items tab.");
 			
 		}
 

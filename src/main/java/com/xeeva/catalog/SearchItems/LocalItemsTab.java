@@ -41,7 +41,8 @@ public class LocalItemsTab {
 	@FindBy(xpath="//div[@id='divAppInfoMsg'][@class='addMessage']") private String lblCartItemAddedMessage;
 
 	//Cart-Item link
-	@FindBy(css="#lnkShowPopup") private Link lnkCartItem;
+	//@FindBy(css="#lnkShowPopup") private Link lnkCartItem;
+	@FindBy(xpath="//a[@id='lnkShowPopup']") private Link lnkCartItem;
 	
 	/**Constructor**/
 
@@ -58,13 +59,14 @@ public class LocalItemsTab {
 
 	// Clicks on local Item Tab 
 	public void click_localItemsTab(){
+		pageLoaded();
 		localItemsTab.click();
 	}
 
 	// Method to read Local Item Numbers 	
 	public String  getLocalItemNumber(){
 		String ItemNumber = null;
-
+		pageLoaded();
 		click_localItemsTab();
 		List<WebElement> localItems= localItemsGrid;
 		if(localItems.size()>0){
@@ -115,7 +117,8 @@ public class LocalItemsTab {
 	
 	public void clickCartItemsLink(){
 		pageLoaded();
-		lnkCartItem.syncVisible(5, false);
+		//lnkCartItem.syncVisible(90, false);
+		Sleeper.sleep(3000);
 		lnkCartItem.click();
 	}
 

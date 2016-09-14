@@ -1,4 +1,4 @@
-package sandbox;
+package catalog.priceAgreementItems;
 
 import org.testng.ITestContext;
 import org.testng.annotations.AfterTest;
@@ -19,7 +19,7 @@ import com.xeeva.navigation.MainNav;
 
 /**
  * @Summary: To verify that requestor is able to add the non price agreement item from favorite list. 
- * @author praveen varma, @version: Created 08-09-2016
+ * @author praveen varma, @version: Created 13-09-2016
  */
  public class Add_PriceAgreementItem_FavouriteFolder extends TestEnvironment {
 			
@@ -41,7 +41,7 @@ import com.xeeva.navigation.MainNav;
 	    }
 		
 		/**
-		 * @description: To initialize the driver and setup the environment.
+		 * @Description: To initialize the driver and setup the environment.
 		 * @param runLocation,browserUnderTest,@param browserVersion
 		 * @param operatingSystem,@param environment
 		 */
@@ -58,7 +58,7 @@ import com.xeeva.navigation.MainNav;
 		}
 
 		/**
-		 * @description: Close the driver instance.
+		 * @Description: Close the driver instance.
 		 * @param testResults
 		 */
 		@AfterTest
@@ -67,12 +67,11 @@ import com.xeeva.navigation.MainNav;
 		}
 		
 		/**
-		 * @param itemNumber 
 		 * @Description: Main business-logic of the test-case resides here.
-		 * @param role,location,selectUOM
+		 * @param role,location,selectUOM,itemNumber 
 		 */
 		@Test(dataProvider = "dataScenario")
-		public void addPriceAgreementItemInCompareScreen(String role, String location,String strUOMValue){
+		public void addPriceAgreementItemFromFavFolder(String role, String location,String strUOMValue){
 			
 			// Application Login 
 			LoginPage loginPage = new LoginPage(getDriver());
@@ -87,8 +86,7 @@ import com.xeeva.navigation.MainNav;
 			reqPage.clickShowFavouriteItems();
 			String getItemNumValue = reqPage.getItemNumberFromCatalog();
 			TestReporter.log("Item-Number to be added to cart: "+ getItemNumValue);
-			reqPage.addPriceAgreementItemsFromFavFolder(strUOMValue);
-			
+						
 			//Navigate to Local-Items page and Add-Item to Cart.
 			LocalItemsTab localItemsPage = new LocalItemsTab(getDriver());
 			TestReporter.logStep("Navigate to Local-Items page and Click on Cart-Items link.");
@@ -107,7 +105,7 @@ import com.xeeva.navigation.MainNav;
 			
 			//Navigate to Local-Items page and Add-Item-To-Cart.
 			TestReporter.logStep("Navigate to Local-Items page and Add-Item-To-Cart.");
-			localItemsPage.addLocalItemToCartAndVerify();
+			reqPage.addPriceAgreementItemsFromFavFolder(strUOMValue);
 			
 			//Navigate to Cart-Info page and grab the Quantity value after adding Item-To-Cart.
 			TestReporter.logStep("Navigate to Cart-Info page and grab the Quantity value "
@@ -115,11 +113,14 @@ import com.xeeva.navigation.MainNav;
 			localItemsPage.clickCartItemsLink();
 			String getQuantityAfter = cartInfoPage.getQuantityForAddedItemToCart(getItemNumValue);
 			TestReporter.log("Quantity value after adding item to cart : "+getQuantityAfter);
-			//cartInfoPage.
 			
-			//Validating that the Unit-Price is not editable for the added item in the cart.
-			TestReporter.log("Verify that the Unit-Price is not editable for the added item in cart.");
-			cartInfoPage.verifyUnitPriceIsNotEditable(getItemNumValue);
+			//Verifying Quantity value before and after adding item to cart.
+			TestReporter.logStep("Verifying Quantity value before and after adding item to cart.");
+			TestReporter.assertNotEquals(getQuantityBefore, getQuantityAfter, "Quantity should be increased "
+					+ "for already added item to cart.");
+			
+			// Close cart-info page.
+			TestReporter.logStep("Close cart-info page.");
 			cartInfoPage.closeCartInfoPage();
 			
 			// Application Logout
