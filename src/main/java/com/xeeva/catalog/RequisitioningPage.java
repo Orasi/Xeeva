@@ -177,11 +177,13 @@ public class RequisitioningPage {
 
 
 	// This method to performs catalog search 
+	//Added the step - searchButton.syncVisible(20,false) by Praveen - 14-09-2016.
 	public void  perform_CatalogSearch(String searchItem){
 		catalogSearch.clear();
 		catalogSearch.safeSet(searchItem);
+		searchButton.syncVisible(20,false);
 		searchButton.click();
-		Sleeper.sleep(5000);
+		Sleeper.sleep(4000);
 
 	}
 

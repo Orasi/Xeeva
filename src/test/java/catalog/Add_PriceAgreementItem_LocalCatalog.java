@@ -111,10 +111,12 @@ import com.xeeva.navigation.MainNav;
 			localItemsPage.clickCartItemsLink();
 			String getQuantityAfter = cartInfoPage.getQuantityForAddedItemToCart(itemNumber);
 			TestReporter.log("Quantity value after adding item to cart : "+getQuantityAfter);
-			//cartInfoPage.
+			TestReporter.logStep("Verifying Quantity value before and after adding item to cart.");
+			TestReporter.assertNotEquals(getQuantityBefore, getQuantityAfter, "Quantity should be increased "
+					+ "for already added item to cart.");
 			
 			//Validating that the Unit-Price is not editable for the added item in the cart.
-			TestReporter.log("Verify that the Unit-Price is not editable for the added item in cart.");
+			TestReporter.logStep("Verifying that the Unit-Price is not editable for the added item in cart.");
 			cartInfoPage.verifyUnitPriceIsNotEditable(itemNumber);
 			cartInfoPage.closeCartInfoPage();
 			

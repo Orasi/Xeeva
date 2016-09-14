@@ -26,7 +26,7 @@ public class CartInformationPage {
 	private ResourceBundle userCredentialRepo = ResourceBundle.getBundle(Constants.USER_CREDENTIALS_PATH);
 
 	/**Page Elements**/
-	@FindBy(css="#fancybox-outer") private Element eleCartInformationPage;	
+	@FindBy(id="fancybox-outer") private Element eleCartInformationPage;	
 	@FindBy(xpath="//*[@id='tblCartInfo']/tbody") private WebElement tblCartInfo;
 	@FindBy(xpath="//a[@id='fancybox-close']") private Link lnkCloseCartInfo;
 	@FindBy(xpath ="//div/table[@id='customfa2']/tbody/tr/td") private Label lblCartEmptyText;
@@ -39,7 +39,7 @@ public class CartInformationPage {
 
 	
 	public void pageLoaded(){
-		eleCartInformationPage.syncVisible(15, false);
+		eleCartInformationPage.syncVisible(30, false);
 	}
 
 	/**Page Interactions**/
@@ -92,7 +92,7 @@ public class CartInformationPage {
 				driver.findElement(By.xpath("//table[@id='tblCartInfo']/tbody/tr["+ ((rows+1)) +"]/td[5]"));
 				String itemQuantityValue = driver.findElement(By.xpath("//table[@id='tblCartInfo']/tbody/"
 						+ "tr["+ ((rows+1)) +"]/td[5]/input")).getAttribute("value");
-				System.out.println("Captured Item Quantity value: "+itemQuantityValue);
+				//System.out.println("Captured Item Quantity value: "+itemQuantityValue);
 				quantityValue = itemQuantityValue;
 				break;
 			}/*else {
