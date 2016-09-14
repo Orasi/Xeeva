@@ -94,7 +94,7 @@ public class LocalItemsTab {
 				break;
 			}
 		}else{
-			TestReporter.assertTrue(localItems.size() == 0, "No Records Found !!");
+			TestReporter.assertFalse(localItems.size() == 0, "No Records Found !!");
 		}
 		
 		//Handle Alert if present
