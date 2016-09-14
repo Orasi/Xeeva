@@ -7,7 +7,6 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
-
 import com.orasi.utils.TestEnvironment;
 import com.orasi.utils.TestReporter;
 import com.orasi.utils.dataProviders.ExcelDataProvider;
@@ -18,14 +17,13 @@ import com.xeeva.login.LoginPage;
 import com.xeeva.navigation.MainNav;
 
 /**
- * @summary Test To add non price agreement from recent orders list
+ * @summary Test To add non price agreement item from recent orders list
  * @author  Lalitha Banda
  * @version	08/09/2016
  * *
  */
 
 public class AddNonPriceAgreementItem_FromRecentOrders extends TestEnvironment{
-
 
 	// **************
 	// Data Provider
@@ -61,7 +59,7 @@ public class AddNonPriceAgreementItem_FromRecentOrders extends TestEnvironment{
 	}
 
 	@Test(dataProvider = "dataScenario")
-	public void smartForm(String role, String location,String selectUOM,String PAItem,String NPAItem,String ID,String UP,String Qty){
+	public void recentOrders(String role, String location,String selectUOM,String PAItem,String NPAItem,String ID,String UP,String Qty){
 
 		// Application Login 
 		TestReporter.logStep("Login into application");
@@ -86,7 +84,7 @@ public class AddNonPriceAgreementItem_FromRecentOrders extends TestEnvironment{
 	    // Application Logout
 		TestReporter.logStep("Application Logout");
 		MainNav mainNav = new MainNav(getDriver());
-		mainNav.clickLogout();
+		//mainNav.clickLogout();
 
 	}
 

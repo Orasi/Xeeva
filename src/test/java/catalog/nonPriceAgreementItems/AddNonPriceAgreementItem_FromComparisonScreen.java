@@ -16,6 +16,13 @@ import com.xeeva.catalog.SearchItems.GlobalItemsTab;
 import com.xeeva.login.LoginPage;
 import com.xeeva.navigation.MainNav;
 
+/**
+ * @summary Test To add non price agreement Item from Comparison Screen
+ * @author  Lalitha Banda
+ * @version	14/09/2016
+ * *
+ */
+
 public class AddNonPriceAgreementItem_FromComparisonScreen extends TestEnvironment {
 
 	// **************
@@ -48,11 +55,11 @@ public class AddNonPriceAgreementItem_FromComparisonScreen extends TestEnvironme
 
 	@AfterTest
 	public void close(ITestContext testResults){
-		//endTest("TestAlert", testResults);
+		endTest("TestAlert", testResults);
 	}
 
 	@Test(dataProvider = "dataScenario")
-	public void smartForm(String role, String location,String GlobalItem,String ItemDescription,String Quantity,
+	public void comparisonScreen(String role, String location,String GlobalItem,String ItemDescription,String Quantity,
 			String UnitofMeasure,String UnitPrice,String UpdatedUnitPrice,String UpdatedUnitofMeasure){
 
 		// Application Login 
@@ -75,12 +82,14 @@ public class AddNonPriceAgreementItem_FromComparisonScreen extends TestEnvironme
 		// Adding Item to cart 
 		TestReporter.logStep("Clicking on Add to cart From Product Comparison Tab");
 		ProductComparisonTab pComparison = new ProductComparisonTab(getDriver());
+		String itemNumber = pComparison.ReadItemNumber();
 		pComparison.click_AddToCart(UnitofMeasure);
 		
 		// Verifications for Cart Item 
 		TestReporter.logStep("Verifications for Cart Item ");
 		MainNav mainNav = new MainNav(getDriver());
-		mainNav.perform_CartItemVerifications(UpdatedUnitPrice, UpdatedUnitofMeasure, Quantity);
+		mainNav.pageLoaded();
+		mainNav.perform_CartItemVerifications(UpdatedUnitPrice, UpdatedUnitofMeasure, Quantity,itemNumber);
 
 		// Application Logout
 		TestReporter.logStep("Application Logout");

@@ -16,6 +16,13 @@ import com.xeeva.catalog.SearchItems.GlobalItemsTab;
 import com.xeeva.login.LoginPage;
 import com.xeeva.navigation.MainNav;
 
+/**
+ * @summary Test To add non price agreement item from Global Items list
+ * @author  Lalitha Banda
+ * @version	14/09/2016
+ * *
+ */
+
 public class AddNonPriceAgreementItem_FromGlobalItems extends TestEnvironment {
 
 	// **************
@@ -52,7 +59,7 @@ public class AddNonPriceAgreementItem_FromGlobalItems extends TestEnvironment {
 	}
 
 	@Test(dataProvider = "dataScenario")
-	public void smartForm(String role, String location,String GlobalItem,String ItemDescription,String Quantity,
+	public void globalItems(String role, String location,String GlobalItem,String ItemDescription,String Quantity,
 			String UnitofMeasure,String UnitPrice,String UpdatedUnitPrice,String UpdatedUnitofMeasure){
 
 		// Application Login 
@@ -78,12 +85,14 @@ public class AddNonPriceAgreementItem_FromGlobalItems extends TestEnvironment {
 
 		//Clicking Add To Cart Button
 		TestReporter.logStep("Clicking on Add To Cart Button - from Global Search Records");
+		String itemNumber = globalitems.getGlobalItemNumber();
+		System.out.println(itemNumber);
 		globalitems.click_AddToCartButton();
 
 		// Verifications for Cart Item 
 		TestReporter.logStep("Verifications for Cart Item ");
 		MainNav mainNav = new MainNav(getDriver());
-		mainNav.perform_CartItemVerifications(UpdatedUnitPrice, UpdatedUnitofMeasure, Quantity);
+		mainNav.perform_CartItemVerifications(UpdatedUnitPrice, UpdatedUnitofMeasure, Quantity,itemNumber);
 
 		// Application Logout
 		TestReporter.logStep("Application Logout");
