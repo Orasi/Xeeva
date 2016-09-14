@@ -321,8 +321,6 @@ public class RequisitioningPage {
 			}
 		}
 
-		//driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-
 		return returnValue;
 	}
 
