@@ -1,4 +1,4 @@
-package catalog;
+package sandbox;
 
 import org.testng.ITestContext;
 import org.testng.annotations.AfterTest;
