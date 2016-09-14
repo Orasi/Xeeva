@@ -90,7 +90,7 @@ public class RequisitioningPage {
 	@FindBy(xpath="//a[@id='aTab2']/span") private Label lblGlobalItems;
 	@FindBy(xpath="//*[@class='Datagridborder mainRecentOdersGrid']/tbody/tr") private List<WebElement> mainRecentOdersGrid;
 	//@FindBy(xpath="//select[@class='textFieldList width90Px']") private Listbox lstSelUOMValue;
-	
+	@FindBy(xpath="//div[@id='divAppInfoMsg'][@class='addMessage']") private Label lblCartItemAddedMessage;
 
 	//**Constructor**//*
 
@@ -105,26 +105,46 @@ public class RequisitioningPage {
 
 	//**Page Interactions**//*
 
+	/**
+	 * @summary  Method to clcik on REQTab
+	 * @author Lalitha Banda
+	 * @date 14/9/16
+	 **/
 	public void click_ReqTab(){
 		ReqTab.syncVisible(10, false);
 		ReqTab.click();
 		Sleeper.sleep(2000);
 	}
 
-	// Method to click on CreateSmartForm Link 
+
+	/**
+	 * @summary  Method to click on CreateSmartForm Link 
+	 * @author Lalitha Banda
+	 * @date 14/9/16
+	 **/
 	private void click_SmartFormRequest(){
 		pageLoaded();
 		smartFormRequest.click();
 	}
 
-	// Method to click on submit 
+
+	/**
+	 * @summary  Method to click on submit  
+	 * @author Lalitha Banda
+	 * @date 14/9/16
+	 **/
 	private void click_Submit(){
 		pageLoaded();
 		btnSubmit.click();
+		Sleeper.sleep(2000);
 
 	}
 
-	// Method to Select Requisition Type
+	/**
+	 * @summary  Method to Select Requisition Type
+	 * @author Lalitha Banda
+	 * @date 14/9/16
+	 **/
 	private void selectRequisitionType(String RequisitionType){
 		switch(RequisitionType){
 
@@ -141,7 +161,11 @@ public class RequisitioningPage {
 		}
 	}
 
-	// Method For Material Request Form
+	/**
+	 * @summary  Method For Material Request Form
+	 * @author Lalitha Banda
+	 * @date 14/9/16
+	 **/
 	private void createMaterialRequest(String ID,String UNSPS,String SS,String CategoryType ,String Category,String SubCategory,
 			String MN,String MPN,String Quantity,String UOM,String Price){
 		itemDescription.sendKeys(ID);
@@ -159,7 +183,12 @@ public class RequisitioningPage {
 	}
 
 
-	// This Method Generates Smart form Request
+
+	/**
+	 * @summary   This Method Generates Smart form Request
+	 * @author Lalitha Banda
+	 * @date 14/9/16
+	 **/
 	public void createSmartFormRequest(String RequisitionType,String ItemDescription,String UNSPS,String SS,
 			String CategoryType,String Category,String SubCategory,String MN,String MPN,String Quantity,String UnitofMeasure,String UnitPrice){
 		click_ReqTab();
@@ -167,16 +196,29 @@ public class RequisitioningPage {
 		selectRequisitionType(RequisitionType);
 		createMaterialRequest(ItemDescription,UNSPS,SS,CategoryType,Category,SubCategory,MN,MPN,Quantity,UnitofMeasure,UnitPrice );
 		click_Submit();
+		Verify_SmartFormItem();
 
 	}
 
-	// This Method Verifies Smart Form Item
-	public void Verify_SmartFormItem(String ItemDescription){
-		TestReporter.logStep("Expected : "+"["+cartItem.getText().trim()+"]"+"Actual : "+"["+ItemDescription.trim() +"]");
-		TestReporter.assertTrue(cartItem.getText().trim().contains(ItemDescription.trim()), "Smart Form Item is Verified !!");
+
+	/**
+	 * @summary   This Method Verifies Smart Form Item
+	 * @author Lalitha Banda
+	 * @date 14/9/16
+	 **/
+	public void Verify_SmartFormItem(){
+		lblCartItemAddedMessage.syncVisible(5, false);
+		String getCartItemAddedMessage = lblCartItemAddedMessage.getText();
+		System.out.println("----------------"+getCartItemAddedMessage);
+		TestReporter.assertTrue(getCartItemAddedMessage.equalsIgnoreCase("The item has been added successfully!"), "Item added to the cart.");
 	}
 
 
+	/**
+	 * @summary  This method to performs catalog search 
+	 * @author Lalitha Banda
+	 * @date 14/9/16
+	 **/
 	// This method to performs catalog search 
 	//Added the step - searchButton.syncVisible(20,false) by Praveen - 14-09-2016.
 	public void  perform_CatalogSearch(String searchItem){
@@ -188,13 +230,22 @@ public class RequisitioningPage {
 
 	}
 
-	// Clicks on Global Item Tab  from Search Result 
+
+	/**
+	 * @summary Clicks on Global Item Tab  from Search Result 
+	 * @author Lalitha Banda
+	 * @date 14/9/16
+	 **/
 	public String  get_SearchResultItem(WebElement inputElement){
 		return inputElement.getText();
 	}
 
 
-	// Method to Verify catalog Search Functionality
+	/**
+	 * @summary Method to Verify catalog Search Functionality
+	 * @author Lalitha Banda
+	 * @date 14/9/16
+	 **/
 	public void verify_SearchItems(String ItemType,String ItemNumber){
 		switch(ItemType){
 
@@ -232,10 +283,7 @@ public class RequisitioningPage {
 		lblRecentOrders.click();
 	}
 
-	
-	
-	
-	
+
 	/**
 	 * @summary: Method to click on Requisition cart link # which has only REQ Number.
 	 * @Author: Praveen Namburi,@version: Created 07-09-2016
@@ -277,7 +325,7 @@ public class RequisitioningPage {
 
 		return returnValue;
 	}
-	
+
 	/**
 	 * @summary: Method to click on Show Favourite items.
 	 * @author: Praveen Namburi, @version: Created 09-09-2016
@@ -362,15 +410,23 @@ public class RequisitioningPage {
 			
 		}
 
-		
+	}
+
+
+	/**
+	 * @summary Method to click on FavoriteItem Link 
+	 * @author Lalitha Banda
+	 * @date 14/9/16
+	 **/
+	public void click_FavoriteItem(){
+		pageLoaded();
+		lnkShowFavItems.syncVisible(5, false);
+		TestReporter.assertTrue(lnkShowFavItems.isDisplayed(), "Fav Icon element is Displaying!!");
+		lnkShowFavItems.click();
+		Sleeper.sleep(2000);
 	}
 	
 	
-	// Method to click on FavoriteItem Link 
-	  public void click_FavoriteItem(){
-	   pageLoaded();
-	   lnkShowFavItems.click();
-	  }
 	  
 	  /**
 	   * @summary: Method to get the Item Number from catalog table.

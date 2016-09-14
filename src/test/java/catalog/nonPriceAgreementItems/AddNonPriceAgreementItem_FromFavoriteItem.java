@@ -17,6 +17,13 @@ import com.xeeva.catalog.SearchItems.GlobalItemsTab;
 import com.xeeva.login.LoginPage;
 import com.xeeva.navigation.MainNav;
 
+/**
+ * @summary Test To add non price agreement Item from Favorite Item list
+ * @author  Lalitha Banda
+ * @version	14/09/2016
+ * *
+ */
+
 public class AddNonPriceAgreementItem_FromFavoriteItem extends TestEnvironment{
 
 
@@ -54,7 +61,7 @@ public class AddNonPriceAgreementItem_FromFavoriteItem extends TestEnvironment{
 	}
 
 	@Test(dataProvider = "dataScenario")
-	public void smartForm(String role, String location,String GlobalItem,String ItemDescription,String Quantity,
+	public void favoriteItems(String role, String location,String GlobalItem,String ItemDescription,String Quantity,
 			String UnitofMeasure,String UnitPrice,String UpdatedUnitPrice,String UpdatedUnitofMeasure){
 
 		// Application Login 
@@ -74,6 +81,7 @@ public class AddNonPriceAgreementItem_FromFavoriteItem extends TestEnvironment{
 		// GlobalItemsTab  - Clicking the GlobalItems Link
 		TestReporter.logStep("Clicking the GlobalItems Link");
 		GlobalItemsTab globalitems = new GlobalItemsTab(getDriver());
+		String itemNumber = globalitems.getGlobalItemNumber();
 		globalitems.click_GlobalItemsTab();
 
 		//Modifying the ItemDetailsPage 
@@ -84,7 +92,7 @@ public class AddNonPriceAgreementItem_FromFavoriteItem extends TestEnvironment{
 		// Verifications for Cart Item 
 		TestReporter.logStep("Verifications for Cart Item ");
 		MainNav mainNav = new MainNav(getDriver());
-		mainNav.perform_CartItemVerifications(UpdatedUnitPrice, UpdatedUnitofMeasure, Quantity);
+		mainNav.perform_CartItemVerifications(UpdatedUnitPrice, UpdatedUnitofMeasure, Quantity,itemNumber);
 
 		// Application Logout
 		TestReporter.logStep("Application Logout");
@@ -93,3 +101,4 @@ public class AddNonPriceAgreementItem_FromFavoriteItem extends TestEnvironment{
 
 
 }
+

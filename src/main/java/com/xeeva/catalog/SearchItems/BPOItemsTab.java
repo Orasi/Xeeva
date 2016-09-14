@@ -2,23 +2,13 @@ package com.xeeva.catalog.SearchItems;
 
 import java.util.List;
 import java.util.ResourceBundle;
-
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-
-import com.orasi.core.interfaces.Element;
-import com.orasi.core.interfaces.Label;
 import com.orasi.core.interfaces.Link;
-import com.orasi.core.interfaces.Textbox;
-import com.orasi.core.interfaces.Webtable;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
 import com.orasi.utils.Constants;
 import com.orasi.utils.OrasiDriver;
 import com.orasi.utils.Sleeper;
-import com.orasi.utils.TestReporter;
-
-
 
 /**
  * @summary This page contains BPO Items Tab objects
@@ -34,7 +24,6 @@ public class BPOItemsTab {
 	@FindBy(xpath = ".//*[@id='gvBPOSearch']/tbody/tr/td/span") private  List<WebElement> bpoItemsGrid;
 
 
-
 	/**Constructor**/
 
 	public BPOItemsTab(OrasiDriver driver){
@@ -48,17 +37,26 @@ public class BPOItemsTab {
 
 	/**Page Interactions**/
 
-	// Clicks on bpo Item Tab 
+
+	/**
+	 * @summary Clicks on BPO Item Tab
+	 * @author Lalitha Banda
+	 * @date 14/9/16
+	 **/
 	public void click_bpoItemsTab(){
 		pageLoaded();
 		bpoItemsTab.click();
 		Sleeper.sleep(3000);
 	}
 
-	// Method to read bpo Item Numbers 	
+	/**
+	 * @summary Method to read bpo Item Numbers 	
+	 * @author Lalitha Banda
+	 * @date 14/9/16
+	 **/
+
 	public String  getBPOItemNumber(){
 		String ItemNumber = null;
-
 		click_bpoItemsTab();
 		List<WebElement> localItems= bpoItemsGrid;
 		if(localItems.size()>0){
@@ -67,8 +65,8 @@ public class BPOItemsTab {
 				break;
 			}
 		}
-
 		return ItemNumber;
 	}
 
 }
+

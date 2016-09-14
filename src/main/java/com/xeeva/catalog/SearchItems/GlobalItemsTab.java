@@ -2,25 +2,16 @@ package com.xeeva.catalog.SearchItems;
 
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.concurrent.TimeUnit;
-
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-
 import com.orasi.core.interfaces.Button;
-import com.orasi.core.interfaces.Element;
 import com.orasi.core.interfaces.Label;
 import com.orasi.core.interfaces.Link;
-import com.orasi.core.interfaces.Textbox;
-import com.orasi.core.interfaces.Webtable;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
 import com.orasi.utils.Constants;
 import com.orasi.utils.OrasiDriver;
 import com.orasi.utils.Sleeper;
 import com.orasi.utils.TestReporter;
-
 
 
 /**
@@ -56,14 +47,25 @@ public class GlobalItemsTab {
 
 	/**Page Interactions**/
 
-	// Clicks on Global Item Tab 
+
+	/**
+	 * @summary Click on Global Item Tab 	
+	 * @author Lalitha Banda
+	 * @date 14/9/16
+	 **/
 	public void click_GlobalItemsTab(){
-		pageLoaded();
-		globalItemsTab.click();
-		Sleeper.sleep(3000);
+		globalItemsTab.syncVisible(10, false);
+		globalItemsTab.isDisplayed();
+		driver.executeJavaScript("arguments[0].click();", globalItemsTab);
+		//globalItemsTab.click();
+		Sleeper.sleep(2000);
 	}
 
-	// Method to read global Item Numbers 	
+	/**
+	 * @summary Method to read global Item Numbers 	
+	 * @author Lalitha Banda
+	 * @date 14/9/16
+	 **/
 	public String  getGlobalItemNumber(){
 		String ItemNumber = null;
 
@@ -79,18 +81,32 @@ public class GlobalItemsTab {
 	}
 
 
-	//Method to click Add-To-Cart Button
+	/**
+	 * @summary Method to click Add-To-Cart Button
+	 * @author Lalitha Banda
+	 * @date 14/9/16
+	 **/
 	public void click_AddToCartButton(){
 		AddToCart.syncVisible(10, false);
 		AddToCart.click();
 		Sleeper.sleep(2000);
 	}
 
-	// Method to Read Number of Records from Global Table
+	/**
+	 * @summary Method to Read Number of Records from Global Table
+	 * @author Lalitha Banda
+	 * @date 14/9/16
+	 **/
 	public int read_GlobalItemsCount(){
 		return Integer.parseInt(globalCount.getText().replaceAll("\\D+", ""));
 	}
 
+	
+	/**
+	 * @summary Method to compare selected Item from Comparison Screen
+	 * @author Lalitha Banda
+	 * @date 14/9/16
+	 **/
 	public void perform_ItemsComparison(){
 		TestReporter.assertTrue(read_GlobalItemsCount()>3, read_GlobalItemsCount() +" - Global Item Records available!!");
 		for(int i=0;i<3;i++){
@@ -100,3 +116,4 @@ public class GlobalItemsTab {
 	}
 
 }
+
