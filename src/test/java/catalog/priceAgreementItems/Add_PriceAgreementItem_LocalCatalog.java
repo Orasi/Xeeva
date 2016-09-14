@@ -1,5 +1,7 @@
-package catalog;
+package catalog.priceAgreementItems;
 
+import org.testng.ITestContext;
+import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Optional;
@@ -59,10 +61,10 @@ import com.xeeva.navigation.MainNav;
 		 * @description: Close the driver instance.
 		 * @param testResults
 		 */
-		/*@AfterTest
+		@AfterTest
 		public void close(ITestContext testResults){
 			endTest("TestAlert", testResults);
-		}*/
+		}
 		
 		/**
 		 * @Description: Main business-logic of the test-case resides here.
@@ -88,28 +90,39 @@ import com.xeeva.navigation.MainNav;
 			TestReporter.logStep("Navigate to Local-Items page and Click on Cart-Items link.");
 			localItemsPage.clickCartItemsLink();
 			
-			//Navigate to CartInformation page and Verify Added item Unit-Price is not editable.
-			TestReporter.logStep("Navigating to CartInformation page.");
+			//Navigate to Cart-Info page and grab the Quantity value before adding Item-To-Cart.
+			TestReporter.logStep("Navigate to Cart-Info page and grab the Quantity value "
+					+ "before adding Item-To-Cart.");
 			CartInformationPage cartInfoPage = new CartInformationPage(getDriver());
-			//Verify whether the quantity can be increased for already added item in the cart.
-			//TestReporter.log("Verify whether the quantity can be increased for already added item in the cart.");
-			//String getQuantityBefore = cartInfoPage.verifyQuantitybeforeAddingItemToCart(itemNumber);
-			//TestReporter.log("Quantity value before addign item to cart : "+getQuantityBefore);
-			//cartInfoPage.closeCartInfoPage();
+			String getQuantityBefore = cartInfoPage.getQuantityForAddedItemToCart(itemNumber);
+			TestReporter.log("Quantity value before adding item to cart : "+getQuantityBefore);
+			
+			//Close cart-Info page.
+			TestReporter.logStep("Close Cart-Information page.");
+			cartInfoPage.closeCartInfoPage();
 			
 			//Navigate to Local-Items page and Add-Item-To-Cart.
 			TestReporter.logStep("Navigate to Local-Items page and Add-Item-To-Cart.");
 			localItemsPage.addLocalItemToCartAndVerify();
+			
+			//Navigate to Cart-Info page and grab the Quantity value after adding Item-To-Cart.
+			TestReporter.logStep("Navigate to Cart-Info page and grab the Quantity value "
+					+ "after adding Item-To-Cart.");
 			localItemsPage.clickCartItemsLink();
+			String getQuantityAfter = cartInfoPage.getQuantityForAddedItemToCart(itemNumber);
+			TestReporter.log("Quantity value after adding item to cart : "+getQuantityAfter);
+			TestReporter.logStep("Verifying Quantity value before and after adding item to cart.");
+			TestReporter.assertNotEquals(getQuantityBefore, getQuantityAfter, "Quantity should be increased "
+					+ "for already added item to cart.");
 			
 			//Validating that the Unit-Price is not editable for the added item in the cart.
-			TestReporter.log("Validating that the Unit-Price is not editable for the added item in the cart.");
+			TestReporter.logStep("Verifying that the Unit-Price is not editable for the added item in cart.");
 			cartInfoPage.verifyUnitPriceIsNotEditable(itemNumber);
 			cartInfoPage.closeCartInfoPage();
 			
 			// Application Logout
 			MainNav mainNav = new MainNav(getDriver());
-			TestReporter.logStep("Log-Out of the application.");
+			TestReporter.logStep("Navigate to Main-Tabs and Click on Log-Out link.");
 			mainNav.clickLogout();
 			
 		}

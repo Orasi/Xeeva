@@ -101,3 +101,4 @@ public class AddNonPriceAgreementItem_FromFavoriteItem extends TestEnvironment{
 
 
 }
+

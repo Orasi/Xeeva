@@ -109,7 +109,8 @@ public class RecentOrderInformationPage {
 
 	
 	/**
-	 * @Summary: Method to click on Price Agreement Item link from Recent Orders page
+	 * @Summary: Method to click on Price Agreement Item link from Recent Orders page.
+	 * @author: Praveen Namburi, @version: Created on 14-09-2016
 	 * @param REQValue
 	 */
 	public void clickPAItemLinkFromRecentOrders(String REQValue){
@@ -117,7 +118,7 @@ public class RecentOrderInformationPage {
 		Sleeper.sleep(2000);
 		List<WebElement> getRecentOrderRows = driver.findElements(By.xpath("//table[@class='RecentOrderDetailsGrid ']/tbody/tr"));
 		int getRecentOrdRowsCount = getRecentOrderRows.size();
-
+		
 		for(int rows=2; rows<=getRecentOrdRowsCount; rows++){
 			List<WebElement> getREQValues = driver.findElements(By.xpath("//table[@class='RecentOrderDetailsGrid ']/tbody/tr[" + rows + "]/td[1]/span"));
 			for(WebElement getREQValue : getREQValues){
@@ -134,8 +135,8 @@ public class RecentOrderInformationPage {
 				}
 			}
 		}
-		driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
 	}
 
 
 }
+

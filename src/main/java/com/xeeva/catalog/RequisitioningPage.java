@@ -217,11 +217,14 @@ public class RequisitioningPage {
 	 * @author Lalitha Banda
 	 * @date 14/9/16
 	 **/
+	// This method to performs catalog search 
+	//Added the step - searchButton.syncVisible(20,false) by Praveen - 14-09-2016.
 	public void  perform_CatalogSearch(String searchItem){
 		catalogSearch.clear();
 		catalogSearch.safeSet(searchItem);
+		searchButton.syncVisible(20,false);
 		searchButton.click();
-		Sleeper.sleep(5000);
+		Sleeper.sleep(4000);
 
 	}
 
@@ -316,7 +319,7 @@ public class RequisitioningPage {
 			}
 		}
 
-		driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+		//driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
 
 		return returnValue;
 	}
@@ -328,7 +331,7 @@ public class RequisitioningPage {
 	public void clickShowFavouriteItems(){
 		lnkShowFavItems.syncVisible(15, false);
 		lnkShowFavItems.click();
-		Sleeper.sleep(4000);
+		
 	}
 
 	/**
@@ -389,6 +392,9 @@ public class RequisitioningPage {
 				}
 				break;
 			}				
+		}else if(getGlobalItemsCount.contains("0")){
+			TestReporter.log(" 'No Records Found !!' in Global Items tab.");
+			
 		}
 
 	}
@@ -406,4 +412,36 @@ public class RequisitioningPage {
 		lnkShowFavItems.click();
 		Sleeper.sleep(2000);
 	}
+	
+	
+	  
+	  /**
+	   * @summary: Method to get the Item Number from catalog table.
+	   * @author praveen namburi,@version: Created 13-09-2016
+	   * @return getItemNumber
+	   */
+	  public String  getItemNumberFromCatalog(){
+		  Sleeper.sleep(2000);
+		  String getItemNumber = null;
+		  String getLocalItemsCount = lblLocalItems.getText();
+		  TestReporter.log("Local-Items Count is: "+ getLocalItemsCount);
+		  
+		  if(!getLocalItemsCount.contains("0")){
+				TestReporter.log("Click on Local-Items tab.");
+				LocalItemsTab localItem = new LocalItemsTab(driver);
+				localItem.click_localItemsTab();
+				List<WebElement> localItems = localItemsGrid;
+				for(WebElement inputItem : localItems){
+					String itemNumber = inputItem.getText().trim();
+					getItemNumber = itemNumber;
+					break;
+				}
+		  }else if(getLocalItemsCount.contains("0")){
+				TestReporter.log(" 'No Records Found !!' in Local Items tab. ");
+		  }
+		return getItemNumber;
+	  
+	  }	
+	  
+	  
 }
