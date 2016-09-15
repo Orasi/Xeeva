@@ -85,9 +85,13 @@ import com.xeeva.navigation.MainNav;
 			reqPage.click_ReqTab();
 			reqPage.verify_SearchItems(ItemType, itemNumber);
 			
-			//Navigate to Local-Items page and Add-Item to Cart.
+			//Navigate to Local-Items page and Add-Item-To-Cart.
 			LocalItemsTab localItemsPage = new LocalItemsTab(getDriver());
-			TestReporter.logStep("Navigate to Local-Items page and Click on Cart-Items link.");
+			TestReporter.logStep("Navigate to Local-Items page and Add-Item-To-Cart.");
+			localItemsPage.addLocalItemToCartAndVerify();
+			
+			//Navigate to Local-Items page and Add-Item to Cart.
+			TestReporter.logStep("Click on Cart-Items link.");
 			localItemsPage.clickCartItemsLink();
 			
 			//Navigate to Cart-Info page and grab the Quantity value before adding Item-To-Cart.
@@ -122,7 +126,7 @@ import com.xeeva.navigation.MainNav;
 			
 			// Application Logout
 			MainNav mainNav = new MainNav(getDriver());
-			TestReporter.logStep("Navigate to Main-Tabs and Click on Log-Out link.");
+			TestReporter.logStep("Log-Out of the application.");
 			mainNav.clickLogout();
 			
 		}

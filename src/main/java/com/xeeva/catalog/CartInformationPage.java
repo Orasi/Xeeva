@@ -84,9 +84,9 @@ public class CartInformationPage {
 		int getRowsCount = cartInfoTableRows.size();
 		TestReporter.log("Total no. of rows in Cart Info table : " + getRowsCount);
 		
-		for(int rows=1; rows<=getRowsCount; rows++){
+		for(int rows=1; rows<getRowsCount; rows++){
 			String getItemNumber = driver.findElement(By.xpath("//table[@id='tblCartInfo']/"
-					+ "tbody/tr["+ ((rows+1)) +"]/td[1]")).getText();
+					+ "tbody/tr["+ (rows+1) +"]/td[1]")).getText();
 
 			if(getItemNumber.trim().equalsIgnoreCase(itemNumber)){
 				driver.findElement(By.xpath("//table[@id='tblCartInfo']/tbody/tr["+ ((rows+1)) +"]/td[5]"));
