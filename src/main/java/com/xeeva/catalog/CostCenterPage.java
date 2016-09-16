@@ -89,6 +89,8 @@ public class CostCenterPage {
 	 * @date    15/09/16
 	 */
 	public void AddInternalComment(String InternalComment){
+		lblCC.syncVisible(30, false);
+		lblCC.isDisplayed();
 		click_InternalComment();
 		txtInternalComment.safeSet(InternalComment);
 		btnSaveComments.click();
@@ -145,10 +147,10 @@ public class CostCenterPage {
 		case "linelevel" : 
 			TestReporter.logStep( "CC before updation : "+ddCCLineLevel.get(0).getFirstSelectedOption().getText());
 			//Read item number here
-			String randomID =ddCCLineLevel.get(1).getAttribute("id").replaceAll("\\D+", "");
+			String randomID =ddCCLineLevel.get(0).getAttribute("id").replaceAll("\\D+", "");
 			String itemNumber = driver.findElement(By.xpath(".//*[@id='trCCRow_"+randomID+"']/td/a")).getText();
 			TestReporter.logStep("itemNumber :"+ itemNumber);
-			ddCCLineLevel.get(1).select(CC);
+			ddCCLineLevel.get(0).select(CC);
 			TestReporter.assertTrue(verifyCC_LineLevel(itemNumber,CC),"Cost Center Updated at Line Level Successfully!!");
 			break;
 
