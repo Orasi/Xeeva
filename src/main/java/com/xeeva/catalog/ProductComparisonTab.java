@@ -50,6 +50,7 @@ public class ProductComparisonTab {
 	 * @date 14/9/16
 	 **/
 	public void select_UOM(String UOM){
+		ddSelectUOM.syncEnabled(30, false);
 		ddSelectUOM.select(UOM);
 	}
 
@@ -79,4 +80,5 @@ public class ProductComparisonTab {
 	}
 
 }
+
 

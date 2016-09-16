@@ -113,6 +113,21 @@ public class GlobalItemsTab {
 		}
 		btnCompare.jsClick();
 	}
+	
+	/**
+	 * @summary Method to select GlobalItems from Comparison screen.
+	 * @author Praveen Namburi,@Version: Created 16-09-2016
+	 **/
+	public void selectGlobalItems_FromComparison(){
+		TestReporter.assertTrue(read_GlobalItemsCount()>3, read_GlobalItemsCount() +" - Global Item Records available!!");
+		click_GlobalItemsTab();
+		for(int i=1;i<4;i++){
+			driver.executeJavaScript("arguments[0].click();", chkCompare.get(i));
+		}
+		btnCompare.jsClick();
+	}
 
 }
+
+
 
