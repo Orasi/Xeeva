@@ -13,7 +13,6 @@ import com.orasi.utils.OrasiDriver;
 import com.orasi.utils.Sleeper;
 import com.orasi.utils.TestReporter;
 
-
 /**
  * @summary This page contains Global Items Tab objects
  * @author  Lalitha Banda
