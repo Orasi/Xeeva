@@ -1,6 +1,7 @@
 package com.xeeva.navigation;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -44,6 +45,8 @@ public class MainNav {
 	private Textbox txtItemUnitPrice;
 	@FindBy(xpath = ".//*[@id='tblItemDetails']/tbody/tr[2]/td[2]/a/div")
 	private Button btnAddToCart;
+	@FindBy(xpath = ".//tr[2]/td/table/tbody/tr/td/input") private Button btnsaveCartPopUp;
+	@FindBy(xpath = "//*[@id='btnPopupCP']") private Button btnCheckOut;
 
 	/** Constructor **/
 
@@ -252,8 +255,9 @@ public class MainNav {
 	 **/
 	public boolean verifyCartValue(String ItemType){
 		boolean statsuFlag = false;
-		lblCartValue.syncVisible(15, false);
-
+		lblCartValue.isDisplayed();
+		lblCartValue.isEnabled();
+		Sleeper.sleep(5000);
 		TestReporter.logStep("Cart Having [" + lblCartValue.getText()+"] Items!!");
 		if(Integer.parseInt(lblCartValue.getText())>=2){
 			TestReporter.logStep("Cart Having [" + lblCartValue.getText()+"] Items!!");
@@ -276,4 +280,32 @@ public class MainNav {
 		SaveCart();
 	}
 
+
+	// Method for Checkout the Cart
+	public void saveCartPopUp(){
+		pageLoaded();
+		btnsaveCartPopUp.isDisplayed();
+		btnsaveCartPopUp.jsClick();
+		Sleeper.sleep(2000);
+	}
+
+	// Method for Checkout the Cart
+	public void CheckOut(){
+		pageLoaded();
+		btnCheckOut.isDisplayed();
+		btnCheckOut.click();
+		driver.manage().timeouts().pageLoadTimeout(10, TimeUnit.SECONDS);
+	}
+
+
+	/**
+	 * @summary Method 'to click on Cart Check Out 
+	 * @author Lalitha Banda
+	 * @date 15/9/16
+	 **/
+	public void cart_CheckOut(){
+		clickCartItemsLink();
+		saveCartPopUp();
+		CheckOut();
+	}
 }

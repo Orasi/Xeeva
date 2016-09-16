@@ -209,7 +209,6 @@ public class RequisitioningPage {
 	public void Verify_SmartFormItem(){
 		lblCartItemAddedMessage.syncVisible(5, false);
 		String getCartItemAddedMessage = lblCartItemAddedMessage.getText();
-		System.out.println("----------------"+getCartItemAddedMessage);
 		TestReporter.assertTrue(getCartItemAddedMessage.equalsIgnoreCase("The item has been added successfully!"), "Item added to the cart.");
 	}
 

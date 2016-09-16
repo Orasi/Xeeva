@@ -30,6 +30,7 @@ public class ItemDetailsPage {
 	@FindBy(linkText = "lnkShowPopup") private Link lnkCartItem;
 	@FindBy(id = "txtBasicSearchCriteria")	private Textbox catalogSearch;
 	@FindBy(xpath = "//select[@class='textFieldList width90Px']") private Listbox lstSelectUOM;
+	@FindBy(xpath = ".//*[@class='textFieldList']") private List<Listbox> lstUOMGlobalCart;
 	@FindBy(className="add-to-cart-box") private List<WebElement> btnIAddToCartItems;
 	@FindBy(xpath="//div[@id='divAppInfoMsg'][@class='addMessage']") private Label lblCartItemAddedMessage;
 	@FindBy(xpath = "//table/tbody/tr[6]/td/table/tbody/tr/td[4]/select") private Listbox lstunitofMeasure;
@@ -133,18 +134,19 @@ public class ItemDetailsPage {
 
 
 	/**
-	 * @summary Method To add two different items to cart 
+	 * @summary Method To add two different items to cart to process Cost Center update
 	 * @author Lalitha Banda
 	 * @date 14/9/16
 	 **/
 	public void add_TwoDiffrent_ItemsToCart(String UP,String Qty,String UOM){
+		TestReporter.logStep("UOM "+lstUOMGlobalCart.size());
 		TestReporter.logStep("Add To Cart buttons "+btnIAddToCartItems.size());
-		for(WebElement input :btnIAddToCartItems){
-			modify_ItemDetails(UP,Qty,UOM);	
-			input.click();
-			System.out.println("item added to cart ");
-			driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-		}
+		lstUOMGlobalCart.get(0).select(UOM);
+		driver.executeJavaScript("arguments[0].click();", btnIAddToCartItems.get(0));
+		Sleeper.sleep(5000);
+		lstUOMGlobalCart.get(1).select(UOM);
+		driver.executeJavaScript("arguments[0].click();", btnIAddToCartItems.get(1));
+		driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
 	}
 
 }
