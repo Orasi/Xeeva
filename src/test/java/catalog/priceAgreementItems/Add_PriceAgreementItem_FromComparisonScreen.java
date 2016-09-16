@@ -1,4 +1,4 @@
-package sandbox;
+package catalog.priceAgreementItems;
 
 import org.testng.ITestContext;
 import org.testng.annotations.AfterTest;
@@ -73,7 +73,7 @@ public class Add_PriceAgreementItem_FromComparisonScreen extends TestEnvironment
 	 * @param role,location,GlobalItem 
 	 */
 	@Test(dataProvider = "dataScenario")
-	public void comparisonScreen(String role, String location,String GlobalItem,String UnitofMeasure){
+	public void addPriceAgreementFromCompareScreen(String role, String location,String GlobalItem,String UnitofMeasure){
 		
 		// Application Login 
 		TestReporter.logStep("Application Login");
