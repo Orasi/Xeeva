@@ -7,6 +7,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
+
 import com.orasi.utils.TestEnvironment;
 import com.orasi.utils.TestReporter;
 import com.orasi.utils.dataProviders.ExcelDataProvider;
@@ -33,7 +34,7 @@ public class ChangeCC_LineLevel extends TestEnvironment{
 	@DataProvider(name = "dataScenario")
 	public Object[][] scenarios() {
 		try {
-			Object[][] excelData = new ExcelDataProvider("/datasheets/Catalog.xlsx","AddNonPriceAgr_GlobalCatalog").getTestData();
+			Object[][] excelData = new ExcelDataProvider("/datasheets/Catalog.xlsx","Verify_AddInternalComments").getTestData();
 			return excelData;
 		}
 		catch (RuntimeException e){
@@ -61,8 +62,7 @@ public class ChangeCC_LineLevel extends TestEnvironment{
 	}
 
 	@Test(dataProvider = "dataScenario")
-	public void CostCenterLineLevel(String role, String location,String GlobalItem,String ItemDescription,String Quantity,
-			String UnitofMeasure,String UnitPrice,String UpdatedUnitPrice,String UpdatedUnitofMeasure){
+	public void CostCenterLineLevel(String role, String location,String InternalComment,String GlobalItem,String UnitofMeasure,String Quantity,String UnitPrice){
 
 		// Application Login 
 		TestReporter.logStep("Login into application");
@@ -72,7 +72,7 @@ public class ChangeCC_LineLevel extends TestEnvironment{
 		TestReporter.logStep("Clicking the GlobalItems Link");
 		RequisitioningPage reqPage = new RequisitioningPage(getDriver());
 		reqPage.click_ReqTab();
-		
+
 		TestReporter.logStep("Navigating to MainNav Page");
 		MainNav mainNav = new MainNav(getDriver());
 		boolean getStatus = mainNav.verifyCartValue(GlobalItem);
