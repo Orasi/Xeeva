@@ -90,6 +90,7 @@ public class MainNav {
 	 **/
 	public void SaveCart() {
 		if (btnSaveCart.isDisplayed()) {
+			btnSaveCart.syncVisible(3, false);
 			btnSaveCart.click();
 		} else {
 			TestReporter.logStep("Cart Empty to Save");
@@ -277,6 +278,7 @@ public class MainNav {
 	public void clickLogout() {
 		isLogoutDisplayed();
 		lnkLogout.click();
+		Sleeper.sleep(2000);
 		SaveCart();
 	}
 

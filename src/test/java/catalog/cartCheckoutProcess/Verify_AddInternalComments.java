@@ -19,14 +19,13 @@ import com.xeeva.login.LoginPage;
 import com.xeeva.navigation.MainNav;
 
 /**
- * @summary Test To verify update Cost Center at Line Level
+ * @summary Test To add internal comments
  * @author  Lalitha Banda
- * @version	08/09/2016
+ * @version	16/09/2016
  * *
  */
 
-public class ChangeCC_LineLevel extends TestEnvironment{
-
+public class Verify_AddInternalComments extends TestEnvironment{
 
 	// **************
 	// Data Provider
@@ -53,23 +52,24 @@ public class ChangeCC_LineLevel extends TestEnvironment{
 		setOperatingSystem(operatingSystem);
 		setRunLocation(runLocation);
 		setTestEnvironment(environment);
-		testStart("AddingNonPriceAgreement");
+		testStart("Verify_AddInternalComments");
 	}
 
 	@AfterTest
 	public void close(ITestContext testResults){
-		endTest("TestAlert", testResults);
+		//endTest("TestAlert", testResults);
 	}
 
 	@Test(dataProvider = "dataScenario")
-	public void CostCenterLineLevel(String role, String location,String InternalComment,String GlobalItem,String UnitofMeasure,String Quantity,String UnitPrice){
+	public void AddInternalComments(String role, String location,String InternalComment,String GlobalItem,String UnitofMeasure,String Quantity,String UnitPrice){
 
 		// Application Login 
-		TestReporter.logStep("Login into application");
+		TestReporter.logStep("Application Login");
 		LoginPage loginPage = new LoginPage(getDriver());
 		loginPage.loginWithCredentials(role,location);
 
-		TestReporter.logStep("Clicking the GlobalItems Link");
+		// Requisition Page   
+		TestReporter.logStep("Navigating to requisition page to perform catalog search");
 		RequisitioningPage reqPage = new RequisitioningPage(getDriver());
 		reqPage.click_ReqTab();
 
@@ -77,7 +77,7 @@ public class ChangeCC_LineLevel extends TestEnvironment{
 		MainNav mainNav = new MainNav(getDriver());
 		boolean getStatus = mainNav.verifyCartValue(GlobalItem);
 		if(getStatus!=true){
-			TestReporter.logStep("Clicking the GlobalItems Link");
+			TestReporter.logStep("Performing Catalog Search");
 			reqPage.perform_CatalogSearch(GlobalItem);
 
 			TestReporter.logStep("Clicking the GlobalItems Link");
@@ -89,15 +89,18 @@ public class ChangeCC_LineLevel extends TestEnvironment{
 			itemdetails.add_TwoDiffrent_ItemsToCart(UnitPrice,Quantity,UnitofMeasure);
 		}
 
-		TestReporter.logStep("Cart CheckOut");
+		//Clicking the CartItemsLink
+		TestReporter.logStep("Clicked on CartItemsLink");
 		mainNav.cart_CheckOut();
 
-		CostCenterPage ccPage = new CostCenterPage(getDriver());
-		ccPage.change_CC("linelevel", "COMCOMERCIAL");
+		//Clicking and Adding Internal Comments in CostCenter Page
+		TestReporter.logStep("Clicking and Adding Internal Comments");
+		CostCenterPage costCenterPage = new CostCenterPage(getDriver());
+		costCenterPage.AddInternalComment(InternalComment);
 
+		// Application Logout
 		TestReporter.logStep("Application Logout");
 		mainNav.clickLogout();
 
 	}
-
 }
