@@ -85,8 +85,7 @@ public class CartInformationPage {
 		TestReporter.log("Total no. of rows in Cart Info table : " + getRowsCount);
 		
 		for(int rows=1; rows<getRowsCount; rows++){
-			String getItemNumber = driver.findElement(By.xpath("//table[@id='tblCartInfo']/"
-					+ "tbody/tr["+ (rows+1) +"]/td[1]")).getText();
+			String getItemNumber = driver.findElement(By.xpath("//table[@id='tblCartInfo']/tbody/tr["+ (rows+1) +"]/td[1]")).getText();
 
 			if(getItemNumber.trim().equalsIgnoreCase(itemNumber)){
 				driver.findElement(By.xpath("//table[@id='tblCartInfo']/tbody/tr["+ ((rows+1)) +"]/td[5]"));
@@ -95,11 +94,7 @@ public class CartInformationPage {
 				//System.out.println("Captured Item Quantity value: "+itemQuantityValue);
 				quantityValue = itemQuantityValue;
 				break;
-			}/*else {
-				TestReporter.log("Item is not added to the cart to get the quantity vaue.");
-				//quantityValue = null;
-				break;
-			}*/
+			}
 		}
 		return quantityValue;	
 
@@ -114,5 +109,35 @@ public class CartInformationPage {
 		lnkCloseCartInfo.isDisplayed();
 		lnkCloseCartInfo.click();
 	}
+	
+	/**
+	 * @summary:Method to get Quantity from cart items.
+	 * @author: praveen namburi, @version: Created 16-09-2016
+	 * @param itemNumber
+	 * @return
+	 */
+	public String grabQuantityForAddedItem(String itemNumber){
+		String quantityValue = null;
+		
+		pageLoaded();
+		List<WebElement> cartInfoTableRows = tblCartInfo.findElements(By.tagName("tr"));
+		int getRowsCount = cartInfoTableRows.size();
+		TestReporter.log("Total no. of rows in Cart Info table : " + getRowsCount);
+		
+		for(int rows=2; rows<=getRowsCount-1; rows++){
+			String getItemNumber = driver.findElement(By.xpath("//table[@id='tblCartInfo']/tbody/tr["+ rows +"]/td[1]")).getText();
+			if(getItemNumber.trim().equalsIgnoreCase(itemNumber)){
+				driver.findElement(By.xpath("//table[@id='tblCartInfo']/tbody/tr["+ rows +"]/td[5]"));
+				String itemQuantityValue = driver.findElement(By.xpath("//table[@id='tblCartInfo']/tbody/"
+						+ "tr["+ rows +"]/td[5]/input")).getAttribute("value");
+				//System.out.println("Captured Item Quantity value: "+itemQuantityValue);
+				quantityValue = itemQuantityValue;
+				break;
+			}
+		}
+		return quantityValue;	
+
+	}
+	
 	
 }

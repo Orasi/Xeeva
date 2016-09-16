@@ -226,7 +226,7 @@ public class RequisitioningPage {
 		catalogSearch.safeSet(searchItem);
 		searchButton.syncVisible(20,false);
 		searchButton.click();
-		Sleeper.sleep(4000);
+		Sleeper.sleep(5000);
 
 	}
 

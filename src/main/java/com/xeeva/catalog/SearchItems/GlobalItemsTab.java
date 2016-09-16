@@ -54,11 +54,11 @@ public class GlobalItemsTab {
 	 * @date 14/9/16
 	 **/
 	public void click_GlobalItemsTab(){
-		globalItemsTab.syncVisible(10, false);
+		globalItemsTab.syncVisible(15, false);
 		globalItemsTab.isDisplayed();
 		driver.executeJavaScript("arguments[0].click();", globalItemsTab);
 		//globalItemsTab.click();
-		Sleeper.sleep(2000);
+		Sleeper.sleep(3000);
 	}
 
 	/**
@@ -109,11 +109,24 @@ public class GlobalItemsTab {
 	 **/
 	public void perform_ItemsComparison(){
 		TestReporter.assertTrue(read_GlobalItemsCount()>3, read_GlobalItemsCount() +" - Global Item Records available!!");
+		click_GlobalItemsTab();
 		for(int i=0;i<3;i++){
 			driver.executeJavaScript("arguments[0].click();", chkCompare.get(i));
 		}
 		btnCompare.jsClick();
 	}
 
+	/**
+	 * @summary Method to select GlobalItems from Comparison screen.
+	 * @author Praveen Namburi,@Version: Created 16-09-2016
+	 **/
+	public void selectGlobalItems_FromComparison(){
+		TestReporter.assertTrue(read_GlobalItemsCount()>3, read_GlobalItemsCount() +" - Global Item Records available!!");
+		click_GlobalItemsTab();
+		for(int i=1;i<4;i++){
+			driver.executeJavaScript("arguments[0].click();", chkCompare.get(i));
+		}
+		btnCompare.jsClick();
+	}
 }
 

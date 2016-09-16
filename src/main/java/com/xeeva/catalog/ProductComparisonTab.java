@@ -24,7 +24,7 @@ public class ProductComparisonTab {
 	private ResourceBundle userCredentialRepo = ResourceBundle.getBundle(Constants.USER_CREDENTIALS_PATH);
 
 	/**Page Elements**/
-	@FindBy(css = ".GridsubHeading>div") private Label lblProductComparison;
+	@FindBy(css = ".GridsubHeading") private Label lblProductComparison;
 	@FindBy(xpath = "//i[@title='Add To Cart']") private List<WebElement> lstAddToCart;
 	@FindBy(xpath = "//select[@class='textFieldList width90Px']") private Listbox ddSelectUOM;
 	@FindBy(xpath="//div[@id='divAppInfoMsg'][@class='addMessage']") private Label lblCartItemAddedMessage;
@@ -39,7 +39,7 @@ public class ProductComparisonTab {
 	}
 
 	private void pageLoaded(){
-		lblProductComparison.syncVisible(20, false);
+		lblProductComparison.syncVisible(30, false);
 	}
 
 	/**Page Interactions**/
@@ -50,6 +50,7 @@ public class ProductComparisonTab {
 	 * @date 14/9/16
 	 **/
 	public void select_UOM(String UOM){
+		ddSelectUOM.syncEnabled(30, false);
 		ddSelectUOM.select(UOM);
 	}
 
