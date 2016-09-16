@@ -45,7 +45,7 @@ public class ProductComparisonTab {
 	/**Page Interactions**/
 
 	/**
-	 * @summary Method To select UOM vale in Product Comparision Screen 
+	 * @summary Method To select UOM vale in Product Comparison Screen 
 	 * @author Lalitha Banda
 	 * @date 14/9/16
 	 **/
