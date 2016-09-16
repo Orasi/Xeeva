@@ -8,7 +8,7 @@
 	<parameter name="operatingSystem" value="windows" />
  	<test name="ChangeCC_LineLevel">
 		<classes>
-			<class name="catalog.cartCheckOutProcess.ChangeCC_LineLevel" />
+			<class name="catalog.cartCheckoutProcess.ChangeCC_LineLevel" />
 		</classes>
 	</test> 
 </suite> <!-- Suite -->
