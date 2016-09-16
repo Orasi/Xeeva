@@ -146,7 +146,7 @@ public class ItemDetailsPage {
 		Sleeper.sleep(5000);
 		lstUOMGlobalCart.get(1).select(UOM);
 		driver.executeJavaScript("arguments[0].click();", btnIAddToCartItems.get(1));
-		driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+
 	}
 
 }
