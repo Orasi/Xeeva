@@ -75,7 +75,7 @@ public class ItemDetailsPage {
 		if(lstSelectUOM.isDisplayed()){
 			lstSelectUOM.select(strUOMValue);
 			btnAddToCart.jsClick();
-			Sleeper.sleep(2000);
+			driver.setPageTimeout(3,TimeUnit.SECONDS);
 			lblCartItemAddedMessage.syncVisible(15, false);
 			String getCartItemAddedMessage = lblCartItemAddedMessage.getText();
 			System.out.println("Message after adding item to cart : "+ getCartItemAddedMessage);
@@ -91,7 +91,7 @@ public class ItemDetailsPage {
 	 */
 	public void addPriceAgreementItemToCart_And_Verify(){
 		btnAddToCart.jsClick();
-		Sleeper.sleep(2000);
+		driver.setPageTimeout(3,TimeUnit.SECONDS);
 		lblCartItemAddedMessage.syncVisible(15, false);
 		String getCartItemAddedMessage = lblCartItemAddedMessage.getText();
 		TestReporter.logStep("Message after adding item to cart : "+ getCartItemAddedMessage);
@@ -123,9 +123,9 @@ public class ItemDetailsPage {
 
 	public void modifyItemDetails(String UnitPrice, String Quantity, String strUOMValue){
 		modify_ItemDetails(UnitPrice,Quantity,strUOMValue);
-		btnAddToCart.isDisplayed();
+		//btnAddToCart.isDisplayed();
 		btnAddToCart.click();
-		Sleeper.sleep(3000);
+		driver.setPageTimeout(5);
 		lblCartItemAddedMessage.syncVisible(15, false);
 		String getCartItemAddedMessage = lblCartItemAddedMessage.getText();
 		//The item has been added successfully!
@@ -143,7 +143,7 @@ public class ItemDetailsPage {
 		TestReporter.logStep("Add To Cart buttons "+btnIAddToCartItems.size());
 		lstUOMGlobalCart.get(0).select(UOM);
 		driver.executeJavaScript("arguments[0].click();", btnIAddToCartItems.get(0));
-		Sleeper.sleep(5000);
+		driver.setPageTimeout(5);
 		lstUOMGlobalCart.get(1).select(UOM);
 		driver.executeJavaScript("arguments[0].click();", btnIAddToCartItems.get(1));
 		driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);

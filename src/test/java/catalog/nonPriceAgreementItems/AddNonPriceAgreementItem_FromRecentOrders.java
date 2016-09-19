@@ -84,7 +84,7 @@ public class AddNonPriceAgreementItem_FromRecentOrders extends TestEnvironment{
 	    // Application Logout
 		TestReporter.logStep("Application Logout");
 		MainNav mainNav = new MainNav(getDriver());
-		//mainNav.clickLogout();
+		mainNav.clickLogout();
 
 	}
 

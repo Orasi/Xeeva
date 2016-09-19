@@ -86,7 +86,11 @@ import com.xeeva.navigation.MainNav;
 			reqPage.clickShowFavouriteItems();
 			String getItemNumValue = reqPage.getItemNumberFromCatalog();
 			TestReporter.log("Item-Number to be added to cart: "+ getItemNumValue);
-						
+			
+			//Navigate to Local-Items page and Add-Item-To-Cart.
+			TestReporter.logStep("Navigate to Local-Items page and Add-Item-To-Cart.");
+			reqPage.addPriceAgreementItemsFromFavFolder(strUOMValue);
+			
 			//Navigate to Local-Items page and Add-Item to Cart.
 			LocalItemsTab localItemsPage = new LocalItemsTab(getDriver());
 			TestReporter.logStep("Navigate to Local-Items page and Click on Cart-Items link.");

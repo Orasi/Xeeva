@@ -94,7 +94,7 @@ public class LocalItemsTab {
 		List<WebElement> localItems = driver.findElements(By.xpath("//div[@class='add-to-cart-box']"));
 		if(localItems.size()>0){
 			for(WebElement inputItem :localItems){
-				Sleeper.sleep(1000);
+				driver.setPageTimeout(2);
 				inputItem.click();
 				break;
 			}
@@ -122,15 +122,9 @@ public class LocalItemsTab {
 	public void clickCartItemsLink(){
 		pageLoaded();
 		//lnkCartItem.syncVisible(90, false);
-		Sleeper.sleep(3000);
+		driver.setPageTimeout(4);
 		lnkCartItem.click();
 	}
-
-	/*public void clickCartItemsLink(){
-		  pageLoaded();
-		  lnkCartItem.syncVisible(5, false);
-		  lnkCartItem.click();
-		 }*/
 
 }
 

@@ -57,7 +57,7 @@ public class CostCenterPage {
 
 
 	public void pageLoaded(){
-		costCenterContainer.syncVisible(15, false);
+		costCenterContainer.syncVisible(20, false);
 	}
 
 	/**Page Interactions**/
@@ -70,6 +70,7 @@ public class CostCenterPage {
 	 */
 	public void click_InternalComment(){
 		pageLoaded();
+		driver.setPageTimeout(3);
 		lstInternalCommentGrid.get(0).click();
 	}
 
@@ -106,7 +107,7 @@ public class CostCenterPage {
 		}else{
 			TestReporter.assertTrue(false, "Internal Comment Wrongly Displayed");
 		}
-		Sleeper.sleep(2000);
+		driver.setPageTimeout(2);
 		btnClosePopUp.click();
 	}
 
