@@ -6,9 +6,9 @@
 	<parameter name="runLocation" value="local" />
 	<parameter name="browserVersion" value="" />
 	<parameter name="operatingSystem" value="windows" />
- 	<test name="CreateSmartFormRequest">
+ 	<test name="Verify_AddInternalComments">
 		<classes>
-			<class name="catalog.CreateSmartFormRequest" />
+			<class name="catalog.cartCheckoutProcess.Verify_AddInternalComments" />
 		</classes>
 	</test> 
 </suite> <!-- Suite -->

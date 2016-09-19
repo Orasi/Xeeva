@@ -59,8 +59,8 @@ public class LoginPage {
 		if (lstLocation.syncVisible(1, false)){
 			lstLocation.select(location);
 		}
+		btnLogin.syncVisible(90, false);
 		btnLogin.click();
-
 	}
 	
 	

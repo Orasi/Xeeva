@@ -1,4 +1,4 @@
-package catalog;
+package catalog.cartCheckoutProcess;
 
 import org.testng.ITestContext;
 import org.testng.annotations.AfterTest;
@@ -7,23 +7,26 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
+
 import com.orasi.utils.TestEnvironment;
 import com.orasi.utils.TestReporter;
 import com.orasi.utils.dataProviders.ExcelDataProvider;
+import com.xeeva.catalog.CostCenterPage;
+import com.xeeva.catalog.ItemDetailsPage;
 import com.xeeva.catalog.RequisitioningPage;
+import com.xeeva.catalog.SearchItems.GlobalItemsTab;
 import com.xeeva.login.LoginPage;
 import com.xeeva.navigation.MainNav;
 
 /**
- * @summary Test To Crate Smart Form Request
+ * @summary Test To verify update Cost Center at Line Level
  * @author  Lalitha Banda
- * @date 	08/09/2016
- *
+ * @version	08/09/2016
+ * *
  */
 
-public class CreateSmartFormRequest extends TestEnvironment{
+public class ChangeCC_LineLevel extends TestEnvironment{
 
-	public String RequisitionType = "serviceRequestGeneral";
 
 	// **************
 	// Data Provider
@@ -31,7 +34,7 @@ public class CreateSmartFormRequest extends TestEnvironment{
 	@DataProvider(name = "dataScenario")
 	public Object[][] scenarios() {
 		try {
-			Object[][] excelData = new ExcelDataProvider("/datasheets/SmartForm.xlsx","SmartForm").getTestData();
+			Object[][] excelData = new ExcelDataProvider("/datasheets/AddInternalComments.xlsx","Verify_AddInternalComments").getTestData();
 			return excelData;
 		}
 		catch (RuntimeException e){
@@ -50,7 +53,7 @@ public class CreateSmartFormRequest extends TestEnvironment{
 		setOperatingSystem(operatingSystem);
 		setRunLocation(runLocation);
 		setTestEnvironment(environment);
-		testStart("CreateSmartFormRequest");
+		testStart("AddingNonPriceAgreement");
 	}
 
 	@AfterTest
@@ -59,38 +62,42 @@ public class CreateSmartFormRequest extends TestEnvironment{
 	}
 
 	@Test(dataProvider = "dataScenario")
-	public void smartForm(String role, String location,String ItemDescription,String UNSPSCCode,String SS,
-			String CategoryType,String Category,String SubCategory,String MN,String MPN,
-			String Quantity,String UnitofMeasure,String Price){
-
-		String[] QuantityArray = Quantity.split(";");
-		String[] UOMArray = UnitofMeasure.split(";");
-		String[] UPArray = Price.split(";");
+	public void CostCenterLineLevel(String role, String location,String InternalComment,String GlobalItem,String UnitofMeasure,String Quantity,String UnitPrice){
 
 		// Application Login 
 		TestReporter.logStep("Login into application");
 		LoginPage loginPage = new LoginPage(getDriver());
 		loginPage.loginWithCredentials(role,location);
 
-		// Requisition Page 
-		TestReporter.logStep("Navigating to requisition page to create Smart Form Request");
+		TestReporter.logStep("Clicking the GlobalItems Link");
 		RequisitioningPage reqPage = new RequisitioningPage(getDriver());
-
-		TestReporter.logStep("Navigating to requisition Tab");
 		reqPage.click_ReqTab();
 
-		TestReporter.logStep("Creating Smart Form Request");
-		reqPage.createSmartFormRequest( RequisitionType,ItemDescription, UNSPSCCode,SS,CategoryType, Category, SubCategory,MN,MPN, 
-				QuantityArray[0], UOMArray[0],UPArray[0]);
-
-		TestReporter.logStep("Navigating to MainTab Page to Verify Updated Smart Form Item");
+		TestReporter.logStep("Navigating to MainNav Page");
 		MainNav mainNav = new MainNav(getDriver());
-		mainNav.verifyCartItem(ItemDescription,UPArray[1],UOMArray[1], QuantityArray[1]);
+		boolean getStatus = mainNav.verifyCartValue(GlobalItem);
+		if(getStatus!=true){
+			TestReporter.logStep("Clicking the GlobalItems Link");
+			reqPage.perform_CatalogSearch(GlobalItem);
 
-		// Application Logout
+			TestReporter.logStep("Clicking the GlobalItems Link");
+			GlobalItemsTab globalitems = new GlobalItemsTab(getDriver());
+			globalitems.click_GlobalItemsTab();
+
+			TestReporter.logStep("ItemDetailsPage  - Modifing Item Details");
+			ItemDetailsPage itemdetails = new ItemDetailsPage(getDriver());
+			itemdetails.add_TwoDiffrent_ItemsToCart(UnitPrice,Quantity,UnitofMeasure);
+		}
+
+		TestReporter.logStep("Cart CheckOut");
+		mainNav.cart_CheckOut();
+
+		CostCenterPage ccPage = new CostCenterPage(getDriver());
+		ccPage.change_CC("linelevel", "COMCOMERCIAL");
+
 		TestReporter.logStep("Application Logout");
 		mainNav.clickLogout();
-		
-		}
+
+	}
 
 }

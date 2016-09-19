@@ -1,4 +1,4 @@
-package catalog;
+package catalog.nonPriceAgreementItems;
 
 import org.testng.ITestContext;
 import org.testng.annotations.AfterTest;
@@ -7,23 +7,25 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
+
 import com.orasi.utils.TestEnvironment;
 import com.orasi.utils.TestReporter;
 import com.orasi.utils.dataProviders.ExcelDataProvider;
+import com.xeeva.catalog.ItemDetailsPage;
 import com.xeeva.catalog.RequisitioningPage;
+import com.xeeva.catalog.SearchItems.GlobalItemsTab;
 import com.xeeva.login.LoginPage;
 import com.xeeva.navigation.MainNav;
 
 /**
- * @summary Test To Crate Smart Form Request
+ * @summary Test To add non price agreement Item from Favorite Item list
  * @author  Lalitha Banda
- * @date 	08/09/2016
- *
+ * @version	14/09/2016
+ * *
  */
 
-public class CreateSmartFormRequest extends TestEnvironment{
+public class AddNonPriceAgreementItem_FromFavoriteItem extends TestEnvironment{
 
-	public String RequisitionType = "serviceRequestGeneral";
 
 	// **************
 	// Data Provider
@@ -31,7 +33,7 @@ public class CreateSmartFormRequest extends TestEnvironment{
 	@DataProvider(name = "dataScenario")
 	public Object[][] scenarios() {
 		try {
-			Object[][] excelData = new ExcelDataProvider("/datasheets/SmartForm.xlsx","SmartForm").getTestData();
+			Object[][] excelData = new ExcelDataProvider("/datasheets/NonPriceAgreementDetails.xlsx","AddNonPriceAgr_GlobalCatalog").getTestData();
 			return excelData;
 		}
 		catch (RuntimeException e){
@@ -50,7 +52,7 @@ public class CreateSmartFormRequest extends TestEnvironment{
 		setOperatingSystem(operatingSystem);
 		setRunLocation(runLocation);
 		setTestEnvironment(environment);
-		testStart("CreateSmartFormRequest");
+		testStart("AddNonPriceAgreementItem_FavoriteItem");
 	}
 
 	@AfterTest
@@ -59,38 +61,43 @@ public class CreateSmartFormRequest extends TestEnvironment{
 	}
 
 	@Test(dataProvider = "dataScenario")
-	public void smartForm(String role, String location,String ItemDescription,String UNSPSCCode,String SS,
-			String CategoryType,String Category,String SubCategory,String MN,String MPN,
-			String Quantity,String UnitofMeasure,String Price){
-
-		String[] QuantityArray = Quantity.split(";");
-		String[] UOMArray = UnitofMeasure.split(";");
-		String[] UPArray = Price.split(";");
+	public void favoriteItems(String role, String location,String GlobalItem,String ItemDescription,String Quantity,
+			String UnitofMeasure,String UnitPrice,String UpdatedUnitPrice,String UpdatedUnitofMeasure){
 
 		// Application Login 
-		TestReporter.logStep("Login into application");
+		TestReporter.logStep("Application Login");
 		LoginPage loginPage = new LoginPage(getDriver());
 		loginPage.loginWithCredentials(role,location);
 
-		// Requisition Page 
-		TestReporter.logStep("Navigating to requisition page to create Smart Form Request");
+		// Requisition Page   
+		TestReporter.logStep("Navigating to requisition page to perform catalog search");
 		RequisitioningPage reqPage = new RequisitioningPage(getDriver());
-
-		TestReporter.logStep("Navigating to requisition Tab");
 		reqPage.click_ReqTab();
 
-		TestReporter.logStep("Creating Smart Form Request");
-		reqPage.createSmartFormRequest( RequisitionType,ItemDescription, UNSPSCCode,SS,CategoryType, Category, SubCategory,MN,MPN, 
-				QuantityArray[0], UOMArray[0],UPArray[0]);
+		// Requisition Page   
+		TestReporter.logStep("Clicking on FavoriteItem Button");
+		reqPage.click_FavoriteItem();
 
-		TestReporter.logStep("Navigating to MainTab Page to Verify Updated Smart Form Item");
+		// GlobalItemsTab  - Clicking the GlobalItems Link
+		TestReporter.logStep("Clicking the GlobalItems Link");
+		GlobalItemsTab globalitems = new GlobalItemsTab(getDriver());
+		String itemNumber = globalitems.getGlobalItemNumber();
+		globalitems.click_GlobalItemsTab();
+
+		//Modifying the ItemDetailsPage 
+		TestReporter.logStep("ItemDetailsPage  - Modifing Item Details");
+		ItemDetailsPage itemdetails = new ItemDetailsPage(getDriver());
+		itemdetails.modifyItemDetails(UnitPrice,Quantity,UnitofMeasure);
+
+		// Verifications for Cart Item 
+		TestReporter.logStep("Verifications for Cart Item ");
 		MainNav mainNav = new MainNav(getDriver());
-		mainNav.verifyCartItem(ItemDescription,UPArray[1],UOMArray[1], QuantityArray[1]);
+		mainNav.perform_CartItemVerifications(UpdatedUnitPrice, UpdatedUnitofMeasure, Quantity,itemNumber);
 
 		// Application Logout
 		TestReporter.logStep("Application Logout");
 		mainNav.clickLogout();
-		
-		}
+	}
 
 }
+

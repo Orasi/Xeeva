@@ -1,4 +1,4 @@
-package catalog;
+package catalog.nonPriceAgreementItems;
 
 import org.testng.ITestContext;
 import org.testng.annotations.AfterTest;
@@ -10,20 +10,20 @@ import org.testng.annotations.Test;
 import com.orasi.utils.TestEnvironment;
 import com.orasi.utils.TestReporter;
 import com.orasi.utils.dataProviders.ExcelDataProvider;
+import com.xeeva.catalog.ItemDetailsPage;
+import com.xeeva.catalog.RecentOrderInformationPage;
 import com.xeeva.catalog.RequisitioningPage;
 import com.xeeva.login.LoginPage;
 import com.xeeva.navigation.MainNav;
 
 /**
- * @summary Test To Crate Smart Form Request
+ * @summary Test To add non price agreement item from recent orders list
  * @author  Lalitha Banda
- * @date 	08/09/2016
- *
+ * @version	08/09/2016
+ * *
  */
 
-public class CreateSmartFormRequest extends TestEnvironment{
-
-	public String RequisitionType = "serviceRequestGeneral";
+public class AddNonPriceAgreementItem_FromRecentOrders extends TestEnvironment{
 
 	// **************
 	// Data Provider
@@ -31,7 +31,7 @@ public class CreateSmartFormRequest extends TestEnvironment{
 	@DataProvider(name = "dataScenario")
 	public Object[][] scenarios() {
 		try {
-			Object[][] excelData = new ExcelDataProvider("/datasheets/SmartForm.xlsx","SmartForm").getTestData();
+			Object[][] excelData = new ExcelDataProvider("/datasheets/AddPriceAgreement_RecentOrder.xlsx","AddPriceAgrmnt_RecentOrder").getTestData();
 			return excelData;
 		}
 		catch (RuntimeException e){
@@ -50,7 +50,7 @@ public class CreateSmartFormRequest extends TestEnvironment{
 		setOperatingSystem(operatingSystem);
 		setRunLocation(runLocation);
 		setTestEnvironment(environment);
-		testStart("CreateSmartFormRequest");
+		testStart("AddingNonPriceAgreement");
 	}
 
 	@AfterTest
@@ -59,38 +59,34 @@ public class CreateSmartFormRequest extends TestEnvironment{
 	}
 
 	@Test(dataProvider = "dataScenario")
-	public void smartForm(String role, String location,String ItemDescription,String UNSPSCCode,String SS,
-			String CategoryType,String Category,String SubCategory,String MN,String MPN,
-			String Quantity,String UnitofMeasure,String Price){
-
-		String[] QuantityArray = Quantity.split(";");
-		String[] UOMArray = UnitofMeasure.split(";");
-		String[] UPArray = Price.split(";");
+	public void recentOrders(String role, String location,String selectUOM,String PAItem,String NPAItem,String ID,String UP,String Qty){
 
 		// Application Login 
 		TestReporter.logStep("Login into application");
 		LoginPage loginPage = new LoginPage(getDriver());
 		loginPage.loginWithCredentials(role,location);
 
-		// Requisition Page 
-		TestReporter.logStep("Navigating to requisition page to create Smart Form Request");
+		// Requisition Page  - Navigating to requisition page to create Smart Form Request
 		RequisitioningPage reqPage = new RequisitioningPage(getDriver());
-
-		TestReporter.logStep("Navigating to requisition Tab");
+		TestReporter.logStep("Navigating to the Requisitioning Page.");
 		reqPage.click_ReqTab();
+		reqPage.clickRequisitionCartLink(NPAItem);
 
-		TestReporter.logStep("Creating Smart Form Request");
-		reqPage.createSmartFormRequest( RequisitionType,ItemDescription, UNSPSCCode,SS,CategoryType, Category, SubCategory,MN,MPN, 
-				QuantityArray[0], UOMArray[0],UPArray[0]);
+		RecentOrderInformationPage recentOrderInfoPage = new RecentOrderInformationPage(getDriver());
+		TestReporter.logStep("Navigating to Recent Order Information page.");
+		recentOrderInfoPage.clcik_RecentOrderItemLink();
 
-		TestReporter.logStep("Navigating to MainTab Page to Verify Updated Smart Form Item");
-		MainNav mainNav = new MainNav(getDriver());
-		mainNav.verifyCartItem(ItemDescription,UPArray[1],UOMArray[1], QuantityArray[1]);
+		// Navigating to Item Details page - to add the Item to cart.
+		ItemDetailsPage itemDetailsPage = new ItemDetailsPage(getDriver());
+		TestReporter.logStep("Navigating to Item Details page.");
+		itemDetailsPage.selectUOMValueAndAddNonPriceItemToCart(selectUOM);
 
-		// Application Logout
+	    // Application Logout
 		TestReporter.logStep("Application Logout");
+		MainNav mainNav = new MainNav(getDriver());
 		mainNav.clickLogout();
-		
-		}
+
+	}
 
 }
+

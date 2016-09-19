@@ -1,4 +1,4 @@
-package catalog;
+package catalog.nonPriceAgreementItems;
 
 import org.testng.ITestContext;
 import org.testng.annotations.AfterTest;
@@ -10,20 +10,20 @@ import org.testng.annotations.Test;
 import com.orasi.utils.TestEnvironment;
 import com.orasi.utils.TestReporter;
 import com.orasi.utils.dataProviders.ExcelDataProvider;
+import com.xeeva.catalog.ProductComparisonTab;
 import com.xeeva.catalog.RequisitioningPage;
+import com.xeeva.catalog.SearchItems.GlobalItemsTab;
 import com.xeeva.login.LoginPage;
 import com.xeeva.navigation.MainNav;
 
 /**
- * @summary Test To Crate Smart Form Request
+ * @summary Test To add non price agreement Item from Comparison Screen
  * @author  Lalitha Banda
- * @date 	08/09/2016
- *
+ * @version	14/09/2016
+ * *
  */
 
-public class CreateSmartFormRequest extends TestEnvironment{
-
-	public String RequisitionType = "serviceRequestGeneral";
+public class AddNonPriceAgreementItem_FromComparisonScreen extends TestEnvironment {
 
 	// **************
 	// Data Provider
@@ -31,7 +31,7 @@ public class CreateSmartFormRequest extends TestEnvironment{
 	@DataProvider(name = "dataScenario")
 	public Object[][] scenarios() {
 		try {
-			Object[][] excelData = new ExcelDataProvider("/datasheets/SmartForm.xlsx","SmartForm").getTestData();
+			Object[][] excelData = new ExcelDataProvider("/datasheets/NonPriceAgreementDetails.xlsx","AddNonPriceAgr_GlobalCatalog").getTestData();
 			return excelData;
 		}
 		catch (RuntimeException e){
@@ -50,7 +50,7 @@ public class CreateSmartFormRequest extends TestEnvironment{
 		setOperatingSystem(operatingSystem);
 		setRunLocation(runLocation);
 		setTestEnvironment(environment);
-		testStart("CreateSmartFormRequest");
+		testStart("AddNonPriceAgreementItem_ComparisonScreen");
 	}
 
 	@AfterTest
@@ -59,38 +59,43 @@ public class CreateSmartFormRequest extends TestEnvironment{
 	}
 
 	@Test(dataProvider = "dataScenario")
-	public void smartForm(String role, String location,String ItemDescription,String UNSPSCCode,String SS,
-			String CategoryType,String Category,String SubCategory,String MN,String MPN,
-			String Quantity,String UnitofMeasure,String Price){
-
-		String[] QuantityArray = Quantity.split(";");
-		String[] UOMArray = UnitofMeasure.split(";");
-		String[] UPArray = Price.split(";");
+	public void comparisonScreen(String role, String location,String GlobalItem,String ItemDescription,String Quantity,
+			String UnitofMeasure,String UnitPrice,String UpdatedUnitPrice,String UpdatedUnitofMeasure){
 
 		// Application Login 
-		TestReporter.logStep("Login into application");
+		TestReporter.logStep("Application Login");
 		LoginPage loginPage = new LoginPage(getDriver());
 		loginPage.loginWithCredentials(role,location);
 
 		// Requisition Page 
-		TestReporter.logStep("Navigating to requisition page to create Smart Form Request");
+		TestReporter.logStep("Navigating to requisition page to perform catalog search");
 		RequisitioningPage reqPage = new RequisitioningPage(getDriver());
-
-		TestReporter.logStep("Navigating to requisition Tab");
 		reqPage.click_ReqTab();
+		reqPage.perform_CatalogSearch(GlobalItem);
 
-		TestReporter.logStep("Creating Smart Form Request");
-		reqPage.createSmartFormRequest( RequisitionType,ItemDescription, UNSPSCCode,SS,CategoryType, Category, SubCategory,MN,MPN, 
-				QuantityArray[0], UOMArray[0],UPArray[0]);
+		// GlobalItemsTab  - Clicking the GlobalItems Link
+		TestReporter.logStep("Clicking the GlobalItems Link");
+		GlobalItemsTab globalitems = new GlobalItemsTab(getDriver());
+		globalitems.click_GlobalItemsTab();
+		globalitems.perform_ItemsComparison();
 
-		TestReporter.logStep("Navigating to MainTab Page to Verify Updated Smart Form Item");
+		// Adding Item to cart 
+		TestReporter.logStep("Clicking on Add to cart From Product Comparison Tab");
+		ProductComparisonTab pComparison = new ProductComparisonTab(getDriver());
+		String itemNumber = pComparison.ReadItemNumber();
+		pComparison.click_AddToCart(UnitofMeasure);
+		
+		// Verifications for Cart Item 
+		TestReporter.logStep("Verifications for Cart Item ");
 		MainNav mainNav = new MainNav(getDriver());
-		mainNav.verifyCartItem(ItemDescription,UPArray[1],UOMArray[1], QuantityArray[1]);
+		mainNav.pageLoaded();
+		mainNav.perform_CartItemVerifications(UpdatedUnitPrice, UpdatedUnitofMeasure, Quantity,itemNumber);
 
 		// Application Logout
 		TestReporter.logStep("Application Logout");
 		mainNav.clickLogout();
-		
-		}
+	}
 
 }
+
+

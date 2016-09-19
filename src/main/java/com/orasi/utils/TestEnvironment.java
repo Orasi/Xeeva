@@ -4,19 +4,13 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.ResourceBundle;
-
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
-
 import com.orasi.core.interfaces.Element;
-import com.saucelabs.common.SauceOnDemandAuthentication;
-import com.saucelabs.saucerest.SauceREST;
 
 /**
  * 
