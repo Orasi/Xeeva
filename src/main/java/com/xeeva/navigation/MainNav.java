@@ -214,8 +214,7 @@ public class MainNav {
 		TestReporter.logStep("Item Qty befor Update : "+ txtItemQuantity.getAttribute("value"));
 		String actualQty = txtItemQuantity.getAttribute("value");
 
-		Sleeper.sleep(3000);
-		txtItemUnitPrice.isDisplayed();
+		txtItemUnitPrice.syncVisible(5, false);
 		txtItemUnitPrice.clear();
 		txtItemUnitPrice.safeSet(UnitPrice);
 		lstItemunitOfMeasure.select(UOM);
@@ -256,9 +255,7 @@ public class MainNav {
 	 **/
 	public boolean verifyCartValue(String ItemType){
 		boolean statsuFlag = false;
-		lblCartValue.isDisplayed();
-		lblCartValue.isEnabled();
-		Sleeper.sleep(5000);
+		driver.setElementTimeout(5);
 		TestReporter.logStep("Cart Having [" + lblCartValue.getText()+"] Items!!");
 		if(Integer.parseInt(lblCartValue.getText())>=2){
 			TestReporter.logStep("Cart Having [" + lblCartValue.getText()+"] Items!!");
@@ -296,7 +293,6 @@ public class MainNav {
 		pageLoaded();
 		btnCheckOut.isDisplayed();
 		btnCheckOut.click();
-		driver.manage().timeouts().pageLoadTimeout(10, TimeUnit.SECONDS);
 	}
 
 

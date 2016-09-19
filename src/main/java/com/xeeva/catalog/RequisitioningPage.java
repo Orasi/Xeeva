@@ -447,7 +447,7 @@ public class RequisitioningPage {
 					break;
 				}
 		  }else if(getLocalItemsCount.contains("0")){
-				TestReporter.log(" 'No Records Found !!' in Local Items tab. ");
+				TestReporter.assertTrue(false," 'No Records Found !!' in Local Items tab. ");
 		  }
 		return getItemNumber;
 	  
