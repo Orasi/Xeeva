@@ -80,7 +80,7 @@ public class MainNav {
 
 	public void clickCartItemsLink() {
 		driver.executeJavaScript("arguments[0].click();", lnkCartItem);
-		Sleeper.sleep(4000);
+		driver.setPageTimeout(4);
 	}
 
 	/**
@@ -110,7 +110,7 @@ public class MainNav {
 				TestReporter.logStep( "Item Number Fronm Cart Rows : "+links.get(0).getText());
 				if(links.get(0).getText().equalsIgnoreCase(itemNumber)){
 					// clicking on Cart Item Edit
-					Sleeper.sleep(2000);
+					driver.setPageTimeout(3);
 					driver.executeJavaScript("arguments[0].click();", links.get(2));
 					break;
 				}
@@ -214,8 +214,7 @@ public class MainNav {
 		TestReporter.logStep("Item Qty befor Update : "+ txtItemQuantity.getAttribute("value"));
 		String actualQty = txtItemQuantity.getAttribute("value");
 
-		Sleeper.sleep(3000);
-		txtItemUnitPrice.isDisplayed();
+		txtItemUnitPrice.syncVisible(5, false);
 		txtItemUnitPrice.clear();
 		txtItemUnitPrice.safeSet(UnitPrice);
 		lstItemunitOfMeasure.select(UOM);
@@ -256,9 +255,8 @@ public class MainNav {
 	 **/
 	public boolean verifyCartValue(String ItemType){
 		boolean statsuFlag = false;
-		lblCartValue.isDisplayed();
-		lblCartValue.isEnabled();
-		Sleeper.sleep(5000);
+		// lblCartValue element is not finding with page,element,script timeouts
+		Sleeper.sleep(10000);
 		TestReporter.logStep("Cart Having [" + lblCartValue.getText()+"] Items!!");
 		if(Integer.parseInt(lblCartValue.getText())>=2){
 			TestReporter.logStep("Cart Having [" + lblCartValue.getText()+"] Items!!");
@@ -278,7 +276,7 @@ public class MainNav {
 	public void clickLogout() {
 		isLogoutDisplayed();
 		lnkLogout.click();
-		Sleeper.sleep(2000);
+		driver.setPageTimeout(2);
 		SaveCart();
 	}
 
@@ -288,7 +286,7 @@ public class MainNav {
 		pageLoaded();
 		btnsaveCartPopUp.isDisplayed();
 		btnsaveCartPopUp.jsClick();
-		Sleeper.sleep(2000);
+		driver.setPageTimeout(2);
 	}
 
 	// Method for Checkout the Cart
@@ -296,7 +294,6 @@ public class MainNav {
 		pageLoaded();
 		btnCheckOut.isDisplayed();
 		btnCheckOut.click();
-		driver.manage().timeouts().pageLoadTimeout(10, TimeUnit.SECONDS);
 	}
 
 

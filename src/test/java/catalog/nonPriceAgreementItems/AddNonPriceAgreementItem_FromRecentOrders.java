@@ -31,7 +31,7 @@ public class AddNonPriceAgreementItem_FromRecentOrders extends TestEnvironment{
 	@DataProvider(name = "dataScenario")
 	public Object[][] scenarios() {
 		try {
-			Object[][] excelData = new ExcelDataProvider("/datasheets/Catalog.xlsx","AddPriceAgrmnt_RecentOrder").getTestData();
+			Object[][] excelData = new ExcelDataProvider("/datasheets/AddPriceAgreement_RecentOrder.xlsx","AddPriceAgrmnt_RecentOrder").getTestData();
 			return excelData;
 		}
 		catch (RuntimeException e){
@@ -84,7 +84,7 @@ public class AddNonPriceAgreementItem_FromRecentOrders extends TestEnvironment{
 	    // Application Logout
 		TestReporter.logStep("Application Logout");
 		MainNav mainNav = new MainNav(getDriver());
-		//mainNav.clickLogout();
+		mainNav.clickLogout();
 
 	}
 

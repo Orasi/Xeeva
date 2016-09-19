@@ -31,7 +31,7 @@ import com.xeeva.navigation.MainNav;
 		@DataProvider(name = "dataScenario")
 		public Object[][] scenarios() {
 			try {
-				Object[][] excelData = new ExcelDataProvider("/datasheets/Catalog.xlsx","AddPriceAgrmnt_LocalCatalog").getTestData();
+				Object[][] excelData = new ExcelDataProvider("/datasheets/AddPriceAgreement_LocalCatalog.xlsx","AddPriceAgrmnt_LocalCatalog").getTestData();
 				return excelData;
 			}
 			catch (RuntimeException e){

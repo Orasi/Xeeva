@@ -34,7 +34,7 @@ public class VerifyCatalogSearch extends TestEnvironment {
 	@DataProvider(name = "dataScenario")
 	public Object[][] scenarios() {
 		try {
-			Object[][] excelData = new ExcelDataProvider("/datasheets/Catalog.xlsx","VerifyCatalogSearch").getTestData();
+			Object[][] excelData = new ExcelDataProvider("/datasheets/VerifyCatalogSearch.xlsx","VerifyCatalogSearch").getTestData();
 			return excelData;
 		}
 		catch (RuntimeException e){

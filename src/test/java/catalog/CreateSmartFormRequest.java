@@ -31,7 +31,7 @@ public class CreateSmartFormRequest extends TestEnvironment{
 	@DataProvider(name = "dataScenario")
 	public Object[][] scenarios() {
 		try {
-			Object[][] excelData = new ExcelDataProvider("/datasheets/Catalog.xlsx","SmartForm").getTestData();
+			Object[][] excelData = new ExcelDataProvider("/datasheets/SmartForm.xlsx","SmartForm").getTestData();
 			return excelData;
 		}
 		catch (RuntimeException e){

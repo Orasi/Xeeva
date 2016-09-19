@@ -32,7 +32,7 @@ public class Add_PriceAgreementItem_FromComparisonScreen extends TestEnvironment
 	@DataProvider(name = "dataScenario")
 	public Object[][] scenarios() {
 		try {
-			Object[][] excelData = new ExcelDataProvider("/datasheets/Catalog.xlsx","AddPriceAgrmnt_CompareScreen").getTestData();
+			Object[][] excelData = new ExcelDataProvider("/datasheets/AddPriceAgreement_CompareScreen.xlsx","AddPriceAgrmnt_CompareScreen").getTestData();
 			return excelData;
 		}
 		catch (RuntimeException e){

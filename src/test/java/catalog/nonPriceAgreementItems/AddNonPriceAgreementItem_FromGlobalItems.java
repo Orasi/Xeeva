@@ -31,7 +31,7 @@ public class AddNonPriceAgreementItem_FromGlobalItems extends TestEnvironment {
 	@DataProvider(name = "dataScenario")
 	public Object[][] scenarios() {
 		try {
-			Object[][] excelData = new ExcelDataProvider("/datasheets/Catalog.xlsx","AddNonPriceAgr_GlobalCatalog").getTestData();
+			Object[][] excelData = new ExcelDataProvider("/datasheets/NonPriceAgreementDetails.xlsx","AddNonPriceAgr_GlobalCatalog").getTestData();
 			return excelData;
 		}
 		catch (RuntimeException e){
