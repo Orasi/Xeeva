@@ -33,7 +33,7 @@ public class Verify_AddInternalComments extends TestEnvironment{
 	@DataProvider(name = "dataScenario")
 	public Object[][] scenarios() {
 		try {
-			Object[][] excelData = new ExcelDataProvider("/datasheets/Catalog.xlsx","Verify_AddInternalComments").getTestData();
+			Object[][] excelData = new ExcelDataProvider("/datasheets/AddInternalComments.xlsx","Verify_AddInternalComments").getTestData();
 			return excelData;
 		}
 		catch (RuntimeException e){

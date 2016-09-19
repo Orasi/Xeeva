@@ -32,7 +32,7 @@ public class Add_PriceAgreementItem_RecentOrder extends TestEnvironment{
 	@DataProvider(name = "dataScenario")
 	public Object[][] scenarios() {
 		try {
-			Object[][] excelData = new ExcelDataProvider("/datasheets/Catalog.xlsx","AddPriceAgrmnt_RecentOrder").getTestData();
+			Object[][] excelData = new ExcelDataProvider("/datasheets/AddPriceAgreement_RecentOrder.xlsx","AddPriceAgrmnt_RecentOrder").getTestData();
 			return excelData;
 		}
 		catch (RuntimeException e){
