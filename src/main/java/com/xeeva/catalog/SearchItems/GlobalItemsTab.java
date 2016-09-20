@@ -56,7 +56,6 @@ public class GlobalItemsTab {
 		globalItemsTab.syncVisible(10, false);
 		globalItemsTab.isDisplayed();
 		driver.executeJavaScript("arguments[0].click();", globalItemsTab);
-		//globalItemsTab.click();
 		driver.setPageTimeout(3);
 	}
 

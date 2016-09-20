@@ -2,16 +2,20 @@ package com.xeeva.catalog;
 
 import java.util.List;
 import java.util.ResourceBundle;
+
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.Select;
+
 import com.orasi.core.interfaces.Button;
 import com.orasi.core.interfaces.Element;
 import com.orasi.core.interfaces.Label;
 import com.orasi.core.interfaces.Listbox;
 import com.orasi.core.interfaces.Textbox;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
+import com.orasi.utils.AlertHandler;
 import com.orasi.utils.Constants;
 import com.orasi.utils.OrasiDriver;
 import com.orasi.utils.Sleeper;
@@ -27,6 +31,7 @@ public class CostCenterPage {
 
 	private OrasiDriver driver = null;
 	private ResourceBundle userCredentialRepo = ResourceBundle.getBundle(Constants.USER_CREDENTIALS_PATH);
+	String xpath = ".//*[@id='customfa']/tbody/tr/td/select";
 
 	/**Page Elements**/
 	@FindBy(id ="countrydivcontainer") private Element costCenterContainer;	
@@ -47,6 +52,7 @@ public class CostCenterPage {
 	@FindBy(xpath="//tr[2]/td[2]/a[2]/input") private Button btnShopMoreItemsCC;
 	@FindBy(xpath="//*[@id='btnCheckOut']/input") private Button btnContinueCheckoutCC;
 	@FindBy(xpath=".//*[@id='customfa']/tbody/tr/td/select") private List<Listbox> ddCCLineLevel;
+
 
 
 	/**Constructor**/
@@ -96,10 +102,9 @@ public class CostCenterPage {
 		txtInternalComment.safeSet(InternalComment);
 		btnSaveComments.click();
 
-		List<WebElement> CommentDisplayed = txtCommentDisplayed;
 		if(txtCommentDisplayed.size()>0){
 			for(WebElement fullComment :txtCommentDisplayed){
-				String Expected = txtCommentDisplayed.get(0).getText();
+				String Expected = fullComment.getText();
 				TestReporter.logStep("Actual :"+ InternalComment + ": " + "Expected : "+ Expected);
 				TestReporter.assertTrue(Expected.equals(InternalComment), "Internal Comment Displayed is Verified!!");
 				break;
@@ -113,29 +118,51 @@ public class CostCenterPage {
 
 
 	/**
-	 * @summary Method to verify CC at Line level
+	 * @summary Method to verify Cost Center
 	 * @author  Lalitha Banda
-	 * @date    16/09/16
+	 * @date    20/09/16
 	 */
-	public boolean verifyCC_LineLevel(String itemNumber,String CCValue) {
-		boolean statusflag = false;
+	public boolean verifyCostCenter(String verifyType,String itemNumber,String CCValue){
+		boolean statusFlag = false;
 		List<WebElement> readLinks = driver.findElements(By.xpath(".//*[@id='customfa']/tbody/tr/td[1]/a"));
-		for(WebElement inputLink : readLinks){
-			List<WebElement> readSelects = driver.findElements(By.xpath(".//*[@id='customfa']/tbody/tr/td/select"));
-			for(WebElement inputSelects: readSelects){
-				String updatedCC = new Select(inputSelects).getFirstSelectedOption().getText();
-				if(inputLink.getText().equalsIgnoreCase(itemNumber) &&updatedCC.equalsIgnoreCase(CCValue)){
-					statusflag = true;			
-					break;
+		List<WebElement> readSelects = driver.findElements(By.xpath(".//*[@id='customfa']/tbody/tr/td/select"));
+
+		switch(verifyType.toLowerCase()){
+		case "linelevel":
+			for(WebElement inputLink : readLinks){
+				for(WebElement inputSelects: readSelects){
+					String updatedCC = new Select(inputSelects).getFirstSelectedOption().getText();
+					if(inputLink.getText().equalsIgnoreCase(itemNumber) &&updatedCC.equalsIgnoreCase(CCValue)){
+						statusFlag = true;			
+						break;
+					}
 				}
 			}
+
+			break;
+		case "headerlevel": 
+			for(int i=0;i<readSelects.size();i++){
+				String ExpectedCC = new Select(readSelects.get(i)).getFirstSelectedOption().getText();
+				if(ExpectedCC.equalsIgnoreCase(CCValue)){
+					statusFlag =true;
+				}
+			}
+			break;
+		default : System.out.println();
+
 		}
-		return statusflag;
+		return statusFlag;
+	}
+
+	// reading Handler method from AlertHandler class
+	public static void handleAlert(WebDriver driver){
+		AlertHandler handleAlert = new AlertHandler();
+		handleAlert.handleAlert(driver, 3);
 	}
 
 
 	/**
-	 * @summary Method to change CC at Line level
+	 * @summary Method to change Cost Center
 	 * @author  Lalitha Banda
 	 * @date    16/09/16
 	 */
@@ -152,11 +179,15 @@ public class CostCenterPage {
 			String itemNumber = driver.findElement(By.xpath(".//*[@id='trCCRow_"+randomID+"']/td/a")).getText();
 			TestReporter.logStep("itemNumber :"+ itemNumber);
 			ddCCLineLevel.get(0).select(CC);
-			TestReporter.assertTrue(verifyCC_LineLevel(itemNumber,CC),"Cost Center Updated at Line Level Successfully!!");
+			System.out.println(verifyCostCenter(changeType,itemNumber,CC));
+			TestReporter.assertTrue(verifyCostCenter(changeType,itemNumber,CC),"Cost Center Updated at Line Level Successfully!!");
 			break;
 
 		case "headerlevel" :
 			lstCostCenterHeaderLevel.select(CC);
+			handleAlert(driver);
+			System.out.println(verifyCostCenter(changeType,null,CC));
+			TestReporter.assertTrue( verifyCostCenter(changeType,null,CC),"Cost Center Updated at Header Level Successfully!!");
 			break;
 
 		default : System.out.println();

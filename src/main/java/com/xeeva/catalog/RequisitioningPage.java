@@ -111,9 +111,10 @@ public class RequisitioningPage {
 	 * @date 14/9/16
 	 **/
 	public void click_ReqTab(){
-		ReqTab.syncVisible(10, false);
+		ReqTab.syncVisible(20, false);
 		ReqTab.click();
-		driver.setPageTimeout(2);
+		Sleeper.sleep(3000);
+		//driver.setPageTimeout(5);
 	}
 
 

@@ -255,7 +255,6 @@ public class MainNav {
 	 **/
 	public boolean verifyCartValue(String ItemType){
 		boolean statsuFlag = false;
-		// lblCartValue element is not finding with page,element,script timeouts
 		Sleeper.sleep(10000);
 		TestReporter.logStep("Cart Having [" + lblCartValue.getText()+"] Items!!");
 		if(Integer.parseInt(lblCartValue.getText())>=2){

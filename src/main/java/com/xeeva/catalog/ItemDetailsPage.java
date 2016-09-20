@@ -141,9 +141,10 @@ public class ItemDetailsPage {
 	public void add_TwoDiffrent_ItemsToCart(String UP,String Qty,String UOM){
 		TestReporter.logStep("UOM "+lstUOMGlobalCart.size());
 		TestReporter.logStep("Add To Cart buttons "+btnIAddToCartItems.size());
+		lstUOMGlobalCart.get(0).syncVisible(5, false);
 		lstUOMGlobalCart.get(0).select(UOM);
 		driver.executeJavaScript("arguments[0].click();", btnIAddToCartItems.get(0));
-		driver.setPageTimeout(5);
+		driver.setElementTimeout(10);
 		lstUOMGlobalCart.get(1).select(UOM);
 		driver.executeJavaScript("arguments[0].click();", btnIAddToCartItems.get(1));
 		driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
