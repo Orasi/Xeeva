@@ -80,7 +80,7 @@ public class MainNav {
 
 	public void clickCartItemsLink() {
 		driver.executeJavaScript("arguments[0].click();", lnkCartItem);
-		Sleeper.sleep(4000);
+		driver.setPageTimeout(4);
 	}
 
 	/**
@@ -110,7 +110,7 @@ public class MainNav {
 				TestReporter.logStep( "Item Number Fronm Cart Rows : "+links.get(0).getText());
 				if(links.get(0).getText().equalsIgnoreCase(itemNumber)){
 					// clicking on Cart Item Edit
-					Sleeper.sleep(2000);
+					driver.setPageTimeout(3);
 					driver.executeJavaScript("arguments[0].click();", links.get(2));
 					break;
 				}
@@ -255,7 +255,7 @@ public class MainNav {
 	 **/
 	public boolean verifyCartValue(String ItemType){
 		boolean statsuFlag = false;
-		driver.setElementTimeout(5);
+		Sleeper.sleep(10000);
 		TestReporter.logStep("Cart Having [" + lblCartValue.getText()+"] Items!!");
 		if(Integer.parseInt(lblCartValue.getText())>=2){
 			TestReporter.logStep("Cart Having [" + lblCartValue.getText()+"] Items!!");
@@ -275,7 +275,7 @@ public class MainNav {
 	public void clickLogout() {
 		isLogoutDisplayed();
 		lnkLogout.click();
-		Sleeper.sleep(2000);
+		driver.setPageTimeout(2);
 		SaveCart();
 	}
 
@@ -285,7 +285,7 @@ public class MainNav {
 		pageLoaded();
 		btnsaveCartPopUp.isDisplayed();
 		btnsaveCartPopUp.jsClick();
-		Sleeper.sleep(2000);
+		driver.setPageTimeout(2);
 	}
 
 	// Method for Checkout the Cart

@@ -84,13 +84,13 @@ public class CartInformationPage {
 		int getRowsCount = cartInfoTableRows.size();
 		TestReporter.log("Total no. of rows in Cart Info table : " + getRowsCount);
 		
-		for(int rows=1; rows<getRowsCount; rows++){
-			String getItemNumber = driver.findElement(By.xpath("//table[@id='tblCartInfo']/tbody/tr["+ (rows+1) +"]/td[1]")).getText();
+		for(int rows=2; rows<=getRowsCount-1; rows++){
+			String getItemNumber = driver.findElement(By.xpath("//table[@id='tblCartInfo']/tbody/tr["+ rows +"]/td[1]")).getText();
 
 			if(getItemNumber.trim().equalsIgnoreCase(itemNumber)){
-				driver.findElement(By.xpath("//table[@id='tblCartInfo']/tbody/tr["+ ((rows+1)) +"]/td[5]"));
+				driver.findElement(By.xpath("//table[@id='tblCartInfo']/tbody/tr["+ rows +"]/td[5]"));
 				String itemQuantityValue = driver.findElement(By.xpath("//table[@id='tblCartInfo']/tbody/"
-						+ "tr["+ ((rows+1)) +"]/td[5]/input")).getAttribute("value");
+						+ "tr["+ rows +"]/td[5]/input")).getAttribute("value");
 				//System.out.println("Captured Item Quantity value: "+itemQuantityValue);
 				quantityValue = itemQuantityValue;
 				break;
@@ -105,7 +105,7 @@ public class CartInformationPage {
 	 * @author: Praveen Namburi, @version: Created 12-09-2016
 	 */
 	public void closeCartInfoPage(){
-		Sleeper.sleep(2000);
+		driver.setPageTimeout(2);
 		lnkCloseCartInfo.isDisplayed();
 		lnkCloseCartInfo.click();
 	}

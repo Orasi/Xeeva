@@ -56,8 +56,7 @@ public class GlobalItemsTab {
 		globalItemsTab.syncVisible(10, false);
 		globalItemsTab.isDisplayed();
 		driver.executeJavaScript("arguments[0].click();", globalItemsTab);
-		//globalItemsTab.click();
-		Sleeper.sleep(2000);
+		driver.setPageTimeout(3);
 	}
 
 	/**
@@ -88,7 +87,7 @@ public class GlobalItemsTab {
 	public void click_AddToCartButton(){
 		AddToCart.syncVisible(10, false);
 		AddToCart.click();
-		Sleeper.sleep(2000);
+		driver.setPageTimeout(3);
 	}
 
 	/**

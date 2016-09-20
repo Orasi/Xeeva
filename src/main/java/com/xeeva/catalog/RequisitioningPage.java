@@ -111,9 +111,10 @@ public class RequisitioningPage {
 	 * @date 14/9/16
 	 **/
 	public void click_ReqTab(){
-		ReqTab.syncVisible(10, false);
+		ReqTab.syncVisible(20, false);
 		ReqTab.click();
-		Sleeper.sleep(2000);
+		Sleeper.sleep(3000);
+		//driver.setPageTimeout(5);
 	}
 
 
@@ -136,7 +137,7 @@ public class RequisitioningPage {
 	private void click_Submit(){
 		pageLoaded();
 		btnSubmit.click();
-		Sleeper.sleep(2000);
+		driver.setPageTimeout(3,TimeUnit.SECONDS);
 
 	}
 
@@ -225,7 +226,7 @@ public class RequisitioningPage {
 		catalogSearch.safeSet(searchItem);
 		searchButton.syncVisible(20,false);
 		searchButton.click();
-		Sleeper.sleep(4000);
+		driver.setPageTimeout(4);
 
 	}
 
@@ -316,7 +317,7 @@ public class RequisitioningPage {
 						+ "tr["+ row +"]/td[1]")).click();
 				break;
 			}else{
-				TestReporter.logStep("Selected item having no REQ orRFQ values !!");
+				TestReporter.assertTrue(false, "Selected item having no REQ orRFQ values !!");
 			}
 		}
 
@@ -356,7 +357,6 @@ public class RequisitioningPage {
 			for(WebElement inputItem : localItems){
 				itemNumber = inputItem.getText();
 				TestReporter.log("Item number is: "+itemNumber);
-				Sleeper.sleep(1000);
 				//Select the UOM option from the listbox.
 				List<WebElement> listboxUOMs = driver.findElements(By.xpath("//select[@class='textFieldList width90Px']"));
 				Select select = new Select(listboxUOMs.get(0));
@@ -420,7 +420,7 @@ public class RequisitioningPage {
 		lnkShowFavItems.syncVisible(5, false);
 		TestReporter.assertTrue(lnkShowFavItems.isDisplayed(), "Fav Icon element is Displaying!!");
 		lnkShowFavItems.click();
-		Sleeper.sleep(2000);
+		driver.setPageTimeout(3);
 	}
 	
 	
@@ -431,7 +431,7 @@ public class RequisitioningPage {
 	   * @return getItemNumber
 	   */
 	  public String  getItemNumberFromCatalog(){
-		  Sleeper.sleep(2000);
+		  driver.setPageTimeout(2);
 		  String getItemNumber = null;
 		  String getLocalItemsCount = lblLocalItems.getText();
 		  TestReporter.log("Local-Items Count is: "+ getLocalItemsCount);
@@ -453,7 +453,4 @@ public class RequisitioningPage {
 	  
 	  }	
 	  
-	  
 }
-
-
