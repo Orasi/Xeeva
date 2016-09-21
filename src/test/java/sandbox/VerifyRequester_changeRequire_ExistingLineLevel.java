@@ -20,7 +20,7 @@ import com.xeeva.navigation.MainNav;
 
 /**
  * @Summary: To verify that requester is able to change the require by for a existing line level requisition. 
- * @author praveen varma, @version: Created 20-09-2016
+ * @author praveen varma, @version: Created 21-09-2016
  */
 public class VerifyRequester_changeRequire_ExistingLineLevel extends TestEnvironment {
 
@@ -63,18 +63,18 @@ public class VerifyRequester_changeRequire_ExistingLineLevel extends TestEnviron
 		 * @Description: Close the driver instance.
 		 * @param testResults
 		 */
-		/*@AfterTest
+		@AfterTest
 		public void close(ITestContext testResults){
 			endTest("TestAlert", testResults);
-		}*/
+		}
 		
 		/**
 		 * @Description: Main business-logic of the test-case resides here.
 		 * @param role,location
 		 */
 		@Test(dataProvider = "dataScenario")
-		public void changeRequire_ExistingLineLevel(String role, String location){
-			String GlobalItem="";
+		public void changeRequire_ExistingLineLevel(String role, String location,String GlobalItem,String UnitPrice,
+				String Quantity,String UnitofMeasure,String daysOut){
 			
 			// Application Login 
 			LoginPage loginPage = new LoginPage(getDriver());
@@ -91,7 +91,7 @@ public class VerifyRequester_changeRequire_ExistingLineLevel extends TestEnviron
 			MainNav mainNav = new MainNav(getDriver());
 			boolean getStatus = mainNav.verifyCartValue(GlobalItem);
 			if(getStatus!=true){
-				/*TestReporter.logStep("Clicking the GlobalItems Link");
+				TestReporter.logStep("Clicking the GlobalItems Link");
 				reqPage.perform_CatalogSearch(GlobalItem);
 
 				TestReporter.logStep("Clicking the GlobalItems Link");
@@ -100,18 +100,18 @@ public class VerifyRequester_changeRequire_ExistingLineLevel extends TestEnviron
 
 				TestReporter.logStep("ItemDetailsPage  - Modifing Item Details");
 				ItemDetailsPage itemdetails = new ItemDetailsPage(getDriver());
-				itemdetails.add_TwoDiffrent_ItemsToCart(UnitPrice,Quantity,UnitofMeasure);*/
+				itemdetails.add_TwoDiffrent_ItemsToCart(UnitPrice,Quantity,UnitofMeasure);
 			}
 
 			TestReporter.logStep("Cart CheckOut");
 			mainNav.cart_CheckOut();
 
 			CostCenterPage ccPage = new CostCenterPage(getDriver());
-			ccPage.change_CC("linelevel", "COMCOMERCIAL");
+			ccPage.change_RequiredByAtLineLevel(daysOut);
 
-			/*// Application Logout
+			// Application Logout
 			TestReporter.logStep("Application Logout");
-			mainNav.clickLogout();*/
+			mainNav.clickLogout();
 			
 		}
 		
