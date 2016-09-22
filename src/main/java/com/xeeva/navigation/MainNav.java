@@ -47,6 +47,7 @@ public class MainNav {
 	private Button btnAddToCart;
 	@FindBy(xpath = ".//tr[2]/td/table/tbody/tr/td/input") private Button btnsaveCartPopUp;
 	@FindBy(xpath = "//*[@id='btnPopupCP']") private Button btnCheckOut;
+	
 
 	/** Constructor **/
 
@@ -255,7 +256,7 @@ public class MainNav {
 	 **/
 	public boolean verifyCartValue(String ItemType){
 		boolean statsuFlag = false;
-		Sleeper.sleep(10000);
+		Sleeper.sleep(15000);
 		TestReporter.logStep("Cart Having [" + lblCartValue.getText()+"] Items!!");
 		if(Integer.parseInt(lblCartValue.getText())>=2){
 			TestReporter.logStep("Cart Having [" + lblCartValue.getText()+"] Items!!");

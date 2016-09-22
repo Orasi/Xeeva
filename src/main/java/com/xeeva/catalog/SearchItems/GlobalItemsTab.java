@@ -53,10 +53,10 @@ public class GlobalItemsTab {
 	 * @date 14/9/16
 	 **/
 	public void click_GlobalItemsTab(){
-		globalItemsTab.syncVisible(10, false);
+		globalItemsTab.syncVisible(20, false);
 		globalItemsTab.isDisplayed();
 		driver.executeJavaScript("arguments[0].click();", globalItemsTab);
-		driver.setPageTimeout(3);
+		driver.setPageTimeout(5);
 	}
 
 	/**

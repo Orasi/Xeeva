@@ -113,8 +113,7 @@ public class RequisitioningPage {
 	public void click_ReqTab(){
 		ReqTab.syncVisible(20, false);
 		ReqTab.click();
-		Sleeper.sleep(3000);
-		//driver.setPageTimeout(5);
+		driver.setPageTimeout(5);
 	}
 
 
