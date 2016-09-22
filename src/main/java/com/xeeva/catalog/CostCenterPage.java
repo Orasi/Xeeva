@@ -2,11 +2,15 @@ package com.xeeva.catalog;
 
 import java.util.List;
 import java.util.ResourceBundle;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
 import com.orasi.core.interfaces.Button;
 import com.orasi.core.interfaces.Element;
 import com.orasi.core.interfaces.Label;
@@ -283,6 +287,17 @@ public class CostCenterPage {
 	 * @author: Praveen Namburi, @version: Created 21-09-2016.
 	 */
 	public void verify_RequiredByDateUpdated_atCCLineLevel(){
+		
+		//Added wait statement to wait until the Cart item added successfull message to be displayed.
+		WebDriverWait wait = new WebDriverWait(driver,10);
+		WebElement lblCartAddItemMessage =wait.until(ExpectedConditions.
+		    visibilityOfElementLocated(By.xpath("//div[@id='divAppInfoMsg'][@class='addMessage']")));
+				 
+		/*//lblCartItemAddedMessage.syncVisible(60,false);
+		String getCartItemAddedMessage = lblCartAddItemMessage.getText();
+		System.out.println("Message after adding item to cart : "+ getCartItemAddedMessage);
+		TestReporter.assertTrue(getCartItemAddedMessage.contains("added successfully!"), "Item added to the cart.");*/
+				
 		lblCartItemAddedMessage.syncVisible(20, false);
 		String getReqByDateMessage = lblCartItemAddedMessage.getText();
 		TestReporter.logStep("Message after changing the RequiredBy date at CC_line-level : "+ getReqByDateMessage);
@@ -320,72 +335,17 @@ public class CostCenterPage {
 			//System.out.println("======> : " + getWeekendDates);
 			for(WebElement selWeekDate : selectDates){
 				selWeekDate.click();
-				driver.setPageTimeout(6);
+				//driver.setPageTimeout(3);
 				break;
 			}
 		}
 		String getReqByDate_AfterChange = getReqByDate();
 		TestReporter.log("Get ReqByDate_after Change: " + getReqByDate_AfterChange);
+		verify_RequiredByDateUpdated_atCCLineLevel();
 		//Verify the RequiredBy date is modified at line-level.
-		TestReporter.assertNotEquals(getReqByDate_beforeChange, getReqByDate_AfterChange, "RequiredBy date is modified at line-level.");
+		//TestReporter.assertNotEquals(getReqByDate_beforeChange, getReqByDate_AfterChange, "RequiredBy date is modified at line-level.");
 
 	}
 
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-/*String randomID =ddCCLineLevel.get(0).getAttribute("id").replaceAll("\\D+", "");
-		  String itemNumber = driver.findElement(By.xpath(".//*[@id='trCCRow_"+randomID+"']/td/a")).getText();
-		  TestReporter.logStep("itemNumber is:"+ itemNumber);
-		  int count = 0;*/
-/*List<WebElement> readLinks = driver.findElements(By.xpath(".//*[@id='customfa']/tbody/tr/td[1]/a"));
-		  List<WebElement> reqByDates = driver.findElements(By.xpath("//table[@id='customfa']/tbody/tr/td/table/tbody/tr/td/input"));
-		  ////table[@id='customfa']/tbody/tr[@class='DataGridTRRowa']/td[5]/table/tbody/tr/td/input
-			for(WebElement inputLink : readLinks){
-				for(WebElement reqByDate : reqByDates){
-					String getReqByDate_beforeChange = reqByDate.getAttribute("value");
-					TestReporter.logStep("Get RequiredBy date before Change : " + getReqByDate_beforeChange);
-					if(inputLink.getText().equalsIgnoreCase(itemNumber)){
-						List<WebElement> nextMonthArrows = driver.findElements(By.xpath("html/body/div[@class='calendar']/table/thead/tr[2]/td[4]"));
-						int getNextMonthArrowsSize = nextMonthArrows.size();
-						for(WebElement nextMonth : nextMonthArrows){
-							driver.setPageTimeout(2);
-							nextMonth.click();
-							driver.setPageTimeout(2);
-							break;
-						}*/
-
-
-//String getReqByDate_afterChange = getDate(daysOut);
-/*TestReporter.logStep("Get RequiredBy date after Change : "+ (getReqByDate_afterChange));
-						driver.setPageTimeout(3);
-						reqByDate.clear();
-						//reqByDate.click();
-						reqByDate.sendKeys(getReqByDate_afterChange);
-						driver.setPageTimeout(5);
-						//driver.setPageTimeout(2);
-						TestReporter.assertNotEquals(getReqByDate_beforeChange, getReqByDate_afterChange, "RequiredBy date is modified at line-level.");
-						count++;
-						break;*/
-
-//List<WebElement> getdays = driver.findElements(By.xpath(""));
-
-/*	}
-					if(count==1)break;
-				}
-				if(count==1)break;
-			}
-
- */
-
