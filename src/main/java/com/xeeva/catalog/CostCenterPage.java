@@ -8,7 +8,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.Select;
-
 import com.orasi.core.interfaces.Button;
 import com.orasi.core.interfaces.Element;
 import com.orasi.core.interfaces.Label;
@@ -46,13 +45,18 @@ public class CostCenterPage {
 	@FindBy(xpath="//*[@id='txtShowFullComment']") private List<WebElement> txtCommentDisplayed;
 	@FindBy(id ="fancybox-close") private Button btnClosePopUp;
 	@FindBy(xpath="//*[@title='Copy Item']") private List<WebElement> lstCopyItemGrid;
+	@FindBy(xpath=".//*[@class='gridtextLink']") private List<WebElement> lstItemNoGrid;
 	@FindBy(css=".costCentername") private Label lblCC;
+	@FindBy(xpath=".//*[@id='customfa']/tbody/tr/td/input[@class='QtyNumericTextBoxClass']") private List<WebElement> lstQty;
+	@FindBy(xpath=".//*[@title='Save changes']") private List<WebElement> lstSave;
+	@FindBy(xpath="//div[@id='divAppInfoMsg'][@class='addMessage']") private Label conformationMsg;
 
 	@FindBy(xpath="//td[2]/a[1]/input") private Button btnSaveCartCC;
 	@FindBy(xpath="//tr[2]/td[2]/a[2]/input") private Button btnShopMoreItemsCC;
 	@FindBy(xpath="//*[@id='btnCheckOut']/input") private Button btnContinueCheckoutCC;
 	@FindBy(xpath=".//*[@id='customfa']/tbody/tr/td/select") private List<Listbox> ddCCLineLevel;
-
+	@FindBy(xpath="//*[@id='tblbasicTable']/tbody/tr/td/div/a") private List<WebElement> lstSelectCC;
+	@FindBy(xpath="//*[@id='tblbasicTable']/tbody/tr/td/div/span") private List<WebElement> lstSelectCCValue;
 
 
 	/**Constructor**/
@@ -76,8 +80,8 @@ public class CostCenterPage {
 	 */
 	public void click_InternalComment(){
 		pageLoaded();
-		driver.setPageTimeout(3);
-		lstInternalCommentGrid.get(0).click();
+		driver.executeJavaScript("arguments[0].click();", lstInternalCommentGrid.get(0));
+		//lstInternalCommentGrid.get(0).click();
 	}
 
 	/**
@@ -86,6 +90,7 @@ public class CostCenterPage {
 	 * @date    15/09/16
 	 */
 	public void click_CopyItemLink(){
+		Sleeper.sleep(5000);
 		lstCopyItemGrid.get(0).click();
 	}
 
@@ -122,7 +127,7 @@ public class CostCenterPage {
 	 * @author  Lalitha Banda
 	 * @date    20/09/16
 	 */
-	public boolean verifyCostCenter(String verifyType,String itemNumber,String CCValue){
+	public boolean verifyCostCenter(String verifyType,String itemNumber,String CCValue,String QuantityValue){
 		boolean statusFlag = false;
 		List<WebElement> readLinks = driver.findElements(By.xpath(".//*[@id='customfa']/tbody/tr/td[1]/a"));
 		List<WebElement> readSelects = driver.findElements(By.xpath(".//*[@id='customfa']/tbody/tr/td/select"));
@@ -140,6 +145,7 @@ public class CostCenterPage {
 			}
 
 			break;
+
 		case "headerlevel": 
 			for(int i=0;i<readSelects.size();i++){
 				String ExpectedCC = new Select(readSelects.get(i)).getFirstSelectedOption().getText();
@@ -148,13 +154,39 @@ public class CostCenterPage {
 				}
 			}
 			break;
+
+		case "copyitem":
+			for(WebElement input :readSelects){
+				if(new Select(input).getFirstSelectedOption().getText().contains(CCValue)){
+					String randomID =input.getAttribute("id").replaceAll("\\D+", "");
+					WebElement element = driver.findElement(By.xpath(".//*[@id='trCCRow_"+randomID+"']/td[9]"));
+					driver.executeJavaScript("arguments[0].click();", element);
+					if(txtShowFullComment.isDisplayed()){
+						TestReporter.assertTrue(false, "Copied Item having Internal Comments");
+					}else{
+						TestReporter.assertTrue(true, "Copied Item is not having Internal Comments");
+					}
+				}
+			}
+			break;
+
+		case "quantity": 
+			lstQty.get(0).clear();
+			lstQty.get(0).sendKeys(QuantityValue);
+			driver.executeJavaScript("arguments[0].click();", lstSave.get(0));
+			Sleeper.sleep(5000);
+			System.out.println("Total size : "+lstQty.size());
+			String updatedQty =lstQty.get((lstQty.size()-1)).getAttribute("value");
+			TestReporter.assertTrue(updatedQty.equalsIgnoreCase(QuantityValue), "Quantity Updated Successfully!!");
+			break;
+
 		default : System.out.println();
 
 		}
 		return statusFlag;
 	}
 
-	// reading Handler method from AlertHandler class
+	// Reading Handler method from AlertHandler class
 	public static void handleAlert(WebDriver driver){
 		AlertHandler handleAlert = new AlertHandler();
 		handleAlert.handleAlert(driver, 3);
@@ -179,20 +211,36 @@ public class CostCenterPage {
 			String itemNumber = driver.findElement(By.xpath(".//*[@id='trCCRow_"+randomID+"']/td/a")).getText();
 			TestReporter.logStep("itemNumber :"+ itemNumber);
 			ddCCLineLevel.get(0).select(CC);
-			System.out.println(verifyCostCenter(changeType,itemNumber,CC));
-			TestReporter.assertTrue(verifyCostCenter(changeType,itemNumber,CC),"Cost Center Updated at Line Level Successfully!!");
+			System.out.println(verifyCostCenter(changeType,itemNumber,CC,null));
+			TestReporter.assertTrue(verifyCostCenter(changeType,itemNumber,CC,null),"Cost Center Updated at Line Level Successfully!!");
 			break;
 
 		case "headerlevel" :
 			lstCostCenterHeaderLevel.select(CC);
 			handleAlert(driver);
-			System.out.println(verifyCostCenter(changeType,null,CC));
-			TestReporter.assertTrue( verifyCostCenter(changeType,null,CC),"Cost Center Updated at Header Level Successfully!!");
+			System.out.println(verifyCostCenter(changeType,null,CC,null));
+			TestReporter.assertTrue( verifyCostCenter(changeType,null,CC,null),"Cost Center Updated at Header Level Successfully!!");
 			break;
 
 		default : System.out.println();
 		}
 	}
+
+	public String selectCCToCopyItem(){
+		driver.setPageTimeout(4);
+		String ccValue = lstSelectCCValue.get(0).getText();
+		System.out.println("CostCenter Name "+lstSelectCCValue.get(0).getText());
+		Sleeper.sleep(5000);
+		driver.executeJavaScript("arguments[0].click();", lstSelectCC.get(0));
+		Sleeper.sleep(5000);
+		return ccValue;
+	}
+
+	public String readItemNuber(){
+		return lstItemNoGrid.get(0).getText();
+	}
+
+
 }
 
 

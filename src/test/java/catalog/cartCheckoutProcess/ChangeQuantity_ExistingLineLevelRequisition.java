@@ -7,7 +7,6 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
-
 import com.orasi.utils.TestEnvironment;
 import com.orasi.utils.TestReporter;
 import com.orasi.utils.dataProviders.ExcelDataProvider;
@@ -42,7 +41,6 @@ public class ChangeQuantity_ExistingLineLevelRequisition extends TestEnvironment
 		}
 		return new Object[][] {{}};
 	}
-
 
 	@BeforeTest
 	@Parameters({ "runLocation", "browserUnderTest", "browserVersion","operatingSystem", "environment" })
