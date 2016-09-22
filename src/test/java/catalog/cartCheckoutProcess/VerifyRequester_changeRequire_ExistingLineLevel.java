@@ -32,7 +32,7 @@ public class VerifyRequester_changeRequire_ExistingLineLevel extends TestEnviron
 		@DataProvider(name = "dataScenario")
 		public Object[][] scenarios() {
 			try {
-				Object[][] excelData = new ExcelDataProvider("/datasheets/VerifyRequestor_changeRequire_ExistingLineLevel.xlsx",
+				Object[][] excelData = new ExcelDataProvider("/datasheets/Verify_ChangeRequireBy_ExistingLineLevel.xlsx",
 						"VerifyReq_changeReq_ExiLineLevl").getTestData();
 				return excelData;
 			}
@@ -103,11 +103,14 @@ public class VerifyRequester_changeRequire_ExistingLineLevel extends TestEnviron
 				itemdetails.add_TwoDiffrent_ItemsToCart(UnitPrice,Quantity,UnitofMeasure);
 			}
 
-			TestReporter.logStep("Cart CheckOut");
+			// Perform Cart CheckOut
+			TestReporter.logStep("Perform Cart CheckOut");
 			mainNav.cart_CheckOut();
 
+			// Change 'RequiredBy date at LineLevel' and Verify the changes.
+			TestReporter.logStep("Change 'RequiredBy date at LineLevel' and Verify the changes.");
 			CostCenterPage ccPage = new CostCenterPage(getDriver());
-			ccPage.change_RequiredByAtLineLevel(daysOut);
+			ccPage.change_RequiredByAtLineLevel();
 
 			// Application Logout
 			TestReporter.logStep("Application Logout");

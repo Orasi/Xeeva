@@ -14,6 +14,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import com.orasi.core.interfaces.Button;
 import com.orasi.core.interfaces.Element;
 import com.orasi.core.interfaces.Label;
+import com.orasi.core.interfaces.Link;
 import com.orasi.core.interfaces.Listbox;
 import com.orasi.core.interfaces.Textbox;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
@@ -66,9 +67,11 @@ public class CostCenterPage {
 
 	@FindBy(xpath="//table[@id='customfa']/tbody/tr/td/table/tbody/tr/td/input") private List<WebElement> dateCCInputLineLevel;
 	@FindBy(xpath="//table[@id='customfa']/tbody/tr/td/table/tbody/tr/td/i") private List<WebElement> dateCCLineLevel;
+	@FindBy(xpath="//div[@id='divAPRPARList']/ul/li[4]/i") private Link lnkDateCC_HeaderLvel;
 
 	@FindBy(xpath="//div[@id='divAppInfoMsg'][@class='addMessage']") private Label lblCartItemAddedMessage;
-
+	@FindBy(xpath="//input[@id='txtRequiredby']") private Textbox txtReqByHeaderLevel;
+	
 	/**Constructor**/
 	public CostCenterPage(OrasiDriver driver){
 		this.driver = driver;
@@ -270,37 +273,32 @@ public class CostCenterPage {
 	 * @author: Praveen Namburi, @Version: Created 21-09-2016
 	 * @return getReqByDate
 	 */
-	public String getReqByDate(){
-		String getRequreDate = null;
+	public String getReqByDateAtLineLevel(){
+		String getRequreDate = "";
 		List<WebElement> reqByDates = dateCCInputLineLevel;
 		for(WebElement reqByDate : reqByDates){
-			String getReqByDate_beforeChange = reqByDate.getAttribute("value");
-			System.out.println(getReqByDate_beforeChange);
-			getRequreDate=getReqByDate_beforeChange;
+			String getReqByDate_beforeChange1 = reqByDate.getAttribute("value");
+			//System.out.println(getReqByDate_beforeChange1);
+			getRequreDate=getReqByDate_beforeChange1;
 			break;
 		}
 		return getRequreDate;
 	}
 
 	/**
-	 * @summary: Method to verify the RequiredBydate has been updated Successfully at CC_ line-level.
+	 * @summary: Method to verify the RequiredBydate has been updated Successfully at CC_level.
 	 * @author: Praveen Namburi, @version: Created 21-09-2016.
 	 */
-	public void verify_RequiredByDateUpdated_atCCLineLevel(){
+	public void verify_RequiredByDateUpdated_atCCLevel(){
 		
 		//Added wait statement to wait until the Cart item added successfull message to be displayed.
 		WebDriverWait wait = new WebDriverWait(driver,10);
 		WebElement lblCartAddItemMessage =wait.until(ExpectedConditions.
 		    visibilityOfElementLocated(By.xpath("//div[@id='divAppInfoMsg'][@class='addMessage']")));
 				 
-		/*//lblCartItemAddedMessage.syncVisible(60,false);
-		String getCartItemAddedMessage = lblCartAddItemMessage.getText();
-		System.out.println("Message after adding item to cart : "+ getCartItemAddedMessage);
-		TestReporter.assertTrue(getCartItemAddedMessage.contains("added successfully!"), "Item added to the cart.");*/
-				
 		lblCartItemAddedMessage.syncVisible(20, false);
 		String getReqByDateMessage = lblCartItemAddedMessage.getText();
-		TestReporter.logStep("Message after changing the RequiredBy date at CC_line-level : "+ getReqByDateMessage);
+		TestReporter.logStep("Message after changing the RequiredBy date at CC_level : "+ getReqByDateMessage);
 		TestReporter.assertTrue(getReqByDateMessage.contains("date has been updated."), 
 				"Required by date has been updated at CC-Level.");
 
@@ -309,15 +307,14 @@ public class CostCenterPage {
 	/**
 	 * @summary: Method to change the RequiredBy value at linelevel.
 	 * @author: Praveen Namburi, @version: Created 20-09-2016.
-	 * @param daysOut
 	 */
-	public void change_RequiredByAtLineLevel(String daysOut){
+	public void change_RequiredByAtLineLevel(){
 		// after cart check out, application taking time to load cost center page 
 		lblCC.syncVisible(30, false);
 		lblCC.isDisplayed();
 		driver.setPageTimeout(3);
 
-		String getReqByDate_beforeChange = getReqByDate();
+		String getReqByDate_beforeChange = getReqByDateAtLineLevel();
 		TestReporter.log("Get ReqByDate_before Change: " + getReqByDate_beforeChange);
 
 		driver.executeJavaScript("arguments[0].click();", dateCCLineLevel.get(0));
@@ -331,21 +328,80 @@ public class CostCenterPage {
 			driver.setPageTimeout(2);
 			List<WebElement> selectDates = driver.findElements(By.xpath("html/body/div[@class='calendar']/"
 					+ "table/tbody/tr[4]/td[@class='day']"));
-			//int getWeekendDates = selectDates.size();
-			//System.out.println("======> : " + getWeekendDates);
 			for(WebElement selWeekDate : selectDates){
 				selWeekDate.click();
-				//driver.setPageTimeout(3);
 				break;
 			}
 		}
-		String getReqByDate_AfterChange = getReqByDate();
-		TestReporter.log("Get ReqByDate_after Change: " + getReqByDate_AfterChange);
-		verify_RequiredByDateUpdated_atCCLineLevel();
-		//Verify the RequiredBy date is modified at line-level.
-		//TestReporter.assertNotEquals(getReqByDate_beforeChange, getReqByDate_AfterChange, "RequiredBy date is modified at line-level.");
+		
+		//Verify the message -'The RequiredBy date has been updated' is displayed.
+		verify_RequiredByDateUpdated_atCCLevel();
+		driver.setPageTimeout(2);
+		
+		List<WebElement> inputDates = dateCCInputLineLevel;
+		int getInputDatesSize = inputDates.size();
+		TestReporter.log("Total no. of input dates available at CC_line-level: " + getInputDatesSize);
+		//Iterate through each ReqBydate element and get text,
+		//verify the expected date with actual values.
+		for(WebElement inputDate : inputDates){
+			String getModifiedDate = inputDate.getAttribute("value");
+			TestReporter.log("Get ReqByDate after change: "+getModifiedDate);
+			TestReporter.assertNotEquals(getReqByDate_beforeChange, getModifiedDate, 
+					"Date has been updated at line-level for the id: - ["+inputDate.getAttribute("id")+"]");
+			break;
+		}
 
 	}
-
+	
+	/**
+	 * @summary: Method to change the RequiredBy value at Header level.
+	 * @author: Praveen Namburi, @version: Created 22-09-2016.
+	 * @param daysOut
+	 */
+	public void change_RequiredByAtHeaderLevel(){
+		// after cart check out, application taking time to load cost center page 
+		lblCC.syncVisible(30, false);
+		lblCC.isDisplayed();
+		driver.setPageTimeout(3);
+		//To click on calender at CC_HeaderLevel.
+		driver.executeJavaScript("arguments[0].click();", lnkDateCC_HeaderLvel);
+		List<WebElement> nextMonthArrows = driver.findElements(By.xpath("html/body/div[@class='calendar']/"
+				+ "table/thead/tr[2]/td[4]"));
+		int loopCount=0;
+		for(WebElement nextMonth : nextMonthArrows){
+			driver.setPageTimeout(2);
+			nextMonth.click();
+			driver.setPageTimeout(2);
+			List<WebElement> selectDates = driver.findElements(By.xpath("html/body/div[@class='calendar']/"
+					+ "table/tbody/tr[4]/td[@class='day']"));
+			for(WebElement selWeekDate : selectDates){
+				selWeekDate.click();
+				driver.setPageTimeout(5);
+				loopCount++;
+				break;
+			}
+			if(loopCount>0) break;
+		}
+		
+		//Verify the message -'The RequiredBy date has been updated' is displayed.
+		verify_RequiredByDateUpdated_atCCLevel();
+		driver.setPageTimeout(2);
+		
+		//Get the RequiredBy date at header level.
+		String getReqByDate_AtHeaderLevel = txtReqByHeaderLevel.getText();
+		TestReporter.log("Get ReqByDate_before Change: " + getReqByDate_AtHeaderLevel);
+		
+		List<WebElement> inputDates = dateCCInputLineLevel;
+		int getInputDatesSize = inputDates.size();
+		TestReporter.log("Total no. of input dates available at CC_line-level: " + getInputDatesSize);
+		//Iterate through each ReqBydate element and get text,
+		//verify the expected date with actual values.
+		for(WebElement inputDate : inputDates){
+			String getModifiedDate = inputDate.getAttribute("value");
+			TestReporter.assertEquals(getReqByDate_AtHeaderLevel, getModifiedDate, 
+					"Date has been updated at line-level for the id: - ["+inputDate.getAttribute("id")+"]");
+		}
+		
+	}
 
 }

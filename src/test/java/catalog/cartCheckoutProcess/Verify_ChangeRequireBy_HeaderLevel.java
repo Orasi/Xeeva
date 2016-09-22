@@ -1,4 +1,4 @@
-package sandbox;
+package catalog.cartCheckoutProcess;
 
 import org.testng.ITestContext;
 import org.testng.annotations.AfterTest;
@@ -19,10 +19,10 @@ import com.xeeva.login.LoginPage;
 import com.xeeva.navigation.MainNav;
 
 /**
- * @Summary: To verify that requester is able to change the require by for a existing line level requisition. 
- * @author praveen varma, @version: Created 21-09-2016
+ * @Summary: To verify that requester is able to change the require by for a existing requisitions at header level. 
+ * @author praveen varma, @version: Created 22-09-2016
  */
-public class VerifyRequester_changeRequire_ExistingLineLevel extends TestEnvironment {
+public class Verify_ChangeRequireBy_HeaderLevel extends TestEnvironment {
 
 	 public String RequisitionType = "serviceRequestGeneral";
 		
@@ -32,8 +32,8 @@ public class VerifyRequester_changeRequire_ExistingLineLevel extends TestEnviron
 		@DataProvider(name = "dataScenario")
 		public Object[][] scenarios() {
 			try {
-				Object[][] excelData = new ExcelDataProvider("/datasheets/VerifyRequestor_changeRequire_ExistingLineLevel.xlsx",
-						"VerifyReq_changeReq_ExiLineLevl").getTestData();
+				Object[][] excelData = new ExcelDataProvider("/datasheets/Verify_ChangeRequireBy_ExistingHeaderLevel.xlsx",
+						"Verify_ChngeReqBy_ExiHeadrLevel").getTestData();
 				return excelData;
 			}
 			catch (RuntimeException e){
@@ -74,7 +74,7 @@ public class VerifyRequester_changeRequire_ExistingLineLevel extends TestEnviron
 		 */
 		@Test(dataProvider = "dataScenario")
 		public void changeRequire_ExistingLineLevel(String role, String location,String GlobalItem,String UnitPrice,
-				String Quantity,String UnitofMeasure,String daysOut){
+				String Quantity,String UnitofMeasure){
 			
 			// Application Login 
 			LoginPage loginPage = new LoginPage(getDriver());
@@ -85,7 +85,6 @@ public class VerifyRequester_changeRequire_ExistingLineLevel extends TestEnviron
 			RequisitioningPage reqPage = new RequisitioningPage(getDriver());
 			TestReporter.logStep("Navigate to Requisitioning Page.");
 			reqPage.click_ReqTab();
-			
 			
 			TestReporter.logStep("Navigating to MainNav Page");
 			MainNav mainNav = new MainNav(getDriver());
@@ -103,12 +102,15 @@ public class VerifyRequester_changeRequire_ExistingLineLevel extends TestEnviron
 				itemdetails.add_TwoDiffrent_ItemsToCart(UnitPrice,Quantity,UnitofMeasure);
 			}
 
+			// Perform Cart CheckOut
 			TestReporter.logStep("Cart CheckOut");
 			mainNav.cart_CheckOut();
 
+			// Change 'RequiredBy date at HeaderLevel' and Verify the changes.
+			TestReporter.logStep("Change 'RequiredBy date at HeaderLevel' and Verify the changes.");
 			CostCenterPage ccPage = new CostCenterPage(getDriver());
-			ccPage.change_RequiredByAtLineLevel(daysOut);
-
+			ccPage.change_RequiredByAtHeaderLevel();
+						
 			// Application Logout
 			TestReporter.logStep("Application Logout");
 			mainNav.clickLogout();
