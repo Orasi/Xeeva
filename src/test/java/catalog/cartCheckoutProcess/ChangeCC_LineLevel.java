@@ -63,7 +63,7 @@ public class ChangeCC_LineLevel extends TestEnvironment{
 
 	@Test(dataProvider = "dataScenario")
 	public void CostCenterLineLevel(String role, String location,String InternalComment,String GlobalItem,String UnitofMeasure,String Quantity,
-			String UnitPrice,String updateLineLevel,String updateHeaderLevel,String CCvalue){
+			String UnitPrice,String updateLineLevel,String updateHeaderLevel,String CCvalue,String Qtvalue){
 
 		// Application Login 
 		TestReporter.logStep("Login into application");

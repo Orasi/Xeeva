@@ -19,14 +19,14 @@ import com.xeeva.login.LoginPage;
 import com.xeeva.navigation.MainNav;
 
 /**
- * @summary Test To verify update Cost Center at Line Level
+ * @summary Test To verify update quantity at line level for existing reservation
  * @author  Lalitha Banda
- * @version	08/09/2016
+ * @version	21/09/2016
  * *
  */
 
-public class ChangeCC_HeaderLevel extends TestEnvironment{
-
+public class ChangeQuantity_ExistingLineLevelRequisition extends TestEnvironment{
+	public String itemType = "Quantity";
 
 	// **************
 	// Data Provider
@@ -58,12 +58,12 @@ public class ChangeCC_HeaderLevel extends TestEnvironment{
 
 	@AfterTest
 	public void close(ITestContext testResults){
-		//endTest("TestAlert", testResults);
+		endTest("TestAlert", testResults);
 	}
 
 	@Test(dataProvider = "dataScenario")
 	public void CostCenterLineLevel(String role, String location,String InternalComment,String GlobalItem,String UnitofMeasure,String Quantity,
-			String UnitPrice,String updateLineLevel,String updateHeaderLevel,String CCvalue,String QtyValue){
+			String UnitPrice,String updateLineLevel,String updateHeaderLevel,String CCvalue,String QtValue){
 
 		// Application Login 
 		TestReporter.logStep("Login into application");
@@ -92,9 +92,9 @@ public class ChangeCC_HeaderLevel extends TestEnvironment{
 
 		TestReporter.logStep("Cart CheckOut");
 		mainNav.cart_CheckOut();
-
+		
 		CostCenterPage ccPage = new CostCenterPage(getDriver());
-		ccPage.change_CC(updateHeaderLevel, CCvalue);
+		ccPage.verifyCostCenter(itemType,null,null,QtValue);
 
 		TestReporter.logStep("Application Logout");
 		mainNav.clickLogout();
