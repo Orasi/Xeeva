@@ -22,7 +22,7 @@ import com.xeeva.navigation.MainNav;
  * @Summary: To verify that requester is able to change the require by for a existing line level requisition. 
  * @author praveen varma, @version: Created 21-09-2016
  */
-public class VerifyRequester_changeRequire_ExistingLineLevel extends TestEnvironment {
+public class Verify_ChangeRequireBy_ExistingLineLevel extends TestEnvironment {
 
 	 public String RequisitionType = "serviceRequestGeneral";
 		
