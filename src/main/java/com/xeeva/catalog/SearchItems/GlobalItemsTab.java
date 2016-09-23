@@ -23,7 +23,7 @@ public class GlobalItemsTab {
 	private ResourceBundle userCredentialRepo = ResourceBundle.getBundle(Constants.USER_CREDENTIALS_PATH);
 
 	/**Page Elements**/
-	@FindBy(id = "aTab2")	private Link globalItemsTab;
+	@FindBy(linkText = "Global Items")	private Link globalItemsTab;
 	@FindBy(css = "#lblGlobalCount") private Label globalCount;
 	@FindBy(css = ".css-label") private List<WebElement> chkCompare;
 	@FindBy(xpath = ".//*[@id='divCompareGlobalItem']/table/tbody/tr[3]/td/input") private Button btnCompare;
@@ -53,8 +53,7 @@ public class GlobalItemsTab {
 	 * @date 14/9/16
 	 **/
 	public void click_GlobalItemsTab(){
-		globalItemsTab.syncVisible(20, false);
-		globalItemsTab.isDisplayed();
+		globalItemsTab.syncVisible(70, false);
 		driver.executeJavaScript("arguments[0].click();", globalItemsTab);
 		driver.setPageTimeout(5);
 	}

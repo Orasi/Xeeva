@@ -71,7 +71,7 @@ public class CostCenterPage {
 
 	@FindBy(xpath="//div[@id='divAppInfoMsg'][@class='addMessage']") private Label lblCartItemAddedMessage;
 	@FindBy(xpath="//input[@id='txtRequiredby']") private Textbox txtReqByHeaderLevel;
-	
+
 	/**Constructor**/
 	public CostCenterPage(OrasiDriver driver){
 		this.driver = driver;
@@ -146,6 +146,10 @@ public class CostCenterPage {
 		TestReporter.assertTrue(updatedQty.equalsIgnoreCase(QtyValue), "Quantity Updated Successfully!!");
 	}
 
+	public void VerifyDelete(){
+
+	}
+
 	/**
 	 * @summary Method to verify Cost Center
 	 * @author  Lalitha Banda
@@ -210,17 +214,26 @@ public class CostCenterPage {
 			// Verify Save Cart 
 			changeQuantity(QuantityValue,btnSaveCart);
 			break;
+
+		case "delete":
+			// Perform Delete 
+			int sizeBeofreDelete =lstQty.size();
+			driver.executeJavaScript("arguments[0].click();", readDeleteIcons.get(0));
+			//Handle Alert if present
+			if(AlertHandler.isAlertPresent(driver, 6)){
+				AlertHandler.handleAlert(driver, 6);
+			}
+			// Verify Delete 
+			Sleeper.sleep(9000);
+			int sizeAfterDelete =lstQty.size();
+			TestReporter.assertTrue(sizeAfterDelete<sizeBeofreDelete, "Item Deleted Successfully!!");
+			break;
 		default : System.out.println();
 
 		}
 		return statusFlag;
 	}
 
-	// Reading Handler method from AlertHandler class
-	public static void handleAlert(WebDriver driver){
-		AlertHandler handleAlert = new AlertHandler();
-		handleAlert.handleAlert(driver, 3);
-	}
 
 
 	/**
@@ -260,7 +273,10 @@ public class CostCenterPage {
 
 		case "headerlevel" :
 			lstCostCenterHeaderLevel.select(CC);
-			handleAlert(driver);
+			//Handle Alert if present
+			if(AlertHandler.isAlertPresent(driver, 6)){
+				AlertHandler.handleAlert(driver, 6);
+			}
 			System.out.println(verifyCostCenter(changeType,null,CC,null));
 			TestReporter.assertTrue( verifyCostCenter(changeType,null,CC,null),"Cost Center Updated at Header Level Successfully!!");
 			break;
@@ -307,11 +323,11 @@ public class CostCenterPage {
 	 * @author: Praveen Namburi, @version: Created 21-09-2016.
 	 */
 	public void verify_RequiredByDateUpdated_atCCLevel(){
-		
+
 		//Added wait statement to wait until the Cart item added successfull message to be displayed.
 		WebDriverWait wait = new WebDriverWait(driver,10);
 		WebElement lblCartAddItemMessage =wait.until(ExpectedConditions.
-		    visibilityOfElementLocated(By.xpath("//div[@id='divAppInfoMsg'][@class='addMessage']")));
+				visibilityOfElementLocated(By.xpath("//div[@id='divAppInfoMsg'][@class='addMessage']")));
 		String getReqByDateMessage = lblCartItemAddedMessage.getText();
 		TestReporter.logStep("Message after changing the RequiredBy date at CC_level : "+ getReqByDateMessage);
 		TestReporter.assertTrue(getReqByDateMessage.contains("date has been updated."), 
@@ -348,11 +364,11 @@ public class CostCenterPage {
 				break;
 			}
 		}
-		
+
 		//Verify the message -'The RequiredBy date has been updated' is displayed.
 		verify_RequiredByDateUpdated_atCCLevel();
 		driver.setPageTimeout(2);
-		
+
 		List<WebElement> inputDates = dateCCInputLineLevel;
 		int getInputDatesSize = inputDates.size();
 		TestReporter.log("Total no. of input dates available at CC_line-level: " + getInputDatesSize);
@@ -367,7 +383,7 @@ public class CostCenterPage {
 		}
 
 	}
-	
+
 	/**
 	 * @summary: Method to change the RequiredBy value at Header level.
 	 * @author: Praveen Namburi, @version: Created 22-09-2016.
@@ -397,15 +413,15 @@ public class CostCenterPage {
 			}
 			if(loopCount>0) break;
 		}
-		
+
 		//Verify the message -'The RequiredBy date has been updated' is displayed.
 		verify_RequiredByDateUpdated_atCCLevel();
 		driver.setPageTimeout(2);
-		
+
 		//Get the RequiredBy date at header level.
 		String getReqByDate_AtHeaderLevel = txtReqByHeaderLevel.getText();
 		TestReporter.log("Get ReqByDate_before Change: " + getReqByDate_AtHeaderLevel);
-		
+
 		List<WebElement> inputDates = dateCCInputLineLevel;
 		int getInputDatesSize = inputDates.size();
 		TestReporter.log("Total no. of input dates available at CC_line-level: " + getInputDatesSize);
@@ -416,7 +432,7 @@ public class CostCenterPage {
 			TestReporter.assertEquals(getReqByDate_AtHeaderLevel, getModifiedDate, 
 					"Date has been updated at line-level for the id: - ["+inputDate.getAttribute("id")+"]");
 		}
-		
+
 	}
 
 }

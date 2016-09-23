@@ -225,7 +225,7 @@ public class RequisitioningPage {
 		catalogSearch.safeSet(searchItem);
 		searchButton.syncVisible(20,false);
 		searchButton.click();
-		driver.setPageTimeout(4);
+		driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
 
 	}
 
@@ -330,7 +330,7 @@ public class RequisitioningPage {
 	public void clickShowFavouriteItems(){
 		lnkShowFavItems.syncVisible(15, false);
 		lnkShowFavItems.click();
-		
+
 	}
 
 	/**
@@ -350,7 +350,7 @@ public class RequisitioningPage {
 			TestReporter.log("Click on Local-Items tab.");
 			LocalItemsTab localItem = new LocalItemsTab(driver);
 			//localItem.click_localItemsTab();
-			
+
 			String itemNumber = null;
 			List<WebElement> localItems = localItemsGrid;
 			for(WebElement inputItem : localItems){
@@ -403,7 +403,7 @@ public class RequisitioningPage {
 		}else if(getGlobalItemsCount.contains("0")){
 			//If there are no records in both local & global items, then test should fail.
 			TestReporter.assertFalse(getGlobalItemsCount.contains("0"), " 'No Records Found !!' from Local & Global Items tab.");
-			
+
 		}
 
 	}
@@ -421,35 +421,35 @@ public class RequisitioningPage {
 		lnkShowFavItems.click();
 		driver.setPageTimeout(3);
 	}
-	
-	
-	  
-	  /**
-	   * @summary: Method to get the Item Number from catalog table.
-	   * @author praveen namburi,@version: Created 13-09-2016
-	   * @return getItemNumber
-	   */
-	  public String  getItemNumberFromCatalog(){
-		  driver.setPageTimeout(2);
-		  String getItemNumber = null;
-		  String getLocalItemsCount = lblLocalItems.getText();
-		  TestReporter.log("Local-Items Count is: "+ getLocalItemsCount);
-		  
-		  if(!getLocalItemsCount.contains("0")){
-				TestReporter.log("Click on Local-Items tab.");
-				LocalItemsTab localItem = new LocalItemsTab(driver);
-				localItem.click_localItemsTab();
-				List<WebElement> localItems = localItemsGrid;
-				for(WebElement inputItem : localItems){
-					String itemNumber = inputItem.getText().trim();
-					getItemNumber = itemNumber;
-					break;
-				}
-		  }else if(getLocalItemsCount.contains("0")){
-				TestReporter.assertTrue(false," 'No Records Found !!' in Local Items tab. ");
-		  }
+
+
+
+	/**
+	 * @summary: Method to get the Item Number from catalog table.
+	 * @author praveen namburi,@version: Created 13-09-2016
+	 * @return getItemNumber
+	 */
+	public String  getItemNumberFromCatalog(){
+		driver.setPageTimeout(2);
+		String getItemNumber = null;
+		String getLocalItemsCount = lblLocalItems.getText();
+		TestReporter.log("Local-Items Count is: "+ getLocalItemsCount);
+
+		if(!getLocalItemsCount.contains("0")){
+			TestReporter.log("Click on Local-Items tab.");
+			LocalItemsTab localItem = new LocalItemsTab(driver);
+			localItem.click_localItemsTab();
+			List<WebElement> localItems = localItemsGrid;
+			for(WebElement inputItem : localItems){
+				String itemNumber = inputItem.getText().trim();
+				getItemNumber = itemNumber;
+				break;
+			}
+		}else if(getLocalItemsCount.contains("0")){
+			TestReporter.assertTrue(false," 'No Records Found !!' in Local Items tab. ");
+		}
 		return getItemNumber;
-	  
-	  }	
-	  
+
+	}	
+
 }
