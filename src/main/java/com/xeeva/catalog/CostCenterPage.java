@@ -54,7 +54,7 @@ public class CostCenterPage {
 	@FindBy(xpath=".//*[@id='customfa']/tbody/tr/td/input[@class='QtyNumericTextBoxClass']") private List<WebElement> lstQty;
 	@FindBy(xpath=".//*[@title='Save changes']") private List<WebElement> lstSave;
 	@FindBy(xpath="//div[@id='divAppInfoMsg'][@class='addMessage']") private Label conformationMsg;
-	@FindBy(xpath=".//*[@value='Save Cart']") private WebElement btnSaveCart;
+	@FindBy(xpath=".//*[@value='Save Cart'][contains(@onclick, 'javascript')]") private WebElement btnSaveCart;
 
 	@FindBy(xpath="//td[2]/a[1]/input") private Button btnSaveCartCC;
 	@FindBy(xpath="//tr[2]/td[2]/a[2]/input") private Button btnShopMoreItemsCC;
@@ -140,9 +140,19 @@ public class CostCenterPage {
 		lstQty.get(0).clear();
 		lstQty.get(0).sendKeys(QtyValue);
 		driver.executeJavaScript("arguments[0].click();",inputElement);
-		Sleeper.sleep(5000);
-		System.out.println("Total size : "+lstQty.size());
-		String updatedQty =lstQty.get((lstQty.size()-1)).getAttribute("value");
+		//handle alert pop up if present
+		//TODO this is not a graceful way to handle multiple items that each have an alert...
+		if (AlertHandler.isAlertPresent(driver, 6)) {
+			AlertHandler.handleAlert(driver, 6);
+			if (AlertHandler.isAlertPresent(driver, 6)) {
+				AlertHandler.handleAlert(driver, 6);
+			}
+		}
+		//Wait for the success message to disappear so that the qty is fully updated
+		Sleeper.sleep(2000);
+
+		System.out.println("Total number of qty text boxes : "+lstQty.size());
+		String updatedQty =lstQty.get(0).getAttribute("value");
 		TestReporter.assertTrue(updatedQty.equalsIgnoreCase(QtyValue), "Quantity Updated Successfully!!");
 	}
 
@@ -212,7 +222,7 @@ public class CostCenterPage {
 			break;
 		case "savecart": 
 			// Verify Save Cart 
-			changeQuantity(QuantityValue,btnSaveCart);
+			changeQuantity(QuantityValue,btnSaveCartCC);
 			break;
 
 		case "delete":

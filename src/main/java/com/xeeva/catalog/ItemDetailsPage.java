@@ -148,21 +148,18 @@ public class ItemDetailsPage {
 	public void add_TwoDiffrent_ItemsToCart(String UP,String Qty,String UOM){
 		TestReporter.logStep("UOM "+lstUOMGlobalCart.size());
 		TestReporter.logStep("Add To Cart Items : "+btnIAddToCartItems.size());
-		driver.setPageTimeout(10, TimeUnit.SECONDS);
 		lstUOMGlobalCart.get(0).select(UOM);
 		driver.executeJavaScript("arguments[0].click();", btnIAddToCartItems.get(0));
 		//Handle Alert if present
 		  if(AlertHandler.isAlertPresent(driver, 6)){
 		   AlertHandler.handleAlert(driver, 6);
 		  }
-		driver.setPageTimeout(5, TimeUnit.SECONDS);
 		lstUOMGlobalCart.get(1).select(UOM);
 		driver.executeJavaScript("arguments[0].click();", btnIAddToCartItems.get(1));
 		//Handle Alert if present
 		  if(AlertHandler.isAlertPresent(driver, 6)){
 		   AlertHandler.handleAlert(driver, 6);
 		  }
-		driver.setPageTimeout(5, TimeUnit.SECONDS);
 	}
 
 }
