@@ -10,7 +10,6 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
 import com.orasi.core.interfaces.Button;
 import com.orasi.core.interfaces.Element;
 import com.orasi.core.interfaces.Label;
@@ -55,6 +54,7 @@ public class CostCenterPage {
 	@FindBy(xpath=".//*[@id='customfa']/tbody/tr/td/input[@class='QtyNumericTextBoxClass']") private List<WebElement> lstQty;
 	@FindBy(xpath=".//*[@title='Save changes']") private List<WebElement> lstSave;
 	@FindBy(xpath="//div[@id='divAppInfoMsg'][@class='addMessage']") private Label conformationMsg;
+	@FindBy(xpath=".//*[@value='Save Cart']") private WebElement btnSaveCart;
 
 	@FindBy(xpath="//td[2]/a[1]/input") private Button btnSaveCartCC;
 	@FindBy(xpath="//tr[2]/td[2]/a[2]/input") private Button btnShopMoreItemsCC;
@@ -135,15 +135,34 @@ public class CostCenterPage {
 	}
 
 
+	// Method to change Quantity 
+	public void changeQuantity(String QtyValue ,WebElement inputElement){
+		lstQty.get(0).clear();
+		lstQty.get(0).sendKeys(QtyValue);
+		driver.executeJavaScript("arguments[0].click();",inputElement);
+		Sleeper.sleep(5000);
+		System.out.println("Total size : "+lstQty.size());
+		String updatedQty =lstQty.get((lstQty.size()-1)).getAttribute("value");
+		TestReporter.assertTrue(updatedQty.equalsIgnoreCase(QtyValue), "Quantity Updated Successfully!!");
+	}
+
 	/**
 	 * @summary Method to verify Cost Center
 	 * @author  Lalitha Banda
 	 * @date    20/09/16
 	 */
+	/**
+	 * @param verifyType
+	 * @param itemNumber
+	 * @param CCValue
+	 * @param QuantityValue
+	 * @return
+	 */
 	public boolean verifyCostCenter(String verifyType,String itemNumber,String CCValue,String QuantityValue){
 		boolean statusFlag = false;
 		List<WebElement> readLinks = driver.findElements(By.xpath(".//*[@id='customfa']/tbody/tr/td[1]/a"));
 		List<WebElement> readSelects = driver.findElements(By.xpath(".//*[@id='customfa']/tbody/tr/td/select"));
+		List<WebElement> readDeleteIcons = driver.findElements(By.xpath(".//*[@title='Delete']"));
 
 		switch(verifyType.toLowerCase()){
 		case "linelevel":
@@ -184,15 +203,13 @@ public class CostCenterPage {
 			break;
 
 		case "quantity": 
-			lstQty.get(0).clear();
-			lstQty.get(0).sendKeys(QuantityValue);
-			driver.executeJavaScript("arguments[0].click();", lstSave.get(0));
-			Sleeper.sleep(5000);
-			System.out.println("Total size : "+lstQty.size());
-			String updatedQty =lstQty.get((lstQty.size()-1)).getAttribute("value");
-			TestReporter.assertTrue(updatedQty.equalsIgnoreCase(QuantityValue), "Quantity Updated Successfully!!");
+			// Change Quantity - Line Level record
+			changeQuantity(QuantityValue,lstSave.get(0));
 			break;
-
+		case "savecart": 
+			// Verify Save Cart 
+			changeQuantity(QuantityValue,btnSaveCart);
+			break;
 		default : System.out.println();
 
 		}
@@ -295,8 +312,6 @@ public class CostCenterPage {
 		WebDriverWait wait = new WebDriverWait(driver,10);
 		WebElement lblCartAddItemMessage =wait.until(ExpectedConditions.
 		    visibilityOfElementLocated(By.xpath("//div[@id='divAppInfoMsg'][@class='addMessage']")));
-				 
-		lblCartItemAddedMessage.syncVisible(20, false);
 		String getReqByDateMessage = lblCartItemAddedMessage.getText();
 		TestReporter.logStep("Message after changing the RequiredBy date at CC_level : "+ getReqByDateMessage);
 		TestReporter.assertTrue(getReqByDateMessage.contains("date has been updated."), 
