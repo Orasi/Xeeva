@@ -7,7 +7,9 @@ import java.util.concurrent.TimeUnit;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.orasi.core.interfaces.Button;
 import com.orasi.core.interfaces.Label;
@@ -16,6 +18,7 @@ import com.orasi.core.interfaces.Listbox;
 import com.orasi.core.interfaces.Textbox;
 import com.orasi.core.interfaces.Webtable;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
+import com.orasi.utils.AlertHandler;
 import com.orasi.utils.Constants;
 import com.orasi.utils.OrasiDriver;
 import com.orasi.utils.Sleeper;
@@ -91,7 +94,11 @@ public class RequisitioningPage {
 	@FindBy(xpath="//*[@class='Datagridborder mainRecentOdersGrid']/tbody/tr") private List<WebElement> mainRecentOdersGrid;
 	//@FindBy(xpath="//select[@class='textFieldList width90Px']") private Listbox lstSelUOMValue;
 	@FindBy(xpath="//div[@id='divAppInfoMsg'][@class='addMessage']") private Label lblCartItemAddedMessage;
-
+	@FindBy(xpath="//td/textarea[@id='txtComments']") private Textbox txtComments;
+	@FindBy(xpath="//input[@id='btnCommentsSubmit']") private Button btnCommentsSubmit;
+	@FindBy(xpath="//input[@value='SEE MORE'][@class='buttonClass marginRight0px']") private Button btnSeeMore;
+	@FindBy(xpath="//*[@class='Datagridborder mainRecentOdersGrid']/tbody/tr") private List<WebElement> tblMainRecentOrdersGrid;
+	
 	//**Constructor**//*
 
 	public RequisitioningPage(OrasiDriver driver){
@@ -451,5 +458,48 @@ public class RequisitioningPage {
 		return getItemNumber;
 	  
 	  }	
+	  
+	  /**
+	   * @summary: Method to cancel the requisition record and verify them.
+	   * @author praveen namburi, @Version: Created 23-09-2016
+	   * @param comments
+	   */
+	  public void cancelRequisitionFromRecentOrders(String comments){
+		  tblRecentOrdersGrid.syncVisible();
+		  driver.setPageTimeout(5);
+		  btnSeeMore.syncEnabled(5);
+		  //btnSeeMore.click();
+		  driver.executeJavaScript("arguments[0].click();", btnSeeMore);
+		  driver.setPageTimeout(5);
+		  List<WebElement> getRows = tblMainRecentOrdersGrid;
+		  int rowsCount = getRows.size();
+		  TestReporter.log("Total rows in RecentOrders Grid table: "+ rowsCount);
+			  
+		    for(int row=1; row<=rowsCount; row++){
+				String getStatus = driver.findElement(By.xpath("//*[@id='gvRecentOdersGrid']/tbody/"
+						+ "tr["+ row +"]/td[8]/span")).getText();
+				if(!getStatus.contains("Canceled By Requester")){
+					driver.setPageTimeout(2);
+					driver.findElement(By.xpath("//*[@id='gvRecentOdersGrid']/tbody"
+							+ "/tr["+ row +"]/td[13]/div/a/i")).jsClick();
+					//Handle Alert if present
+					if(AlertHandler.isAlertPresent(driver, 6)){
+						AlertHandler.handleAlert(driver, 6);
+					}
+					txtComments.syncVisible(5);
+					txtComments.safeSet(comments);
+					btnCommentsSubmit.syncVisible(5);
+					btnCommentsSubmit.click();
+					Sleeper.sleep(5000);
+					String getStatusAfterCancelReqLink = driver.findElement(By.xpath("//*[@id='gvRecentOdersGrid']/tbody/"
+							+ "tr["+ row +"]/td[8]/span")).getText();
+					TestReporter.logStep("Get Status After Cancel Requisition: "+getStatusAfterCancelReqLink);
+					TestReporter.assertTrue(getStatusAfterCancelReqLink.contains("Canceled By Requester"), 
+							"Cancelled the requisition record sucessfully.");
+					break;
+		       }
+		    }
+	  }
+	 
 	  
 }
