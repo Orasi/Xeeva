@@ -34,7 +34,7 @@ public class ChangeCC_LineLevel extends TestEnvironment{
 	@DataProvider(name = "dataScenario")
 	public Object[][] scenarios() {
 		try {
-			Object[][] excelData = new ExcelDataProvider("/datasheets/AddInternalComments.xlsx","Verify_AddInternalComments").getTestData();
+			Object[][] excelData = new ExcelDataProvider("/datasheets/UpdateCostCenter.xlsx","CostCenter").getTestData();
 			return excelData;
 		}
 		catch (RuntimeException e){
@@ -62,7 +62,8 @@ public class ChangeCC_LineLevel extends TestEnvironment{
 	}
 
 	@Test(dataProvider = "dataScenario")
-	public void CostCenterLineLevel(String role, String location,String InternalComment,String GlobalItem,String UnitofMeasure,String Quantity,String UnitPrice){
+	public void CostCenterLineLevel(String role, String location,String InternalComment,String GlobalItem,String UnitofMeasure,String Quantity,
+			String UnitPrice,String updateLineLevel,String updateHeaderLevel,String CCvalue,String Qtvalue){
 
 		// Application Login 
 		TestReporter.logStep("Login into application");
@@ -93,7 +94,7 @@ public class ChangeCC_LineLevel extends TestEnvironment{
 		mainNav.cart_CheckOut();
 
 		CostCenterPage ccPage = new CostCenterPage(getDriver());
-		ccPage.change_CC("linelevel", "COMCOMERCIAL");
+		ccPage.change_CC(updateLineLevel, CCvalue);
 
 		TestReporter.logStep("Application Logout");
 		mainNav.clickLogout();

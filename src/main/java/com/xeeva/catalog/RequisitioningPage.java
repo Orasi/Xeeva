@@ -7,7 +7,9 @@ import java.util.concurrent.TimeUnit;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.orasi.core.interfaces.Button;
 import com.orasi.core.interfaces.Label;
@@ -16,6 +18,7 @@ import com.orasi.core.interfaces.Listbox;
 import com.orasi.core.interfaces.Textbox;
 import com.orasi.core.interfaces.Webtable;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
+import com.orasi.utils.AlertHandler;
 import com.orasi.utils.Constants;
 import com.orasi.utils.OrasiDriver;
 import com.orasi.utils.Sleeper;
@@ -91,7 +94,11 @@ public class RequisitioningPage {
 	@FindBy(xpath="//*[@class='Datagridborder mainRecentOdersGrid']/tbody/tr") private List<WebElement> mainRecentOdersGrid;
 	//@FindBy(xpath="//select[@class='textFieldList width90Px']") private Listbox lstSelUOMValue;
 	@FindBy(xpath="//div[@id='divAppInfoMsg'][@class='addMessage']") private Label lblCartItemAddedMessage;
-
+	@FindBy(xpath="//td/textarea[@id='txtComments']") private Textbox txtComments;
+	@FindBy(xpath="//input[@id='btnCommentsSubmit']") private Button btnCommentsSubmit;
+	@FindBy(xpath="//input[@value='SEE MORE'][@class='buttonClass marginRight0px']") private Button btnSeeMore;
+	@FindBy(xpath="//*[@class='Datagridborder mainRecentOdersGrid']/tbody/tr") private List<WebElement> tblMainRecentOrdersGrid;
+	
 	//**Constructor**//*
 
 	public RequisitioningPage(OrasiDriver driver){
@@ -111,9 +118,9 @@ public class RequisitioningPage {
 	 * @date 14/9/16
 	 **/
 	public void click_ReqTab(){
-		ReqTab.syncVisible(10, false);
+		ReqTab.syncVisible(20, false);
 		ReqTab.click();
-		driver.setPageTimeout(2);
+		driver.setPageTimeout(5);
 	}
 
 
@@ -225,7 +232,7 @@ public class RequisitioningPage {
 		catalogSearch.safeSet(searchItem);
 		searchButton.syncVisible(20,false);
 		searchButton.click();
-		driver.setPageTimeout(4);
+		driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
 
 	}
 
@@ -330,7 +337,7 @@ public class RequisitioningPage {
 	public void clickShowFavouriteItems(){
 		lnkShowFavItems.syncVisible(15, false);
 		lnkShowFavItems.click();
-		
+
 	}
 
 	/**
@@ -350,7 +357,7 @@ public class RequisitioningPage {
 			TestReporter.log("Click on Local-Items tab.");
 			LocalItemsTab localItem = new LocalItemsTab(driver);
 			//localItem.click_localItemsTab();
-			
+
 			String itemNumber = null;
 			List<WebElement> localItems = localItemsGrid;
 			for(WebElement inputItem : localItems){
@@ -403,7 +410,7 @@ public class RequisitioningPage {
 		}else if(getGlobalItemsCount.contains("0")){
 			//If there are no records in both local & global items, then test should fail.
 			TestReporter.assertFalse(getGlobalItemsCount.contains("0"), " 'No Records Found !!' from Local & Global Items tab.");
-			
+
 		}
 
 	}
@@ -421,38 +428,78 @@ public class RequisitioningPage {
 		lnkShowFavItems.click();
 		driver.setPageTimeout(3);
 	}
-	
-	
-	  
-	  /**
-	   * @summary: Method to get the Item Number from catalog table.
-	   * @author praveen namburi,@version: Created 13-09-2016
-	   * @return getItemNumber
-	   */
-	  public String  getItemNumberFromCatalog(){
-		  driver.setPageTimeout(2);
-		  String getItemNumber = null;
-		  String getLocalItemsCount = lblLocalItems.getText();
-		  TestReporter.log("Local-Items Count is: "+ getLocalItemsCount);
-		  
-		  if(!getLocalItemsCount.contains("0")){
-				TestReporter.log("Click on Local-Items tab.");
-				LocalItemsTab localItem = new LocalItemsTab(driver);
-				localItem.click_localItemsTab();
-				List<WebElement> localItems = localItemsGrid;
-				for(WebElement inputItem : localItems){
-					String itemNumber = inputItem.getText().trim();
-					getItemNumber = itemNumber;
-					break;
-				}
-		  }else if(getLocalItemsCount.contains("0")){
-				TestReporter.assertTrue(false," 'No Records Found !!' in Local Items tab. ");
-		  }
+
+
+
+	/**
+	 * @summary: Method to get the Item Number from catalog table.
+	 * @author praveen namburi,@version: Created 13-09-2016
+	 * @return getItemNumber
+	 */
+	public String  getItemNumberFromCatalog(){
+		driver.setPageTimeout(2);
+		String getItemNumber = null;
+		String getLocalItemsCount = lblLocalItems.getText();
+		TestReporter.log("Local-Items Count is: "+ getLocalItemsCount);
+
+		if(!getLocalItemsCount.contains("0")){
+			TestReporter.log("Click on Local-Items tab.");
+			LocalItemsTab localItem = new LocalItemsTab(driver);
+			localItem.click_localItemsTab();
+			List<WebElement> localItems = localItemsGrid;
+			for(WebElement inputItem : localItems){
+				String itemNumber = inputItem.getText().trim();
+				getItemNumber = itemNumber;
+				break;
+			}
+		}else if(getLocalItemsCount.contains("0")){
+			TestReporter.assertTrue(false," 'No Records Found !!' in Local Items tab. ");
+		}
 		return getItemNumber;
 	  
 	  }	
 	  
+	  /**
+	   * @summary: Method to cancel the requisition record and verify them.
+	   * @author praveen namburi, @Version: Created 23-09-2016
+	   * @param comments
+	   */
+	  public void cancelRequisitionFromRecentOrders(String comments){
+		  tblRecentOrdersGrid.syncVisible();
+		  driver.setPageTimeout(5);
+		  btnSeeMore.syncEnabled(5);
+		  //btnSeeMore.click();
+		  driver.executeJavaScript("arguments[0].click();", btnSeeMore);
+		  driver.setPageTimeout(5);
+		  List<WebElement> getRows = tblMainRecentOrdersGrid;
+		  int rowsCount = getRows.size();
+		  TestReporter.log("Total rows in RecentOrders Grid table: "+ rowsCount);
+			  
+		    for(int row=1; row<=rowsCount; row++){
+				String getStatus = driver.findElement(By.xpath("//*[@id='gvRecentOdersGrid']/tbody/"
+						+ "tr["+ row +"]/td[8]/span")).getText();
+				if(!getStatus.contains("Canceled By Requester")){
+					driver.setPageTimeout(2);
+					driver.findElement(By.xpath("//*[@id='gvRecentOdersGrid']/tbody"
+							+ "/tr["+ row +"]/td[13]/div/a/i")).jsClick();
+					//Handle Alert if present
+					if(AlertHandler.isAlertPresent(driver, 6)){
+						AlertHandler.handleAlert(driver, 6);
+					}
+					txtComments.syncVisible(5);
+					txtComments.safeSet(comments);
+					btnCommentsSubmit.syncVisible(5);
+					btnCommentsSubmit.click();
+					Sleeper.sleep(5000);
+					String getStatusAfterCancelReqLink = driver.findElement(By.xpath("//*[@id='gvRecentOdersGrid']/tbody/"
+							+ "tr["+ row +"]/td[8]/span")).getText();
+					TestReporter.logStep("Get Status After Cancel Requisition: "+getStatusAfterCancelReqLink);
+					TestReporter.assertTrue(getStatusAfterCancelReqLink.contains("Canceled By Requester"), 
+							"Cancelled the requisition record sucessfully.");
+					break;
+		       }
+		    }
+	  }
+	 
 	  
 }
-
-
