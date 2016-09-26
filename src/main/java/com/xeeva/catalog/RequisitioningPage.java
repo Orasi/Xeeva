@@ -21,6 +21,7 @@ import com.orasi.core.interfaces.impl.internal.ElementFactory;
 import com.orasi.utils.AlertHandler;
 import com.orasi.utils.Constants;
 import com.orasi.utils.OrasiDriver;
+import com.orasi.utils.PageLoaded;
 import com.orasi.utils.Sleeper;
 import com.orasi.utils.TestReporter;
 import com.xeeva.catalog.SearchItems.GlobalItemsTab;
@@ -34,6 +35,7 @@ import com.xeeva.catalog.SearchItems.LocalItemsTab;
  */
 public class RequisitioningPage {
 
+	PageLoaded pageLoad = new PageLoaded();
 	private OrasiDriver driver = null;
 	private ResourceBundle userCredentialRepo = ResourceBundle.getBundle(Constants.USER_CREDENTIALS_PATH);
 
@@ -98,6 +100,24 @@ public class RequisitioningPage {
 	@FindBy(xpath="//input[@id='btnCommentsSubmit']") private Button btnCommentsSubmit;
 	@FindBy(xpath="//input[@value='SEE MORE'][@class='buttonClass marginRight0px']") private Button btnSeeMore;
 	@FindBy(xpath="//*[@class='Datagridborder mainRecentOdersGrid']/tbody/tr") private List<WebElement> tblMainRecentOrdersGrid;
+	
+	// Search criteria details
+	@FindBy(xpath="//input[@id='txtCart']") private Textbox txtCart;
+	@FindBy(xpath="//input[@id='txtRfq']") private Textbox txtRFQ;
+	@FindBy(id="txtOrderDescription") private Textbox txtOrderDesc;
+	@FindBy(id="txtReq") private Textbox txtREQ;
+	@FindBy(id="ddl_OrderStatus") private Listbox lstLocation;
+	@FindBy(id="btnROSearchSubmit") private Button btnSearch;
+	
+	@FindBy(xpath="//div/table/tbody/tr/td/div/table/tbody/tr/td/table/tbody/tr/td/table/tbody/tr[2]/td[5]") 
+	private WebElement tblRecentOrder_CartItem;
+	@FindBy(xpath="//div/table/tbody/tr/td/div/table/tbody/tr/td/table/tbody/tr/td/table/tbody/tr[2]/td[4]")  
+	private WebElement tblRecentOrder_RFQNum;
+	@FindBy(xpath="//div/table/tbody/tr/td/div/table/tbody/tr/td/table/tbody/tr/td/table/tbody/tr[2]/td[3]")  
+	private WebElement tblRecentOrder_REQNum;
+	@FindBy(id="divRejectedOrderResult") private WebElement eleRejectedOrderResult;
+	@FindBy(xpath="//div/table/tbody/tr/td/div/table/tbody/tr/td/table/tbody/tr/td/table/tbody/tr") 
+	private List<WebElement> tblRejectedOrdersResult;
 	
 	//**Constructor**//*
 
@@ -282,14 +302,26 @@ public class RequisitioningPage {
 		}
 	}
 
-
-	// This method clicks on Recent Orders tab. - Author[Praveen]
+	/**
+	 *@summary: Method to click on Recent Orders tab.
+	 *@author Praveen Namburi, @Version: Created 14-09-2016
+	 */
 	public void clickRecentOrdersTab(){
 		lblRecentOrders.syncVisible(5, false);
 		lblRecentOrders.click();
 	}
 
-
+	/**
+	 *@summary: Method to click on Rejected Orders tab.
+	 *@author Praveen Namburi, @Version: Created 23-09-2016
+	 */
+	public void clickRejectedOrdersTab(){
+		pageLoad.isDomComplete(driver);
+		lblRejectedOrders.syncVisible(20, false);
+		driver.executeJavaScript("arguments[0].click();", lblRejectedOrders);
+		//lblRejectedOrders.click();
+	}
+	
 	/**
 	 * @summary: Method to click on Requisition cart link # which has only REQ Number.
 	 * @Author: Praveen Namburi,@version: Created 07-09-2016
@@ -468,7 +500,6 @@ public class RequisitioningPage {
 		  tblRecentOrdersGrid.syncVisible();
 		  driver.setPageTimeout(5);
 		  btnSeeMore.syncEnabled(5);
-		  //btnSeeMore.click();
 		  driver.executeJavaScript("arguments[0].click();", btnSeeMore);
 		  driver.setPageTimeout(5);
 		  List<WebElement> getRows = tblMainRecentOrdersGrid;
@@ -501,5 +532,89 @@ public class RequisitioningPage {
 		    }
 	  }
 	 
+	  /**
+	   * @Summary: Method to get the Cart number from Rejected Orders.
+	   * @author: Praveen Namburi, @version: Created 26-09-2016
+	   * @return getCartValue
+	   */
+	  public String getCart_RejectedOrders(){
+		  String getCartValue="";
+		  getCartValue = tblRecentOrder_CartItem.getText().trim();
+		  TestReporter.log("Cart Number: "+getCartValue);
+		  return getCartValue;
+	  }
+	  
+	  /**
+	   * @Summary: Method to get the RFQ number from Rejected Orders tab.
+	   * @author: Praveen Namburi, @version: Created 26-09-2016
+	   * @return getRFQValue
+	   */
+	  public String getRFQ_RejectedOrders(){
+		  String getRFQValue="";
+		  getRFQValue = tblRecentOrder_RFQNum.getText().trim();
+		  TestReporter.log("RFQ Number: "+getRFQValue);
+		  return getRFQValue;
+	  }
+	  
+	  /**
+	   * @Summary: Method to get the REQ number from Rejected Orders.
+	   * @author: Praveen Namburi, @version: Created 26-09-2016
+	   * @return
+	   */
+	  public String getREQ_RejectedOrders(){
+		  String getREQValue="";
+		  String REQValue = tblRecentOrder_REQNum.getText().trim();
+		  TestReporter.log("REQ Number: "+ REQValue);
+		  if(REQValue.contains("-")){
+			  String strREQValue = REQValue.replace("-", "");
+			  getREQValue = strREQValue;
+		  }
+		  return getREQValue;
+	  }
+	 
+	  /**
+	   * @summary: Method to enter search Criteria for Rejected Orders and Verify them.
+	   * @author: Praveen Namburi, @version: Created 26-09-2016
+	   * @param cart, @param RFQ, @param OrderDesc, @param location
+	   */
+	  public void enterSearchCriteriaAndVerifyRejectedOrders(String location){
+		  	driver.manage().timeouts().implicitlyWait(7, TimeUnit.SECONDS);
+		    pageLoaded();
+		    Sleeper.sleep(5000);
+		  	String cartValue = getCart_RejectedOrders();
+		  	String RFQValue = getRFQ_RejectedOrders();
+		  	String REQValue = getREQ_RejectedOrders();
+		  	
+		  	pageLoad.isDomComplete(driver);
+		  	txtCart.syncVisible(10);
+		  	txtCart.click();
+		  	txtCart.safeSet(cartValue);
+		  	txtRFQ.syncVisible(5);
+		  	txtRFQ.click();
+		  	txtRFQ.safeSet(RFQValue);
+		  	txtREQ.syncVisible(5);
+		  	txtREQ.click();
+		  	txtREQ.safeSet(REQValue);
+		  	lstLocation.syncEnabled(5);
+		  	lstLocation.select(location);
+		  	btnSearch.syncVisible(5);
+		  	driver.executeJavaScript("arguments[0].click();", btnSearch);
+		  	driver.manage().timeouts().implicitlyWait(6, TimeUnit.SECONDS);
+		  	//Verifying the Filtered Rejected Oder details.
+		  	List<WebElement> rejectedOrdersResult = tblRejectedOrdersResult;
+		  	int getRowsCount = rejectedOrdersResult.size();
+		  	if(getRowsCount>0){
+		  		TestReporter.assertEquals(getCart_RejectedOrders(), cartValue, 
+			  			"Found the Rejected order details with Cart no. - ["+ cartValue +"]");
+		  		TestReporter.assertEquals(getRFQ_RejectedOrders(), RFQValue, 
+			  			"Found the Rejected order details with Cart no. - ["+ RFQValue +"]");
+			  	TestReporter.assertEquals(getREQ_RejectedOrders(), REQValue,
+			  			"Found the Rejected order details with Cart no. - ["+ REQValue +"]");
+		  	}else{
+		  		TestReporter.assertTrue(false, "No Records found!!!");
+		  	}
+		  	
+		  	
+	  }
 	  
 }
