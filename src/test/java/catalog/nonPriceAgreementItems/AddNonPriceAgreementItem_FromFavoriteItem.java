@@ -99,6 +99,5 @@ public class AddNonPriceAgreementItem_FromFavoriteItem extends TestEnvironment{
 		mainNav.clickLogout();
 	}
 
-
 }
 

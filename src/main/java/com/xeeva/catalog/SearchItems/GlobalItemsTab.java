@@ -2,14 +2,17 @@ package com.xeeva.catalog.SearchItems;
 
 import java.util.List;
 import java.util.ResourceBundle;
+
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+
 import com.orasi.core.interfaces.Button;
 import com.orasi.core.interfaces.Label;
 import com.orasi.core.interfaces.Link;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
 import com.orasi.utils.Constants;
 import com.orasi.utils.OrasiDriver;
+import com.orasi.utils.PageLoaded;
 import com.orasi.utils.Sleeper;
 import com.orasi.utils.TestReporter;
 
@@ -19,6 +22,7 @@ import com.orasi.utils.TestReporter;
  * @date 	06/09/16
  */
 public class GlobalItemsTab {
+	PageLoaded pl = new PageLoaded();
 	private OrasiDriver driver = null;
 	private ResourceBundle userCredentialRepo = ResourceBundle.getBundle(Constants.USER_CREDENTIALS_PATH);
 
@@ -54,9 +58,8 @@ public class GlobalItemsTab {
 	 **/
 	public void click_GlobalItemsTab(){
 		globalItemsTab.syncVisible(20, false);
-		globalItemsTab.isDisplayed();
-		driver.executeJavaScript("arguments[0].click();", globalItemsTab);
-		driver.setPageTimeout(5);
+		globalItemsTab.click();
+		pl.isDomComplete(driver);
 	}
 
 	/**

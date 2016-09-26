@@ -6,9 +6,9 @@
 	<parameter name="runLocation" value="local" />
 	<parameter name="browserVersion" value="" />
 	<parameter name="operatingSystem" value="windows" />
- 	<test name="Verify_CopiedItem_LineLevel">
+ 	<test name="Verify_ItemDelete">
 		<classes>
-			<class name="catalog.cartCheckoutProcess.Verify_CopiedItem_LineLevel" />
+			<class name="catalog.cartCheckoutProcess.Verify_ItemDelete" />
 		</classes>
 	</test> 
 </suite> <!-- Suite -->
