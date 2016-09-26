@@ -63,10 +63,10 @@ public class Verify_ChangeRequireBy_HeaderLevel extends TestEnvironment {
 		 * @Description: Close the driver instance.
 		 * @param testResults
 		 */
-		/*@AfterTest
+		@AfterTest
 		public void close(ITestContext testResults){
 			endTest("TestAlert", testResults);
-		}*/
+		}
 		
 		/**
 		 * @Description: Main business-logic of the test-case resides here.
