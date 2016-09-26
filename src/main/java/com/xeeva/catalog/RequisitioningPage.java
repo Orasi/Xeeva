@@ -120,7 +120,6 @@ public class RequisitioningPage {
 	public void click_ReqTab(){
 		ReqTab.syncVisible(20, false);
 		ReqTab.click();
-		driver.setPageTimeout(5);
 	}
 
 
@@ -466,11 +465,9 @@ public class RequisitioningPage {
 	   */
 	  public void cancelRequisitionFromRecentOrders(String comments){
 		  tblRecentOrdersGrid.syncVisible();
-		  driver.setPageTimeout(5);
 		  btnSeeMore.syncEnabled(5);
 		  //btnSeeMore.click();
 		  driver.executeJavaScript("arguments[0].click();", btnSeeMore);
-		  driver.setPageTimeout(5);
 		  List<WebElement> getRows = tblMainRecentOrdersGrid;
 		  int rowsCount = getRows.size();
 		  TestReporter.log("Total rows in RecentOrders Grid table: "+ rowsCount);
@@ -479,7 +476,7 @@ public class RequisitioningPage {
 				String getStatus = driver.findElement(By.xpath("//*[@id='gvRecentOdersGrid']/tbody/"
 						+ "tr["+ row +"]/td[8]/span")).getText();
 				if(!getStatus.contains("Canceled By Requester")){
-					driver.setPageTimeout(2);
+					driver.setElementTimeout(2);
 					driver.findElement(By.xpath("//*[@id='gvRecentOdersGrid']/tbody"
 							+ "/tr["+ row +"]/td[13]/div/a/i")).jsClick();
 					//Handle Alert if present

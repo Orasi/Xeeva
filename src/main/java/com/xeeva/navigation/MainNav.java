@@ -248,6 +248,12 @@ public class MainNav {
 
 	}
 
+	
+	// Method to Get Cart Items Count 
+	public int getCartItemsCount(){
+		pl.isDomComplete(driver);
+		return Integer.parseInt(lblCartValue.getText());
+	}
 
 	/**
 	 * @summary Verify Cart Items 
@@ -256,7 +262,7 @@ public class MainNav {
 	 **/
 	public boolean verifyCartValue(String ItemType){
 		boolean statsuFlag = false;
-		//Sleeper.sleep(15000);
+		pl.isDomComplete(driver);
 		TestReporter.logStep("Cart Having [" + lblCartValue.getText()+"] Items!!");
 		if(Integer.parseInt(lblCartValue.getText())>=2){
 			statsuFlag = true;
@@ -265,6 +271,7 @@ public class MainNav {
 		}
 		return statsuFlag;
 	}
+	
 
 
 	/**

@@ -30,8 +30,8 @@ public class ItemDetailsPage {
 
 	private OrasiDriver driver = null;
 	private ResourceBundle userCredentialRepo = ResourceBundle.getBundle(Constants.USER_CREDENTIALS_PATH);
-	
-	
+
+
 	/**Page Elements**/
 	@FindBy(linkText = "lnkShowPopup") private Link lnkCartItem;
 	@FindBy(id = "txtBasicSearchCriteria")	private Textbox catalogSearch;
@@ -43,7 +43,7 @@ public class ItemDetailsPage {
 	@FindBy(xpath = "//tr[1]/td[3]//tr[7]//td[4]/a/div")
 	private Button btnAddToCart;
 	@FindBy(linkText = "Global Items")	private Link globalItemsTab;
-	
+
 	// global Items , UnitPrice ,Quantity
 	@FindBy(xpath = "//table/tbody/tr[6]/td/table/tbody/tr/td[2]/input") 
 	private Textbox txtunitPrice;
@@ -141,7 +141,8 @@ public class ItemDetailsPage {
 
 
 	/**
-	 * @summary Method To add two different items to cart to process Cost Center update
+	 * @summary To Proceed with Cost Center Page , cart should have minimum two items
+	 *  if cart having less than two items , this method will add two different items into the cart 
 	 * @author Lalitha Banda
 	 * @date 14/9/16
 	 **/
@@ -151,15 +152,15 @@ public class ItemDetailsPage {
 		lstUOMGlobalCart.get(0).select(UOM);
 		driver.executeJavaScript("arguments[0].click();", btnIAddToCartItems.get(0));
 		//Handle Alert if present
-		  if(AlertHandler.isAlertPresent(driver, 6)){
-		   AlertHandler.handleAlert(driver, 6);
-		  }
-		lstUOMGlobalCart.get(1).select(UOM);
+		if(AlertHandler.isAlertPresent(driver, 6)){
+			AlertHandler.handleAlert(driver, 6);
+		}
+		if(lstUOMGlobalCart.get(1).isDisplayed()){lstUOMGlobalCart.get(1).select(UOM);}
 		driver.executeJavaScript("arguments[0].click();", btnIAddToCartItems.get(1));
 		//Handle Alert if present
-		  if(AlertHandler.isAlertPresent(driver, 6)){
-		   AlertHandler.handleAlert(driver, 6);
-		  }
+		if(AlertHandler.isAlertPresent(driver, 6)){
+			AlertHandler.handleAlert(driver, 6);
+		}
 	}
 
 }

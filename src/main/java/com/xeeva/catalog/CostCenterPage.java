@@ -10,6 +10,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
 import com.orasi.core.interfaces.Button;
 import com.orasi.core.interfaces.Element;
 import com.orasi.core.interfaces.Label;
@@ -20,9 +21,11 @@ import com.orasi.core.interfaces.impl.internal.ElementFactory;
 import com.orasi.utils.AlertHandler;
 import com.orasi.utils.Constants;
 import com.orasi.utils.OrasiDriver;
+import com.orasi.utils.PageLoaded;
 import com.orasi.utils.Sleeper;
 import com.orasi.utils.TestReporter;
 import com.orasi.utils.date.DateTimeConversion;
+import com.xeeva.navigation.MainNav;
 
 /**
  * @summary This page contains Cost Center page objects
@@ -31,10 +34,12 @@ import com.orasi.utils.date.DateTimeConversion;
  */
 
 public class CostCenterPage {
-
+	
+	PageLoaded pl = new PageLoaded();
 	private OrasiDriver driver = null;
 	private ResourceBundle userCredentialRepo = ResourceBundle.getBundle(Constants.USER_CREDENTIALS_PATH);
 	String xpath = ".//*[@id='customfa']/tbody/tr/td/select";
+	
 
 	/**Page Elements**/
 	@FindBy(id ="countrydivcontainer") private Element costCenterContainer;	
@@ -233,8 +238,8 @@ public class CostCenterPage {
 			if(AlertHandler.isAlertPresent(driver, 6)){
 				AlertHandler.handleAlert(driver, 6);
 			}
-			// Verify Delete 
-			Sleeper.sleep(9000);
+			// Waiting for quantity table 
+			Sleeper.sleep(2000);
 			int sizeAfterDelete =lstQty.size();
 			TestReporter.assertTrue(sizeAfterDelete<sizeBeofreDelete, "Item Deleted Successfully!!");
 			break;
@@ -296,10 +301,8 @@ public class CostCenterPage {
 	}
 
 	public String selectCCToCopyItem(){
-		driver.setPageTimeout(4);
 		String ccValue = lstSelectCCValue.get(0).getText();
 		System.out.println("CostCenter Name "+lstSelectCCValue.get(0).getText());
-		Sleeper.sleep(5000);
 		driver.executeJavaScript("arguments[0].click();", lstSelectCC.get(0));
 		Sleeper.sleep(5000);
 		return ccValue;
@@ -353,7 +356,7 @@ public class CostCenterPage {
 		// after cart check out, application taking time to load cost center page 
 		lblCC.syncVisible(30, false);
 		lblCC.isDisplayed();
-		driver.setPageTimeout(3);
+		driver.setElementTimeout(Constants.ELEMENT_TIMEOUT);
 
 		String getReqByDate_beforeChange = getReqByDateAtLineLevel();
 		TestReporter.log("Get ReqByDate_before Change: " + getReqByDate_beforeChange);
@@ -364,9 +367,7 @@ public class CostCenterPage {
 		int getNextMonthArrowsSize = nextMonthArrows.size();
 		System.out.println("Next month arrows size: "+getNextMonthArrowsSize);
 		for(WebElement nextMonth : nextMonthArrows){
-			driver.setPageTimeout(2);
 			nextMonth.click();
-			driver.setPageTimeout(2);
 			List<WebElement> selectDates = driver.findElements(By.xpath("html/body/div[@class='calendar']/"
 					+ "table/tbody/tr[4]/td[@class='day']"));
 			for(WebElement selWeekDate : selectDates){
@@ -377,7 +378,6 @@ public class CostCenterPage {
 
 		//Verify the message -'The RequiredBy date has been updated' is displayed.
 		verify_RequiredByDateUpdated_atCCLevel();
-		driver.setPageTimeout(2);
 
 		List<WebElement> inputDates = dateCCInputLineLevel;
 		int getInputDatesSize = inputDates.size();
