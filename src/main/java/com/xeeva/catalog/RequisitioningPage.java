@@ -140,7 +140,6 @@ public class RequisitioningPage {
 	public void click_ReqTab(){
 		ReqTab.syncVisible(20, false);
 		ReqTab.click();
-		driver.setPageTimeout(5);
 	}
 
 
@@ -498,10 +497,9 @@ public class RequisitioningPage {
 	   */
 	  public void cancelRequisitionFromRecentOrders(String comments){
 		  tblRecentOrdersGrid.syncVisible();
-		  driver.setPageTimeout(5);
-		  btnSeeMore.syncEnabled(5);
+		  btnSeeMore.syncEnabled(10);
 		  driver.executeJavaScript("arguments[0].click();", btnSeeMore);
-		  driver.setPageTimeout(5);
+		  driver.setElementTimeout(Constants.ELEMENT_TIMEOUT);
 		  List<WebElement> getRows = tblMainRecentOrdersGrid;
 		  int rowsCount = getRows.size();
 		  TestReporter.log("Total rows in RecentOrders Grid table: "+ rowsCount);
@@ -580,7 +578,7 @@ public class RequisitioningPage {
 	  public void enterSearchCriteriaAndVerifyRejectedOrders(String location){
 		  	driver.manage().timeouts().implicitlyWait(7, TimeUnit.SECONDS);
 		    pageLoaded();
-		    Sleeper.sleep(5000);
+		    Sleeper.sleep(4000);
 		  	String cartValue = getCart_RejectedOrders();
 		  	String RFQValue = getRFQ_RejectedOrders();
 		  	String REQValue = getREQ_RejectedOrders();

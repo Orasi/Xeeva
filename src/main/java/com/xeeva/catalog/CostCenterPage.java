@@ -403,16 +403,15 @@ public class CostCenterPage {
 		// after cart check out, application taking time to load cost center page 
 		lblCC.syncVisible(30, false);
 		lblCC.isDisplayed();
-		driver.setPageTimeout(3);
+		//driver.setElementTimeout(Constants.ELEMENT_TIMEOUT);
 		//To click on calender at CC_HeaderLevel.
 		driver.executeJavaScript("arguments[0].click();", lnkDateCC_HeaderLvel);
 		List<WebElement> nextMonthArrows = driver.findElements(By.xpath("html/body/div[@class='calendar']/"
 				+ "table/thead/tr[2]/td[4]"));
 		int loopCount=0;
 		for(WebElement nextMonth : nextMonthArrows){
-			driver.setPageTimeout(2);
 			nextMonth.click();
-			driver.setPageTimeout(2);
+			driver.setElementTimeout(Constants.ELEMENT_TIMEOUT);
 			List<WebElement> selectDates = driver.findElements(By.xpath("html/body/div[@class='calendar']/"
 					+ "table/tbody/tr[4]/td[@class='day']"));
 			for(WebElement selWeekDate : selectDates){
