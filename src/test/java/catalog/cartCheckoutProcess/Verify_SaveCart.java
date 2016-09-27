@@ -23,7 +23,6 @@ import com.xeeva.navigation.MainNav;
  * @version	22/09/2016
  * *
  */
-
 public class Verify_SaveCart extends TestEnvironment{
 	public String itemType = "SaveCart";
 
