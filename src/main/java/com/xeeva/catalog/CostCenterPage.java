@@ -77,6 +77,7 @@ public class CostCenterPage {
 	@FindBy(xpath="//div[@id='divAppInfoMsg'][@class='addMessage']") private Label lblCartItemAddedMessage;
 	@FindBy(xpath="//input[@id='txtRequiredby']") private Textbox txtReqByHeaderLevel;
 	@FindBy(xpath=".//*[@class='buttonClass'][@value='SHOP FOR MORE ITEMS']") private Button btnShopForMoreItems;
+	@FindBy(xpath=".//*[@id='customfa']/tbody/tr/td[10]/a[2]") private List<WebElement> lstEditItemGrid;
 	
 
 	/**Constructor**/
@@ -179,11 +180,12 @@ public class CostCenterPage {
 	 * @param QuantityValue
 	 * @return
 	 */
-	public boolean verifyCostCenter(String verifyType,String itemNumber,String CCValue,String QuantityValue){
+	public boolean verifyCostCenter(String verifyType,String itemNumber,String CCValue,String QuantityValue,String ItemDescription){
 		boolean statusFlag = false;
 		List<WebElement> readLinks = driver.findElements(By.xpath(".//*[@id='customfa']/tbody/tr/td[1]/a"));
 		List<WebElement> readSelects = driver.findElements(By.xpath(".//*[@id='customfa']/tbody/tr/td/select"));
 		List<WebElement> readDeleteIcons = driver.findElements(By.xpath(".//*[@title='Delete']"));
+		List<WebElement> readText = driver.findElements(By.xpath(".//*[@id='customfa']/tbody/tr/td[2]"));
 
 		switch(verifyType.toLowerCase()){
 		case "linelevel":
@@ -245,6 +247,19 @@ public class CostCenterPage {
 			int sizeAfterDelete =lstQty.size();
 			TestReporter.assertTrue(sizeAfterDelete<sizeBeofreDelete, "Item Deleted Successfully!!");
 			break;
+		case "edititem" :
+			//Read item description here
+			for(WebElement input :readText){
+				if(input.getText().equalsIgnoreCase(ItemDescription)){
+					TestReporter.log("ItemDescription is :"+ItemDescription);
+					if(lstEditItemGrid.get(lstEditItemGrid.size()-1).isEnabled()){
+						lstEditItemGrid.get(lstEditItemGrid.size()-1).click();
+						TestReporter.assertTrue(true, "Clicked Edit Link on Non-Price Agreement Item");
+						break;
+					}
+				}
+			}
+			break;
 		default : System.out.println();
 
 		}
@@ -284,8 +299,8 @@ public class CostCenterPage {
 			String itemNumber = driver.findElement(By.xpath(".//*[@id='trCCRow_"+randomID+"']/td/a")).getText();
 			TestReporter.logStep("itemNumber :"+ itemNumber);
 			ddCCLineLevel.get(0).select(CC);
-			System.out.println(verifyCostCenter(changeType,itemNumber,CC,null));
-			TestReporter.assertTrue(verifyCostCenter(changeType,itemNumber,CC,null),"Cost Center Updated at Line Level Successfully!!");
+			System.out.println(verifyCostCenter(changeType,itemNumber,CC,null,null));
+			TestReporter.assertTrue(verifyCostCenter(changeType,itemNumber,CC,null,null),"Cost Center Updated at Line Level Successfully!!");
 			break;
 
 		case "headerlevel" :
@@ -294,8 +309,8 @@ public class CostCenterPage {
 			if(AlertHandler.isAlertPresent(driver, 6)){
 				AlertHandler.handleAlert(driver, 6);
 			}
-			System.out.println(verifyCostCenter(changeType,null,CC,null));
-			TestReporter.assertTrue( verifyCostCenter(changeType,null,CC,null),"Cost Center Updated at Header Level Successfully!!");
+			System.out.println(verifyCostCenter(changeType,null,CC,null,null));
+			TestReporter.assertTrue( verifyCostCenter(changeType,null,CC,null,null),"Cost Center Updated at Header Level Successfully!!");
 			break;
 
 		default : System.out.println();
@@ -357,9 +372,6 @@ public class CostCenterPage {
 	public void change_RequiredByAtLineLevel(){
 		// after cart check out, application taking time to load cost center page 
 		lblCC.syncVisible(30, false);
-		lblCC.isDisplayed();
-		driver.setElementTimeout(Constants.ELEMENT_TIMEOUT);
-
 		String getReqByDate_beforeChange = getReqByDateAtLineLevel();
 		TestReporter.log("Get ReqByDate_before Change: " + getReqByDate_beforeChange);
 
@@ -404,22 +416,19 @@ public class CostCenterPage {
 	public void change_RequiredByAtHeaderLevel(){
 		// after cart check out, application taking time to load cost center page 
 		lblCC.syncVisible(30, false);
-		lblCC.isDisplayed();
-		driver.setPageTimeout(3);
 		//To click on calender at CC_HeaderLevel.
 		driver.executeJavaScript("arguments[0].click();", lnkDateCC_HeaderLvel);
 		List<WebElement> nextMonthArrows = driver.findElements(By.xpath("html/body/div[@class='calendar']/"
 				+ "table/thead/tr[2]/td[4]"));
 		int loopCount=0;
 		for(WebElement nextMonth : nextMonthArrows){
-			driver.setPageTimeout(2);
 			nextMonth.click();
-			driver.setPageTimeout(2);
+			driver.setElementTimeout(Constants.ELEMENT_TIMEOUT);
 			List<WebElement> selectDates = driver.findElements(By.xpath("html/body/div[@class='calendar']/"
 					+ "table/tbody/tr[4]/td[@class='day']"));
 			for(WebElement selWeekDate : selectDates){
 				selWeekDate.click();
-				driver.setPageTimeout(5);
+				//driver.setPageTimeout(5);
 				loopCount++;
 				break;
 			}
@@ -428,7 +437,7 @@ public class CostCenterPage {
 
 		//Verify the message -'The RequiredBy date has been updated' is displayed.
 		verify_RequiredByDateUpdated_atCCLevel();
-		driver.setPageTimeout(2);
+		//driver.setElementTimeout(4);
 
 		//Get the RequiredBy date at header level.
 		String getReqByDate_AtHeaderLevel = txtReqByHeaderLevel.getText();
@@ -447,6 +456,7 @@ public class CostCenterPage {
 
 	}
 	
+	
 	// Method To click button - Shop For More Items 
 	public void click_ShopForMoreItems(){
 		pageLoaded();
@@ -454,5 +464,31 @@ public class CostCenterPage {
 		btnShopForMoreItems.jsClick();
 	}
 	
+
+	/**
+	 * @summary Method to verify Edit link Enabled or Disabled in costcenter page
+	 * @author  Praveen Namburi
+	 * @date    27/09/16
+	 */
+	public void verifyEDITlinkEnabledOrNot(){
+		// Verify Edit for Non Price agreement 
+		List<WebElement> unitPriceEdits = driver.findElements(By.xpath(".//*[@id='customfa']/tbody/tr/td[6]/div/input"));
+		for(WebElement input : unitPriceEdits){
+			String randomID =input.getAttribute("name").replaceAll("\\D+", "");
+			String classValue = driver.findElement(By.xpath(".//*[@id='trCCRow_"+randomID+"']/td[10]/a[2]/i")).getAttribute("class");
+			if(classValue.contains("cursor-pointer")){
+				TestReporter.assertTrue(true, "Edit Item for non Price Agreement Item is Enabled !!");
+				break;
+			}
+		}
+
+		// Verify Edit for  Price agreement ,PA Expired 
+		List<WebElement> unitPriceEdits1 = driver.findElements(By.xpath(".//*[@id='customfa']/tbody/tr/td[6]/div/span"));
+		String randomID =unitPriceEdits1.get(1).getAttribute("id").replaceAll("\\D+", "");
+		String classValue = driver.findElement(By.xpath(".//*[@id='trCCRow_"+randomID+"']/td[10]/a[2]/i")).getAttribute("class");
+		if(classValue.contains("opacity")){
+			TestReporter.assertTrue(true, "Edit Item for  Price Agreement Item is Disabled !!");
+		}
+	}
 
 }

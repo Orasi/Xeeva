@@ -119,7 +119,7 @@ public class RecentOrderInformationPage {
 	 */
 	public void clickPAItemLinkFromRecentOrders(String REQValue){
 		pageLoaded();
-		driver.setPageTimeout(2);
+		pl.isDomInteractive(driver);
 		List<WebElement> getRecentOrderRows = driver.findElements(By.xpath("//table[@class='RecentOrderDetailsGrid ']/tbody/tr"));
 		int getRecentOrdRowsCount = getRecentOrderRows.size();
 
@@ -132,7 +132,7 @@ public class RecentOrderInformationPage {
 						String getItemNumLink = itemNumLink.getText();
 						TestReporter.log("Clicking on Item Number link for Price agreement item : " + getItemNumLink);
 						itemNumLink.click();
-						driver.setPageTimeout(3);
+						//driver.setPageTimeout(3);
 						break;
 					}
 					break;
@@ -218,7 +218,4 @@ public class RecentOrderInformationPage {
 
 
 }
-
-
-
 

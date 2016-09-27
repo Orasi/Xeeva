@@ -1,4 +1,4 @@
-package catalog.cartCheckoutProcess;
+package catalog.rejectedOrdersTab;
 
 import org.testng.ITestContext;
 import org.testng.annotations.AfterTest;
@@ -11,29 +11,26 @@ import org.testng.annotations.Test;
 import com.orasi.utils.TestEnvironment;
 import com.orasi.utils.TestReporter;
 import com.orasi.utils.dataProviders.ExcelDataProvider;
-import com.xeeva.catalog.CostCenterPage;
-import com.xeeva.catalog.ItemDetailsPage;
 import com.xeeva.catalog.RequisitioningPage;
-import com.xeeva.catalog.SearchItems.GlobalItemsTab;
 import com.xeeva.login.LoginPage;
 import com.xeeva.navigation.MainNav;
 
 /**
- * @Summary: To verify that requester is able to change the require by for a existing line level requisition. 
- * @author praveen varma, @version: Created 21-09-2016
+ * @Summary: To verify that requester is able to search rejected orders based on PO # , REQ , RFQ , location and order description.
+ * @author praveen varma, @version: Created 26-09-2016
  */
-public class Verify_ChangeRequireBy_ExistingLineLevel extends TestEnvironment {
+public class VerifyReq_SearchRejectedOrders extends TestEnvironment {
 
-	 public String RequisitionType = "serviceRequestGeneral";
-		
+	public String RequisitionType = "serviceRequestGeneral";
+			
 		// **************
 		// Data Provider
 		// **************
 		@DataProvider(name = "dataScenario")
 		public Object[][] scenarios() {
 			try {
-				Object[][] excelData = new ExcelDataProvider("/datasheets/Verify_ChangeRequireBy_ExistingLineLevel.xlsx",
-						"VerifyReq_changeReq_ExiLineLevl").getTestData();
+				Object[][] excelData = new ExcelDataProvider("/datasheets/VerifyReq_SearchRejectedOrders.xlsx",
+						"SearchRejectedOrders").getTestData();
 				return excelData;
 			}
 			catch (RuntimeException e){
@@ -73,8 +70,7 @@ public class Verify_ChangeRequireBy_ExistingLineLevel extends TestEnvironment {
 		 * @param role,location
 		 */
 		@Test(dataProvider = "dataScenario")
-		public void changeRequire_ExistingLineLevel(String role, String location,String GlobalItem,String UnitPrice,
-				String Quantity,String UnitofMeasure,String daysOut){
+		public void changeRequire_ExistingLineLevel(String role, String location){
 			
 			// Application Login 
 			LoginPage loginPage = new LoginPage(getDriver());
@@ -83,39 +79,19 @@ public class Verify_ChangeRequireBy_ExistingLineLevel extends TestEnvironment {
 			
 			// Requisition Page  - Navigating to requisition page to create Smart Form Request
 			RequisitioningPage reqPage = new RequisitioningPage(getDriver());
-			TestReporter.logStep("Navigate to Requisitioning Page.");
+			TestReporter.logStep("Navigate to Requisitioning Page and click on RejectedOrders tab.");
 			reqPage.click_ReqTab();
+			reqPage.clickRejectedOrdersTab();
 			
+			// Rejected Orders  - Enter Search Criteria and Verify the filtered RejectedOrders.
+			TestReporter.logStep("Enter Search Criteria and Verify the filtered RejectedOrders.");
+			reqPage.enterSearchCriteriaAndVerifyRejectedOrders(location);
 			
-			TestReporter.logStep("Navigating to MainNav Page");
-			MainNav mainNav = new MainNav(getDriver());
-			boolean getStatus = mainNav.verifyCartValue(GlobalItem);
-			if(getStatus!=true){
-				TestReporter.logStep("Clicking the GlobalItems Link");
-				reqPage.perform_CatalogSearch(GlobalItem);
-
-				TestReporter.logStep("Clicking the GlobalItems Link");
-				GlobalItemsTab globalitems = new GlobalItemsTab(getDriver());
-				globalitems.click_GlobalItemsTab();
-
-				TestReporter.logStep("ItemDetailsPage  - Modifing Item Details");
-				ItemDetailsPage itemdetails = new ItemDetailsPage(getDriver());
-				itemdetails.add_TwoDiffrent_ItemsToCart(UnitPrice,Quantity,UnitofMeasure);
-			}
-
-			// Perform Cart CheckOut
-			TestReporter.logStep("Perform Cart CheckOut");
-			mainNav.cart_CheckOut();
-
-			// Change 'RequiredBy date at LineLevel' and Verify the changes.
-			TestReporter.logStep("Change 'RequiredBy date at LineLevel' and Verify the changes.");
-			CostCenterPage ccPage = new CostCenterPage(getDriver());
-			ccPage.change_RequiredByAtLineLevel();
-
 			// Application Logout
 			TestReporter.logStep("Application Logout");
+			MainNav mainNav = new MainNav(getDriver());
 			mainNav.clickLogout();
 			
-		}
-		
-   }
+	 }
+			
+  }
