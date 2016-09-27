@@ -296,6 +296,7 @@ public class MainNav {
 	// Method for Checkout the Cart
 	public void CheckOut(){
 		pageLoaded();
+		btnCheckOut.syncVisible(5, false);
 		btnCheckOut.click();
 		//Wait for the cart pop up to close
 		btnsaveCartPopUp.syncHidden(10);

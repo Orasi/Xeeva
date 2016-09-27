@@ -38,7 +38,8 @@ public class LocalItemsTab {
 	@FindBy(xpath="//div[@id='divAppInfoMsg'][@class='addMessage']") private Label lblCartItemAddedMessage;
 
 	//Cart-Item link
-	@FindBy(css="#lnkShowPopup") private Link lnkCartItem;
+	//@FindBy(css="#lnkShowPopup") private Link lnkCartItem;
+	@FindBy(xpath="//a[@id='lnkShowPopup']") private Link lnkCartItem;
 
 	/**Constructor**/
 
@@ -124,6 +125,10 @@ public class LocalItemsTab {
 		//lnkCartItem.syncVisible(90, false);
 		driver.setPageTimeout(4);
 		lnkCartItem.click();
+		driver.setPageTimeout(5);
+		//lnkCartItem.syncEnabled(30);
+		//lnkCartItem.jsClick();
+		driver.executeJavaScript("arguments[0].click();", lnkCartItem);
 	}
 
 }
