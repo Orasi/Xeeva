@@ -40,8 +40,8 @@ public class ItemDetailsPage {
 	@FindBy(xpath=".//*[@class='add-to-cart-box']") private List<WebElement> btnIAddToCartItems;
 	@FindBy(xpath="//div[@id='divAppInfoMsg'][@class='addMessage']") private Label lblCartItemAddedMessage;
 	@FindBy(xpath = "//table/tbody/tr[6]/td/table/tbody/tr/td[4]/select") private Listbox lstunitofMeasure;
-	@FindBy(xpath = "//tr[1]/td[3]//tr[7]//td[4]/a/div")
-	private Button btnAddToCart;
+	//@FindBy(xpath = "//tr[1]/td[3]//tr[7]//td[4]/a/div")
+	@FindBy(xpath = ".//*[@class='add-to-cart-box']") private Button btnAddToCart;
 	@FindBy(linkText = "Global Items")	private Link globalItemsTab;
 
 	// global Items , UnitPrice ,Quantity
@@ -81,14 +81,15 @@ public class ItemDetailsPage {
 	public void selectUOMValueAndAddNonPriceItemToCart(String strUOMValue){
 		if(lstSelectUOM.isDisplayed()){
 			lstSelectUOM.select(strUOMValue);
-			btnAddToCart.jsClick();
-			driver.setPageTimeout(3,TimeUnit.SECONDS);
+			btnAddToCart.click();
+			driver.setElementTimeout(Constants.ELEMENT_TIMEOUT);
 			lblCartItemAddedMessage.syncVisible(15, false);
 			String getCartItemAddedMessage = lblCartItemAddedMessage.getText();
 			System.out.println("Message after adding item to cart : "+ getCartItemAddedMessage);
 			TestReporter.assertTrue(getCartItemAddedMessage.contains("added successfully!"), "Item added to the cart.");
 		}else{
-			TestReporter.assertFalse(!lstSelectUOM.isDisplayed(),"Selected Random Item is Price aggrement Item!!");
+			TestReporter.logStep("Selected Random Item is Price aggrement Item!!");
+			btnAddToCart.jsClick();
 		}
 	}
 
@@ -135,7 +136,6 @@ public class ItemDetailsPage {
 		driver.setPageTimeout(5);
 		lblCartItemAddedMessage.syncVisible(15, false);
 		String getCartItemAddedMessage = lblCartItemAddedMessage.getText();
-		//The item has been added successfully!
 		TestReporter.assertTrue(getCartItemAddedMessage.equalsIgnoreCase("The item has been added successfully!"), "Item added to the cart.");
 	}
 
@@ -149,12 +149,14 @@ public class ItemDetailsPage {
 	public void add_TwoDiffrent_ItemsToCart(String UP,String Qty,String UOM){
 		TestReporter.logStep("UOM "+lstUOMGlobalCart.size());
 		TestReporter.logStep("Add To Cart Items : "+btnIAddToCartItems.size());
-		lstUOMGlobalCart.get(0).select(UOM);
+		// If UOM is displayed , selects UOM value otherwise proceeds with Add to Cart 
+		if(lstUOMGlobalCart.get(0).isDisplayed()){lstUOMGlobalCart.get(0).select(UOM);}
 		driver.executeJavaScript("arguments[0].click();", btnIAddToCartItems.get(0));
 		//Handle Alert if present
 		if(AlertHandler.isAlertPresent(driver, 6)){
 			AlertHandler.handleAlert(driver, 6);
 		}
+		// If UOM is displayed , selects UOM value otherwise proceeds with Add to Cart 
 		if(lstUOMGlobalCart.get(1).isDisplayed()){lstUOMGlobalCart.get(1).select(UOM);}
 		driver.executeJavaScript("arguments[0].click();", btnIAddToCartItems.get(1));
 		//Handle Alert if present

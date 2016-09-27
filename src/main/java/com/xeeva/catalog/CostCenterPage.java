@@ -76,6 +76,8 @@ public class CostCenterPage {
 
 	@FindBy(xpath="//div[@id='divAppInfoMsg'][@class='addMessage']") private Label lblCartItemAddedMessage;
 	@FindBy(xpath="//input[@id='txtRequiredby']") private Textbox txtReqByHeaderLevel;
+	@FindBy(xpath=".//*[@class='buttonClass'][@value='SHOP FOR MORE ITEMS']") private Button btnShopForMoreItems;
+	
 
 	/**Constructor**/
 	public CostCenterPage(OrasiDriver driver){
@@ -444,5 +446,13 @@ public class CostCenterPage {
 		}
 
 	}
+	
+	// Method To click button - Shop For More Items 
+	public void click_ShopForMoreItems(){
+		pageLoaded();
+		btnShopForMoreItems.syncVisible(5, false);
+		btnShopForMoreItems.jsClick();
+	}
+	
 
 }
