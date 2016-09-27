@@ -67,7 +67,8 @@ public class CostCenterPage {
 	@FindBy(xpath=".//*[@id='customfa']/tbody/tr/td/select") private List<Listbox> ddCCLineLevel;
 	@FindBy(xpath="//*[@id='tblbasicTable']/tbody/tr/td/div/a") private List<WebElement> lstSelectCC;
 	@FindBy(xpath="//*[@id='tblbasicTable']/tbody/tr/td/div/span") private List<WebElement> lstSelectCCValue;
-	@FindBy(xpath=".//*[@id='customfa']/tbody/tr/td[10]/a[2]") private List<WebElement> lstEditItemGrid;
+
+
 
 	@FindBy(xpath="//table[@id='customfa']/tbody/tr/td/table/tbody/tr/td/input") private List<WebElement> dateCCInputLineLevel;
 	@FindBy(xpath="//table[@id='customfa']/tbody/tr/td/table/tbody/tr/td/i") private List<WebElement> dateCCLineLevel;
@@ -75,6 +76,9 @@ public class CostCenterPage {
 
 	@FindBy(xpath="//div[@id='divAppInfoMsg'][@class='addMessage']") private Label lblCartItemAddedMessage;
 	@FindBy(xpath="//input[@id='txtRequiredby']") private Textbox txtReqByHeaderLevel;
+	@FindBy(xpath=".//*[@class='buttonClass'][@value='SHOP FOR MORE ITEMS']") private Button btnShopForMoreItems;
+	@FindBy(xpath=".//*[@id='customfa']/tbody/tr/td[10]/a[2]") private List<WebElement> lstEditItemGrid;
+	
 
 	/**Constructor**/
 	public CostCenterPage(OrasiDriver driver){
@@ -176,14 +180,13 @@ public class CostCenterPage {
 	 * @param QuantityValue
 	 * @return
 	 */
-	public boolean verifyCostCenter(String verifyType,String itemNumber,String CCValue,String QuantityValue
-			,String ItemDescription){
+	public boolean verifyCostCenter(String verifyType,String itemNumber,String CCValue,String QuantityValue,String ItemDescription){
 		boolean statusFlag = false;
 		List<WebElement> readLinks = driver.findElements(By.xpath(".//*[@id='customfa']/tbody/tr/td[1]/a"));
 		List<WebElement> readSelects = driver.findElements(By.xpath(".//*[@id='customfa']/tbody/tr/td/select"));
 		List<WebElement> readDeleteIcons = driver.findElements(By.xpath(".//*[@title='Delete']"));
 		List<WebElement> readText = driver.findElements(By.xpath(".//*[@id='customfa']/tbody/tr/td[2]"));
-		
+
 		switch(verifyType.toLowerCase()){
 		case "linelevel":
 			for(WebElement inputLink : readLinks){
@@ -248,7 +251,7 @@ public class CostCenterPage {
 			//Read item description here
 			for(WebElement input :readText){
 				if(input.getText().equalsIgnoreCase(ItemDescription)){
-					System.out.println("ItemDescription is :"+ItemDescription);
+					TestReporter.log("ItemDescription is :"+ItemDescription);
 					if(lstEditItemGrid.get(lstEditItemGrid.size()-1).isEnabled()){
 						lstEditItemGrid.get(lstEditItemGrid.size()-1).click();
 						TestReporter.assertTrue(true, "Clicked Edit Link on Non-Price Agreement Item");
@@ -338,6 +341,7 @@ public class CostCenterPage {
 		List<WebElement> reqByDates = dateCCInputLineLevel;
 		for(WebElement reqByDate : reqByDates){
 			String getReqByDate_beforeChange1 = reqByDate.getAttribute("value");
+			//System.out.println(getReqByDate_beforeChange1);
 			getRequreDate=getReqByDate_beforeChange1;
 			break;
 		}
@@ -452,6 +456,15 @@ public class CostCenterPage {
 
 	}
 	
+	
+	// Method To click button - Shop For More Items 
+	public void click_ShopForMoreItems(){
+		pageLoaded();
+		btnShopForMoreItems.syncVisible(5, false);
+		btnShopForMoreItems.jsClick();
+	}
+	
+
 	/**
 	 * @summary Method to verify Edit link Enabled or Disabled in costcenter page
 	 * @author  Praveen Namburi
@@ -462,7 +475,6 @@ public class CostCenterPage {
 		List<WebElement> unitPriceEdits = driver.findElements(By.xpath(".//*[@id='customfa']/tbody/tr/td[6]/div/input"));
 		for(WebElement input : unitPriceEdits){
 			String randomID =input.getAttribute("name").replaceAll("\\D+", "");
-			System.out.println("----------"+randomID);
 			String classValue = driver.findElement(By.xpath(".//*[@id='trCCRow_"+randomID+"']/td[10]/a[2]/i")).getAttribute("class");
 			if(classValue.contains("cursor-pointer")){
 				TestReporter.assertTrue(true, "Edit Item for non Price Agreement Item is Enabled !!");
@@ -473,7 +485,6 @@ public class CostCenterPage {
 		// Verify Edit for  Price agreement ,PA Expired 
 		List<WebElement> unitPriceEdits1 = driver.findElements(By.xpath(".//*[@id='customfa']/tbody/tr/td[6]/div/span"));
 		String randomID =unitPriceEdits1.get(1).getAttribute("id").replaceAll("\\D+", "");
-		System.out.println("----------"+randomID);
 		String classValue = driver.findElement(By.xpath(".//*[@id='trCCRow_"+randomID+"']/td[10]/a[2]/i")).getAttribute("class");
 		if(classValue.contains("opacity")){
 			TestReporter.assertTrue(true, "Edit Item for  Price Agreement Item is Disabled !!");

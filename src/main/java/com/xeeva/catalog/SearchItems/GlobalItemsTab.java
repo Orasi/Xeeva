@@ -58,7 +58,8 @@ public class GlobalItemsTab {
 	 **/
 	public void click_GlobalItemsTab(){
 		globalItemsTab.syncVisible(20, false);
-		globalItemsTab.click();
+		//globalItemsTab.click();
+		driver.executeJavaScript("arguments[0].click();", globalItemsTab);
 		pl.isDomComplete(driver);
 	}
 
