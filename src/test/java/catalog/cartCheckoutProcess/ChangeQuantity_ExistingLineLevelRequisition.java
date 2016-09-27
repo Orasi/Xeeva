@@ -92,7 +92,7 @@ public class ChangeQuantity_ExistingLineLevelRequisition extends TestEnvironment
 		mainNav.cart_CheckOut();
 		
 		CostCenterPage ccPage = new CostCenterPage(getDriver());
-		ccPage.verifyCostCenter(itemType,null,null,QtValue);
+		ccPage.verifyCostCenter(itemType,null,null,QtValue,null);
 
 		TestReporter.logStep("Application Logout");
 		mainNav.clickLogout();

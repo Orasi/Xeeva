@@ -119,9 +119,9 @@ public class RequisitioningPage {
 	@FindBy(xpath="//div/table/tbody/tr/td/div/table/tbody/tr/td/table/tbody/tr/td/table/tbody/tr") 
 	private List<WebElement> tblRejectedOrdersResult;
 	
-	@FindBy(xpath="//div/table/tbody/tr/td/div/table/tbody/tr/td/table/tbody/tr/td/table/tbody/tr/td[14]/span") 
+	@FindBy(xpath="//div/table/tbody/tr/td/div/table/tbody/tr/td/table/tbody/tr/td/table/tbody/tr") 
 	private List<WebElement> lblRFQStatus;
-	
+	//xpath="//div/table/tbody/tr/td/div/table/tbody/tr/td/table/tbody/tr/td/table/tbody/tr/td[14]/span"
 	//**Constructor**//*
 
 	public RequisitioningPage(OrasiDriver driver){
@@ -617,5 +617,34 @@ public class RequisitioningPage {
 		  	
 	  }
 	  
-
+	 /**
+	  * @summary: Method to search for RFQ Cancelled item from Rejected Orders tab.
+	  * @author: Praveen Namburi, @version: Created 26-09-2016
+	  */
+	  public void copyRFQCancelledItem(){
+		    int evenNum = 0;
+            List<WebElement> RFQStatusList = lblRFQStatus;
+  		    int getRFQStatusCount = RFQStatusList.size();
+  		    TestReporter.log("Total Rows in Rejected Orders table: " + getRFQStatusCount);
+  		    //Iterate even number rows
+  		    for(int rows=2; rows<=getRFQStatusCount-1;rows++){
+  		    	//To get even numbers rows
+  		    	if(rows % 2 == 0){
+  		    		evenNum = rows;
+  		    		String getRFQStatus = driver.findElement(By.xpath("//table[@class='RecentOrderDetailsGrid ']"
+  		    				+ "/tbody/tr[" + evenNum + "]/td[14]/span")).getText();
+  	  		        //Get the RFQ cancelled status from Rejected Orders grid.
+  		    		if(getRFQStatus.trim().contains("Cancelled")){
+  		    			//Click on Copy-item link.
+  	  		        	driver.findElement(By.xpath("//table[@class='RecentOrderDetailsGrid ']/tbody/"
+  	  		        			+ "tr[" + evenNum + "]/td[17]/a[1]/i")).jsClick();
+  	  		        	break;
+  	  		        }
+  	  		     if(getRFQStatus.trim().contains("Cancelled")) break;  
+  		    	}
+  		    }
+  		   driver.manage().timeouts().implicitlyWait(Constants.PAGE_TIMEOUT, TimeUnit.SECONDS);
+	  }
+	  
+	  
 }

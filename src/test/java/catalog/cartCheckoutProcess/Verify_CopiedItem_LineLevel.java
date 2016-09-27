@@ -111,7 +111,7 @@
 	
 			//Clicking CopyItem Link in CostCenter Page
 			TestReporter.logStep("Clicking Copy Item Link");
-			costCenterPage.verifyCostCenter(itemType,ItemNumber,ccValue,null);
+			costCenterPage.verifyCostCenter(itemType,ItemNumber,ccValue,null,null);
 	
 			// Application Logout
 			TestReporter.logStep("Application Logout");
