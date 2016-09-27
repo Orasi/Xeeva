@@ -83,7 +83,7 @@ public class ItemDetailsPage {
 			lstSelectUOM.select(strUOMValue);
 			btnAddToCart.click();
 			driver.setElementTimeout(Constants.ELEMENT_TIMEOUT);
-			lblCartItemAddedMessage.syncVisible(15, false);
+			lblCartItemAddedMessage.syncVisible(20, false);
 			String getCartItemAddedMessage = lblCartItemAddedMessage.getText();
 			System.out.println("Message after adding item to cart : "+ getCartItemAddedMessage);
 			TestReporter.assertTrue(getCartItemAddedMessage.contains("added successfully!"), "Item added to the cart.");
