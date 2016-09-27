@@ -8,6 +8,8 @@ import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.orasi.core.interfaces.Button;
 import com.orasi.core.interfaces.Label;
@@ -18,8 +20,10 @@ import com.orasi.core.interfaces.impl.internal.ElementFactory;
 import com.orasi.utils.AlertHandler;
 import com.orasi.utils.Constants;
 import com.orasi.utils.OrasiDriver;
+import com.orasi.utils.PageLoaded;
 import com.orasi.utils.Sleeper;
 import com.orasi.utils.TestReporter;
+import com.xeeva.catalog.SearchItems.LocalItemsTab;
 
 /**
  * @summary This page contains Item Details page objects.
@@ -28,6 +32,7 @@ import com.orasi.utils.TestReporter;
  */
 public class ItemDetailsPage {
 
+	private PageLoaded pageLoad = new PageLoaded();
 	private OrasiDriver driver = null;
 	private ResourceBundle userCredentialRepo = ResourceBundle.getBundle(Constants.USER_CREDENTIALS_PATH);
 
@@ -49,6 +54,17 @@ public class ItemDetailsPage {
 	private Textbox txtunitPrice;
 	@FindBy(xpath = "//table/tbody/tr[7]/td/table/tbody/tr/td[4]/input") 
 	private Textbox txtQuantity;
+
+	//Rejected order item elements
+	@FindBy(id = "Resultpanel") private Label lblResultPanel;
+	@FindBy(xpath="//div/table/tbody/tr[2]/td/table/tbody/tr/td[2]/table/tbody/tr[4]/td[2]")
+	private Label lblItemNumber;
+	@FindBy(xpath="//table/tbody/tr/td[2]/table/tbody/tr[5]/td/table/tbody/tr[1]/td[2]/input") 
+	private Textbox txtUnitPrice_RejectedOrderItem;
+	@FindBy(xpath="//table/tbody/tr/td[2]/table/tbody/tr[5]/td/table/tbody/tr[2]/td[2]/input") 
+	private Textbox txtQuantity_RejectedOrderItem;
+	@FindBy(xpath="//table[@id='tblItemDetails']/tbody/tr[2]/td[2]/a/div") 
+	private Button btnAddToCart_RejectedOrderItem;
 
 
 
@@ -165,5 +181,41 @@ public class ItemDetailsPage {
 		}
 	}
 
+	/**
+	 * @summary: Method to add the copied item to cart from Rejected orders tab.
+	 * @author: Praveen Namburi, @version: Created 27-09-2016.
+	 */
+	public String addCopiedItemToCart_RejectedOrders(String unitPrice,String Quantity,String UOMValue){
+		String itemNum = "";
+		
+		pageLoad.isDomComplete(driver);
+		lblResultPanel.syncVisible(10);
+		String getItemNumber = lblItemNumber.getText();
+		//TestReporter.log("Captured Item Number: " + getItemNumber);
+		txtUnitPrice_RejectedOrderItem.syncVisible(5);
+		txtUnitPrice_RejectedOrderItem.clear();
+		txtUnitPrice_RejectedOrderItem.safeSet(unitPrice);
+		txtQuantity_RejectedOrderItem.syncVisible(5);
+		txtQuantity_RejectedOrderItem.clear();
+		txtQuantity_RejectedOrderItem.safeSet(Quantity);
+		lstSelectUOM.syncEnabled(5);
+		lstSelectUOM.select(UOMValue);
+		btnAddToCart_RejectedOrderItem.click();
+		//lblCartItemAddedMessage.syncVisible(15, false);
+		//Added wait statement to wait until the Cart item added successfull message to be displayed.
+		WebDriverWait wait = new WebDriverWait(driver,10);
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='divAppInfoMsg'][@class='addMessage']")));
+		String getCartItemAddedMessage = lblCartItemAddedMessage.getText();
+		//Verifying whether the item has been added successfully!
+		TestReporter.assertTrue(getCartItemAddedMessage.equalsIgnoreCase("The item has been added successfully!"), 
+				"Item added to the cart.");
+		
+		LocalItemsTab localItemsPage = new LocalItemsTab(driver);
+		TestReporter.logStep("Click on Cart-Items link and Navigate to Cart-Info page.");
+		localItemsPage.clickCartItemsLink();
+		
+		return itemNum = getItemNumber;
+		
+	}
+	
 }
-

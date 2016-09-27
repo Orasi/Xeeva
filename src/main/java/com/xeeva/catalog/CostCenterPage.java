@@ -1,5 +1,4 @@
 package com.xeeva.catalog;
-
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -34,12 +33,12 @@ import com.xeeva.navigation.MainNav;
  */
 
 public class CostCenterPage {
-	
+
 	PageLoaded pl = new PageLoaded();
 	private OrasiDriver driver = null;
 	private ResourceBundle userCredentialRepo = ResourceBundle.getBundle(Constants.USER_CREDENTIALS_PATH);
 	String xpath = ".//*[@id='customfa']/tbody/tr/td/select";
-	
+
 
 	/**Page Elements**/
 	@FindBy(id ="countrydivcontainer") private Element costCenterContainer;	
@@ -68,6 +67,8 @@ public class CostCenterPage {
 	@FindBy(xpath="//*[@id='tblbasicTable']/tbody/tr/td/div/a") private List<WebElement> lstSelectCC;
 	@FindBy(xpath="//*[@id='tblbasicTable']/tbody/tr/td/div/span") private List<WebElement> lstSelectCCValue;
 
+
+
 	@FindBy(xpath="//table[@id='customfa']/tbody/tr/td/table/tbody/tr/td/input") private List<WebElement> dateCCInputLineLevel;
 	@FindBy(xpath="//table[@id='customfa']/tbody/tr/td/table/tbody/tr/td/i") private List<WebElement> dateCCLineLevel;
 	@FindBy(xpath="//div[@id='divAPRPARList']/ul/li[4]/i") private Link lnkDateCC_HeaderLvel;
@@ -78,7 +79,7 @@ public class CostCenterPage {
 	@FindBy(xpath=".//*[@id='customfa']/tbody/tr/td[10]/a[2]") private List<WebElement> lstEditItemGrid;
 	@FindBy(xpath=".//*[@value='CONTINUE Checkout']") private Button btnContinueCheckOut;
 	@FindBy(xpath=".//*[@id='ddlshippingaddress']") private WebElement lstShippingAdd;
-	
+
 
 	/**Constructor**/
 	public CostCenterPage(OrasiDriver driver){
@@ -167,6 +168,8 @@ public class CostCenterPage {
 	public void VerifyDelete(){
 
 	}
+
+
 
 	/**
 	 * @summary Method to verify Cost Center
@@ -455,15 +458,15 @@ public class CostCenterPage {
 		}
 
 	}
-	
-	
+
+
 	// Method To click button - Shop For More Items 
 	public void click_ShopForMoreItems(){
 		pageLoaded();
 		btnShopForMoreItems.syncVisible(5, false);
 		btnShopForMoreItems.jsClick();
 	}
-	
+
 
 	/**
 	 * @summary Method to verify Edit link Enabled or Disabled in costcenter page
@@ -490,12 +493,12 @@ public class CostCenterPage {
 			TestReporter.assertTrue(true, "Edit Item for  Price Agreement Item is Disabled !!");
 		}
 	}
-	
+
 	//Method to Select Shipping Address
 	public void selectShippingAddress(){
 		new Select(lstShippingAdd).selectByIndex(0);
 	}
-	
+
 	// Method to click continue checkout 
 	public void click_ContinueCheckOut(){
 		selectShippingAddress();

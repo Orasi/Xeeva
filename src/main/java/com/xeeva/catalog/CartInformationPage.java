@@ -15,6 +15,7 @@ import com.orasi.utils.Constants;
 import com.orasi.utils.OrasiDriver;
 import com.orasi.utils.Sleeper;
 import com.orasi.utils.TestReporter;
+import com.xeeva.catalog.SearchItems.LocalItemsTab;
 
 /**
  * @summary: This page class contains all the methods and locators of CartInformation page.
@@ -105,8 +106,9 @@ public class CartInformationPage {
 	 * @author: Praveen Namburi, @version: Created 12-09-2016
 	 */
 	public void closeCartInfoPage(){
-		driver.setPageTimeout(2);
-		lnkCloseCartInfo.isDisplayed();
+		//driver.setElementTimeout(Constants.ELEMENT_TIMEOUT);
+		//driver.executeJavaScript("arguments[0].click();", lnkCloseCartInfo);
+		lnkCloseCartInfo.syncVisible(20);
 		lnkCloseCartInfo.click();
 	}
 	
@@ -139,5 +141,32 @@ public class CartInformationPage {
 
 	}
 	
+	/**
+	 * @summary: Method to verify the rejected item is added to cart.
+	 * @author: Praveen Namburi, @Version: Created 27-09-2016
+	 * @param itemNumber
+	 */
+	public void verifyAddedCartItem_ForRejectedOrder(String itemNumber){
+		int evenNum = 0;
+		pageLoaded();
+		List<WebElement> cartInfoTableRows = driver.findElements(By.xpath("//table[@id='tblCartInfo']/tbody/tr"));
+		int getRowsCount = cartInfoTableRows.size();
+		TestReporter.log("Total no. of rows in Cart Info table : " + getRowsCount);
+		
+		for(int rows=1; rows<=getRowsCount-1; rows++){
+			if(rows % 2 == 0){
+	    		evenNum = rows;
+	    		Sleeper.sleep(2000);
+	    		String getItemNumber = driver.findElement(By.xpath("//table[@id='tblCartInfo']/tbody/tr["+rows+"]/td[1]/a")).getText();
+				if(getItemNumber.trim().equalsIgnoreCase(itemNumber)){
+					TestReporter.assertEquals(getItemNumber, itemNumber, 
+							"Rejected Item number added to cart successfully.");
+					break;
+			    }
+		     }
+
+	     }
+	
+	}
 	
 }
