@@ -116,14 +116,17 @@ public class RecentOrderInformationPage {
 	public void clickPAItemLinkFromRecentOrders(String REQValue){
 		pageLoaded();
 		driver.setPageTimeout(2);
-		List<WebElement> getRecentOrderRows = driver.findElements(By.xpath("//table[@class='RecentOrderDetailsGrid ']/tbody/tr"));
+		List<WebElement> getRecentOrderRows = driver.findElements(By.xpath("//table[@class='RecentOrderDetailsGrid ']"
+				+ "/tbody/tr"));
 		int getRecentOrdRowsCount = getRecentOrderRows.size();
 		
 		for(int rows=2; rows<=getRecentOrdRowsCount; rows++){
-			List<WebElement> getREQValues = driver.findElements(By.xpath("//table[@class='RecentOrderDetailsGrid ']/tbody/tr[" + rows + "]/td[1]/span"));
+			List<WebElement> getREQValues = driver.findElements(By.xpath("//table[@class='RecentOrderDetailsGrid ']"
+					+ "/tbody/tr[" + rows + "]/td[1]/span"));
 			for(WebElement getREQValue : getREQValues){
 				if(getREQValue.getText().trim().contains(REQValue)){
-					List<WebElement> itemNumberLinks = driver.findElements(By.xpath("//table[@class='RecentOrderDetailsGrid ']/tbody/tr[" + rows + "]/td[4]/a"));
+					List<WebElement> itemNumberLinks = driver.findElements(By.xpath("//table[@class='RecentOrderDetailsGrid ']"
+							+ "/tbody/tr[" + rows + "]/td[4]/a"));
 					for(WebElement itemNumLink : itemNumberLinks ){
 						String getItemNumLink = itemNumLink.getText();
 						TestReporter.log("Clicking on Item Number link for Price agreement item : " + getItemNumLink);
