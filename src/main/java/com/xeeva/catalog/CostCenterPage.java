@@ -68,8 +68,6 @@ public class CostCenterPage {
 	@FindBy(xpath="//*[@id='tblbasicTable']/tbody/tr/td/div/a") private List<WebElement> lstSelectCC;
 	@FindBy(xpath="//*[@id='tblbasicTable']/tbody/tr/td/div/span") private List<WebElement> lstSelectCCValue;
 
-
-
 	@FindBy(xpath="//table[@id='customfa']/tbody/tr/td/table/tbody/tr/td/input") private List<WebElement> dateCCInputLineLevel;
 	@FindBy(xpath="//table[@id='customfa']/tbody/tr/td/table/tbody/tr/td/i") private List<WebElement> dateCCLineLevel;
 	@FindBy(xpath="//div[@id='divAPRPARList']/ul/li[4]/i") private Link lnkDateCC_HeaderLvel;
@@ -78,6 +76,8 @@ public class CostCenterPage {
 	@FindBy(xpath="//input[@id='txtRequiredby']") private Textbox txtReqByHeaderLevel;
 	@FindBy(xpath=".//*[@class='buttonClass'][@value='SHOP FOR MORE ITEMS']") private Button btnShopForMoreItems;
 	@FindBy(xpath=".//*[@id='customfa']/tbody/tr/td[10]/a[2]") private List<WebElement> lstEditItemGrid;
+	@FindBy(xpath=".//*[@value='CONTINUE Checkout']") private Button btnContinueCheckOut;
+	@FindBy(xpath=".//*[@id='ddlshippingaddress']") private WebElement lstShippingAdd;
 	
 
 	/**Constructor**/
@@ -489,6 +489,19 @@ public class CostCenterPage {
 		if(classValue.contains("opacity")){
 			TestReporter.assertTrue(true, "Edit Item for  Price Agreement Item is Disabled !!");
 		}
+	}
+	
+	//Method to Select Shipping Address
+	public void selectShippingAddress(){
+		new Select(lstShippingAdd).selectByIndex(0);
+	}
+	
+	// Method to click continue checkout 
+	public void click_ContinueCheckOut(){
+		selectShippingAddress();
+		pageLoaded();
+		btnContinueCheckOut.syncVisible(5, false);
+		btnContinueCheckOut.jsClick();
 	}
 
 }
