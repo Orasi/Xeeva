@@ -324,7 +324,6 @@ public class CostCenterPage {
 		List<WebElement> reqByDates = dateCCInputLineLevel;
 		for(WebElement reqByDate : reqByDates){
 			String getReqByDate_beforeChange1 = reqByDate.getAttribute("value");
-			//System.out.println(getReqByDate_beforeChange1);
 			getRequreDate=getReqByDate_beforeChange1;
 			break;
 		}
@@ -355,9 +354,6 @@ public class CostCenterPage {
 	public void change_RequiredByAtLineLevel(){
 		// after cart check out, application taking time to load cost center page 
 		lblCC.syncVisible(30, false);
-		lblCC.isDisplayed();
-		driver.setElementTimeout(Constants.ELEMENT_TIMEOUT);
-
 		String getReqByDate_beforeChange = getReqByDateAtLineLevel();
 		TestReporter.log("Get ReqByDate_before Change: " + getReqByDate_beforeChange);
 
@@ -402,8 +398,6 @@ public class CostCenterPage {
 	public void change_RequiredByAtHeaderLevel(){
 		// after cart check out, application taking time to load cost center page 
 		lblCC.syncVisible(30, false);
-		lblCC.isDisplayed();
-		//driver.setElementTimeout(Constants.ELEMENT_TIMEOUT);
 		//To click on calender at CC_HeaderLevel.
 		driver.executeJavaScript("arguments[0].click();", lnkDateCC_HeaderLvel);
 		List<WebElement> nextMonthArrows = driver.findElements(By.xpath("html/body/div[@class='calendar']/"
@@ -416,7 +410,7 @@ public class CostCenterPage {
 					+ "table/tbody/tr[4]/td[@class='day']"));
 			for(WebElement selWeekDate : selectDates){
 				selWeekDate.click();
-				driver.setPageTimeout(5);
+				//driver.setPageTimeout(5);
 				loopCount++;
 				break;
 			}
@@ -425,7 +419,7 @@ public class CostCenterPage {
 
 		//Verify the message -'The RequiredBy date has been updated' is displayed.
 		verify_RequiredByDateUpdated_atCCLevel();
-		driver.setPageTimeout(2);
+		//driver.setElementTimeout(4);
 
 		//Get the RequiredBy date at header level.
 		String getReqByDate_AtHeaderLevel = txtReqByHeaderLevel.getText();

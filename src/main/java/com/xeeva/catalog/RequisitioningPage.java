@@ -119,6 +119,9 @@ public class RequisitioningPage {
 	@FindBy(xpath="//div/table/tbody/tr/td/div/table/tbody/tr/td/table/tbody/tr/td/table/tbody/tr") 
 	private List<WebElement> tblRejectedOrdersResult;
 	
+	@FindBy(xpath="//div/table/tbody/tr/td/div/table/tbody/tr/td/table/tbody/tr/td/table/tbody/tr/td[14]/span") 
+	private List<WebElement> lblRFQStatus;
+	
 	//**Constructor**//*
 
 	public RequisitioningPage(OrasiDriver driver){
@@ -612,7 +615,7 @@ public class RequisitioningPage {
 		  		TestReporter.assertTrue(false, "No Records found!!!");
 		  	}
 		  	
-		  	
 	  }
 	  
+
 }
