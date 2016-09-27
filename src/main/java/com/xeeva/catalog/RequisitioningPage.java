@@ -35,7 +35,7 @@ import com.xeeva.catalog.SearchItems.LocalItemsTab;
  */
 public class RequisitioningPage {
 
-	PageLoaded pageLoad = new PageLoaded();
+	PageLoaded pl = new PageLoaded();
 	private OrasiDriver driver = null;
 	private ResourceBundle userCredentialRepo = ResourceBundle.getBundle(Constants.USER_CREDENTIALS_PATH);
 
@@ -121,7 +121,7 @@ public class RequisitioningPage {
 	
 	@FindBy(xpath="//div/table/tbody/tr/td/div/table/tbody/tr/td/table/tbody/tr/td/table/tbody/tr") 
 	private List<WebElement> lblRFQStatus;
-	//xpath="//div/table/tbody/tr/td/div/table/tbody/tr/td/table/tbody/tr/td/table/tbody/tr/td[14]/span"
+
 	//**Constructor**//*
 
 	public RequisitioningPage(OrasiDriver driver){
@@ -318,7 +318,7 @@ public class RequisitioningPage {
 	 *@author Praveen Namburi, @Version: Created 23-09-2016
 	 */
 	public void clickRejectedOrdersTab(){
-		pageLoad.isDomComplete(driver);
+		pl.isDomComplete(driver);
 		lblRejectedOrders.syncVisible(20, false);
 		driver.executeJavaScript("arguments[0].click();", lblRejectedOrders);
 		//lblRejectedOrders.click();
@@ -586,7 +586,7 @@ public class RequisitioningPage {
 		  	String RFQValue = getRFQ_RejectedOrders();
 		  	String REQValue = getREQ_RejectedOrders();
 		  	
-		  	pageLoad.isDomComplete(driver);
+		  	pl.isDomComplete(driver);
 		  	txtCart.syncVisible(10);
 		  	txtCart.click();
 		  	txtCart.safeSet(cartValue);
