@@ -1,17 +1,19 @@
 package com.xeeva.catalog;
 
 import java.util.ResourceBundle;
-
 import org.openqa.selenium.support.FindBy;
-
-import com.orasi.core.interfaces.Button;
-import com.orasi.core.interfaces.Checkbox;
 import com.orasi.core.interfaces.Label;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
 import com.orasi.utils.Constants;
 import com.orasi.utils.OrasiDriver;
 import com.orasi.utils.PageLoaded;
 import com.orasi.utils.TestReporter;
+
+/**
+ * @summary This page contains Checkout Details Page objects
+ * @author  Lalitha Banda
+ * @date    28/09/16
+ */
 
 public class CheckoutDetailPage {
 	
@@ -21,8 +23,8 @@ public class CheckoutDetailPage {
 	
 
 	/**Page Elements**/
-	@FindBy(xpath ="//table/tbody/tr[5]/td/span[1]") private Label lblREQ;
-	@FindBy(xpath ="//table/tbody/tr[5]/td/span[3]") private Label lblRFQ;
+	@FindBy(xpath ="//table/tbody/tr[5]/td/span[1]") private Label lblOne;
+	@FindBy(xpath ="//table/tbody/tr[5]/td/span[3]") private Label lblTwo;
 
 	/**Constructor**/
 	public CheckoutDetailPage(OrasiDriver driver){
@@ -32,24 +34,30 @@ public class CheckoutDetailPage {
 
 
 	public void pageLoaded(){
-		lblREQ.syncVisible(20, false);
+		lblOne.syncVisible(20, false);
 	}
 
 	/**Page Interactions**/
 	
-	//Method to click on non budgeted
+	/**
+	 * @summary Method to Verify Order splits as REQ/RFQ
+	 * @author  Lalitha Banda
+	 * @date    28/09/16
+	 */
+
 	public void verify_SplitOrder(){
 		pageLoaded();
+		
 		// Verify REQ
-		if(lblREQ.isDisplayed()){
-		if(lblREQ.getText().contains("REQ")){
-			TestReporter.assertTrue(true, "Order splitted as REQ!!");
+		if(lblOne.isDisplayed()){
+		if(lblOne.getText().contains("RFQ") ||lblOne.getText().contains("REQ")){
+			TestReporter.assertTrue(true, "Order splitted as "+lblOne.getText().replaceAll("[^A-Z]+", "")+"!!");
 		}}
 		
 		// Verify RFQ
-		if(lblRFQ.isDisplayed()){
-		if(lblRFQ.getText().contains("RFQ")){
-			TestReporter.assertTrue(true, "Order splitted as RFQ!!");
+		if(lblTwo.isDisplayed()){
+		if(lblTwo.getText().contains("REQ") ||lblTwo.getText().contains("RFQ")){
+			TestReporter.assertTrue(true, "Order splitted as "+lblTwo.getText().replaceAll("[^A-Z]+", "")+"!!");
 		}}
 	}
 

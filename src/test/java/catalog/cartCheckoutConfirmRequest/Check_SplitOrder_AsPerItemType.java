@@ -1,4 +1,4 @@
-package sandbox;
+package catalog.cartCheckoutConfirmRequest;
 
 import org.testng.ITestContext;
 import org.testng.annotations.AfterTest;
@@ -11,7 +11,7 @@ import com.orasi.utils.TestEnvironment;
 import com.orasi.utils.TestReporter;
 import com.orasi.utils.dataProviders.ExcelDataProvider;
 import com.xeeva.catalog.CheckoutDetailPage;
-import com.xeeva.catalog.ConfirmRequest;
+import com.xeeva.catalog.ConfirmRequestPage;
 import com.xeeva.catalog.CostCenterPage;
 import com.xeeva.catalog.ItemDetailsPage;
 import com.xeeva.catalog.RequisitioningPage;
@@ -95,17 +95,18 @@ public class Check_SplitOrder_AsPerItemType extends TestEnvironment{
 		TestReporter.logStep("Click on Continue CheckOut");
 		CostCenterPage ccPage = new CostCenterPage(getDriver());
 		ccPage.click_ContinueCheckOut();
-		
-		ConfirmRequest crPage = new ConfirmRequest(getDriver());
+
+		ConfirmRequestPage crPage = new ConfirmRequestPage(getDriver());
 		TestReporter.logStep("Click on Confirm ");
 		crPage.click_Confirm();
-		
+
+		TestReporter.logStep("Verify Order splitted");
 		CheckoutDetailPage cdPage = new CheckoutDetailPage(getDriver());
 		cdPage.verify_SplitOrder();
-		
-		/*TestReporter.logStep("Application Logout");
+
+		TestReporter.logStep("Application Logout");
 		mainNav.clickLogout();
-		 */
+
 	}
 
 }
