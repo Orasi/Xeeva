@@ -188,7 +188,6 @@ public class CartInformationPage {
 		for(int rows=1; rows<=getRowsCount-1; rows++){
 			if(rows % 2 == 0){
 		       evenNum = rows;
-		       //Sleeper.sleep(1000);
 		       String getItemNumber = driver.findElement(By.xpath("//table[@id='tblCartInfo']/tbody/"
 		    		  + "tr["+rows+"]/td[1]/a")).getText();
 		       TestReporter.log("Updating the quantity for the item number: " + getItemNumber);
