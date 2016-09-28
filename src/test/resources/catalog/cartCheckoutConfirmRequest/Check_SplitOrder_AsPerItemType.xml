@@ -6,7 +6,7 @@
 	<parameter name="runLocation" value="local" />
 	<parameter name="browserVersion" value="" />
 	<parameter name="operatingSystem" value="windows" />
- 	<test name="Verify_AddMoreItems">
+ 	<test name="Check_SplitOrder_AsPerItemType">
 		<classes>
 			<class name="catalog.cartCheckoutConfirmRequest.Check_SplitOrder_AsPerItemType" />
 		</classes>

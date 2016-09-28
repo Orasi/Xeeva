@@ -20,9 +20,9 @@ import com.xeeva.login.LoginPage;
 import com.xeeva.navigation.MainNav;
 
 /**
- * @summary Test To verify requester is able to add more items
+ * @summary Test To verify order splits by Item Type in check out details page
  * @author  Lalitha Banda
- * @version	26/09/2016
+ * @version	28/09/2016
  * *
  */
 
