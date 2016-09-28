@@ -115,7 +115,7 @@ public class ItemDetailsPage {
 	 */
 	public void addPriceAgreementItemToCart_And_Verify(){
 		btnAddToCart.jsClick();
-		driver.setPageTimeout(3,TimeUnit.SECONDS);
+		driver.setElementTimeout(Constants.ELEMENT_TIMEOUT);
 		lblCartItemAddedMessage.syncVisible(15, false);
 		String getCartItemAddedMessage = lblCartItemAddedMessage.getText();
 		TestReporter.logStep("Message after adding item to cart : "+ getCartItemAddedMessage);
@@ -149,7 +149,7 @@ public class ItemDetailsPage {
 		modify_ItemDetails(UnitPrice,Quantity,strUOMValue);
 		btnAddToCart.isDisplayed();
 		btnAddToCart.click();
-		driver.setPageTimeout(5);
+		driver.setElementTimeout(Constants.ELEMENT_TIMEOUT);
 		lblCartItemAddedMessage.syncVisible(15, false);
 		String getCartItemAddedMessage = lblCartItemAddedMessage.getText();
 		TestReporter.assertTrue(getCartItemAddedMessage.equalsIgnoreCase("The item has been added successfully!"), "Item added to the cart.");
