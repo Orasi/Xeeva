@@ -1,4 +1,6 @@
-package catalog.cartCheckoutProcess;
+package catalog.cartFunctionality;
+
+import java.util.concurrent.TimeUnit;
 
 import org.testng.ITestContext;
 import org.testng.annotations.AfterTest;
@@ -8,23 +10,23 @@ import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
+import com.orasi.utils.Constants;
 import com.orasi.utils.TestEnvironment;
 import com.orasi.utils.TestReporter;
 import com.orasi.utils.dataProviders.ExcelDataProvider;
-import com.xeeva.catalog.CostCenterPage;
-import com.xeeva.catalog.ItemDetailsPage;
+import com.xeeva.catalog.CartInformationPage;
 import com.xeeva.catalog.RequisitioningPage;
-import com.xeeva.catalog.SearchItems.GlobalItemsTab;
+import com.xeeva.catalog.SearchItems.LocalItemsTab;
 import com.xeeva.login.LoginPage;
 import com.xeeva.navigation.MainNav;
 
 /**
- * @Summary: To verify that requester is able to change the require by for a existing line level requisition. 
- * @author praveen varma, @version: Created 21-09-2016
+ * @Summary: To verify that requester is able to save cart with  update the quantity.
+ * @author praveen varma, @version: Created 28-09-2016
  */
-public class Verify_ChangeRequireBy_ExistingLineLevel extends TestEnvironment {
+public class VerifyReq_UpdateQuantityAndSaveCart extends TestEnvironment{
 
-	 public String RequisitionType = "serviceRequestGeneral";
+		public String RequisitionType = "serviceRequestGeneral";
 		
 		// **************
 		// Data Provider
@@ -32,8 +34,8 @@ public class Verify_ChangeRequireBy_ExistingLineLevel extends TestEnvironment {
 		@DataProvider(name = "dataScenario")
 		public Object[][] scenarios() {
 			try {
-				Object[][] excelData = new ExcelDataProvider("/datasheets/Verify_ChangeRequireBy_ExistingLineLevel.xlsx",
-						"VerifyReq_changeReq_ExiLineLevl").getTestData();
+				Object[][] excelData = new ExcelDataProvider("/datasheets/VerifyReq_UpdateQuantityAndSaveCart.xlsx",
+						"UpdateQuantityAndSaveCart").getTestData();
 				return excelData;
 			}
 			catch (RuntimeException e){
@@ -73,49 +75,47 @@ public class Verify_ChangeRequireBy_ExistingLineLevel extends TestEnvironment {
 		 * @param role,location
 		 */
 		@Test(dataProvider = "dataScenario")
-		public void changeRequire_ExistingLineLevel(String role, String location,String GlobalItem,String UnitPrice,
-				String Quantity,String UnitofMeasure,String daysOut){
+		public void updateQuantityAndSaveCart(String role, String location,String Quantity){
 			
 			// Application Login 
 			LoginPage loginPage = new LoginPage(getDriver());
 			TestReporter.logStep("Launch the application and Login with valid Requestor credentials");
 			loginPage.loginWithCredentials(role,location);
 			
-			// Requisition Page  - Navigating to requisition page to create Smart Form Request
+			// Requisition Page  - Navigating to requisition page.
 			RequisitioningPage reqPage = new RequisitioningPage(getDriver());
 			TestReporter.logStep("Navigate to Requisitioning Page.");
 			reqPage.click_ReqTab();
 			
-			
-			TestReporter.logStep("Navigating to MainNav Page");
+			//Get Cart-Items count
 			MainNav mainNav = new MainNav(getDriver());
-			boolean getStatus = mainNav.verifyCartValue(GlobalItem);
-			if(getStatus!=true){
-				TestReporter.logStep("Clicking the GlobalItems Link");
-				reqPage.perform_CatalogSearch(GlobalItem);
-
-				TestReporter.logStep("Clicking the GlobalItems Link");
-				GlobalItemsTab globalitems = new GlobalItemsTab(getDriver());
-				globalitems.click_GlobalItemsTab();
-
-				TestReporter.logStep("ItemDetailsPage  - Modifing Item Details");
-				ItemDetailsPage itemdetails = new ItemDetailsPage(getDriver());
-				itemdetails.add_TwoDiffrent_ItemsToCart(UnitPrice,Quantity,UnitofMeasure);
+			int cartItemsCount = mainNav.getCartItemsCount();
+			TestReporter.log("Total no. of Cart-Items in Cart Info page: " + cartItemsCount);
+			
+			if(cartItemsCount>0){
+				//Click on Cart-Items link and Navigate to Cart-Info page.
+				LocalItemsTab localItemsPage = new LocalItemsTab(getDriver());
+				TestReporter.logStep("Click on Cart-Items link and Navigate to Cart-Info page.");
+				localItemsPage.clickCartItemsLink();
+				
+				//Update quantity and Verify the Save cart functionality.
+				TestReporter.logStep("Update the quantity and Verify Save cart functionality.");
+				CartInformationPage cartInfoPage = new CartInformationPage(getDriver());
+				cartInfoPage.updateQuantityAndVerifySaveCartFunc(Quantity);
+				
+				//Close cart-Info page.
+				TestReporter.logStep("Close Cart-Information page.");
+				cartInfoPage.closeCartInfoPage();
+				
+			}else{
+				TestReporter.assertTrue(false, "Cart is Empty!!!");
 			}
-
-			// Perform Cart CheckOut
-			TestReporter.logStep("Perform Cart CheckOut");
-			mainNav.cart_CheckOut();
-
-			// Change 'RequiredBy date at LineLevel' and Verify the changes.
-			TestReporter.logStep("Change 'RequiredBy date at LineLevel' and Verify the changes.");
-			CostCenterPage ccPage = new CostCenterPage(getDriver());
-			ccPage.change_RequiredByAtLineLevel();
-
+			
 			// Application Logout
 			TestReporter.logStep("Application Logout");
 			mainNav.clickLogout();
 			
-		}
-		
-   }
+	 }
+			
+  }
+

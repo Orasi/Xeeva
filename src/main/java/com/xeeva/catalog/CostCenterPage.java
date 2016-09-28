@@ -139,7 +139,6 @@ public class CostCenterPage {
 		}else{
 			TestReporter.assertTrue(false, "Internal Comment Wrongly Displayed");
 		}
-		driver.setPageTimeout(2);
 		btnClosePopUp.click();
 	}
 
@@ -460,7 +459,11 @@ public class CostCenterPage {
 	}
 
 
-	// Method To click button - Shop For More Items 
+	/**
+	 * @summary Method To click button - Shop For More Items 
+	 * @author  Lalitha Banda
+	 * @date    28/09/16
+	 */
 	public void click_ShopForMoreItems(){
 		pageLoaded();
 		btnShopForMoreItems.syncVisible(5, false);
@@ -494,17 +497,36 @@ public class CostCenterPage {
 		}
 	}
 
-	//Method to Select Shipping Address
+	/**
+	 * @summary Method to Select Shipping Address
+	 * @author  Lalitha Banda
+	 * @date    28/09/16
+	 */
 	public void selectShippingAddress(){
 		new Select(lstShippingAdd).selectByIndex(0);
 	}
 
-	// Method to click continue checkout 
+	/**
+	 * @summary Method to click continue checkout
+	 * @author  Lalitha Banda
+	 * @date    28/09/16
+	 */
 	public void click_ContinueCheckOut(){
 		selectShippingAddress();
 		pageLoaded();
 		btnContinueCheckOut.syncVisible(5, false);
 		btnContinueCheckOut.jsClick();
+	}
+	
+	/**
+	 * @summary Method  verify whether Quantity updated successfully
+	 * @author  Praveen Varma @date 28/09/16
+	 */
+	public void verifyUpdatedQuantity(String QtyValue){
+		TestReporter.logStep("Total size : "+lstQty.size());
+		String updatedQty =lstQty.get((lstQty.size()-1)).getAttribute("value");
+		TestReporter.logStep("Updated Quantity : "+updatedQty);
+		TestReporter.assertTrue(!updatedQty.equalsIgnoreCase(QtyValue), "Quantity Updated Successfully!!");
 	}
 
 }
