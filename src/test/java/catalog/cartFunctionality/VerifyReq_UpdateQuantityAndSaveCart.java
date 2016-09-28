@@ -86,7 +86,7 @@ public class VerifyReq_UpdateQuantityAndSaveCart extends TestEnvironment{
 			RequisitioningPage reqPage = new RequisitioningPage(getDriver());
 			TestReporter.logStep("Navigate to Requisitioning Page.");
 			reqPage.click_ReqTab();
-			driver.manage().timeouts().implicitlyWait(Constants.PAGE_TIMEOUT, TimeUnit.SECONDS);
+			
 			//Get Cart-Items count
 			MainNav mainNav = new MainNav(getDriver());
 			int cartItemsCount = mainNav.getCartItemsCount();

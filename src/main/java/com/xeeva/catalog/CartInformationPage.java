@@ -233,7 +233,7 @@ public class CartInformationPage {
 	public void deleteExistingCartItems(){
 		int evenNum = 0;  
 		pageLoaded();
-		List<WebElement> cartInfoTableRows = tblCartInfo.findElements(By.tagName("tr"));
+		List<WebElement> cartInfoTableRows = driver.findElements(By.xpath("//table[@id='tblCartInfo']/tbody/tr"));
 		int getRowsCount = cartInfoTableRows.size();
 		TestReporter.log("Total no. of rows in Cart Info table : " + getRowsCount);
 		//Iterate even number rows	
@@ -241,7 +241,7 @@ public class CartInformationPage {
 			if(rows % 2 == 0){
 		       evenNum = rows;
 		       String getItemNumber = driver.findElement(By.xpath("//table[@id='tblCartInfo']/tbody/"
-		    		  + "tr["+rows+"]/td[1]/a")).getText();
+		    		  + "tr["+rows+"]/td[1]")).getText();
 		       TestReporter.log("Deleting the existing Item - [" + getItemNumber + "] from cart.");
 		       driver.findElement(By.xpath("//table[@id='tblCartInfo']/tbody/tr["+rows+"]/td[8]/div/a[3]/i")).click();
 		       //Handle Alert if present
@@ -250,6 +250,7 @@ public class CartInformationPage {
 			   }
 			   verify_DeleteCartItems();
 			 }
+		   driver.setElementTimeout(Constants.ELEMENT_TIMEOUT);
 		}
 		
 	}

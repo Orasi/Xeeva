@@ -149,6 +149,7 @@ public class RequisitioningPage {
 		ReqTab.syncVisible(30, false);
 		//ReqTab.click();
 		driver.executeJavaScript("arguments[0].click();", ReqTab);
+		driver.manage().timeouts().implicitlyWait(Constants.PAGE_TIMEOUT, TimeUnit.SECONDS);
 	}
 
 
