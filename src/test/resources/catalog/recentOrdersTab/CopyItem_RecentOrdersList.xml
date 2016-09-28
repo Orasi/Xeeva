@@ -8,7 +8,7 @@
 	<parameter name="operatingSystem" value="windows" />
  	<test name="CopyItem_RecentOrdersList">
 		<classes>
-			<class name="catalog.CopyItem_RecentOrdersList" />
+			<class name="catalog.recentOrdersTab.CopyItem_RecentOrdersList" />
 		</classes>
 	</test> 
 </suite> <!-- Suite -->

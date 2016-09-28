@@ -8,7 +8,7 @@
 	<parameter name="operatingSystem" value="windows" />
  	<test name="CancelRequisition_RecentOrdersList">
 		<classes>
-			<class name="catalog.CancelRequisition_RecentOrdersList" />
+			<class name="catalog.recentOrdersTab.CancelRequisition_RecentOrdersList" />
 		</classes>
 	</test> 
 </suite> <!-- Suite -->
