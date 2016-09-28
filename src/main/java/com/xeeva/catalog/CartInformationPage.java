@@ -188,10 +188,10 @@ public class CartInformationPage {
 		    		  + "tr["+rows+"]/td[1]/a")).getText();
 		       TestReporter.log("Updating the quantity for the item number: " + getItemNumber);
 		       driver.findElement(By.xpath("//table[@id='tblCartInfo']/tbody/tr["+rows+"]/td[5]/input")).sendKeys(Quantity);
-		       
+		       break;
 			 }
-
 		}
 	}
+
 	
 }
