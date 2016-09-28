@@ -124,6 +124,9 @@ public class RequisitioningPage {
 	@FindBy(xpath="//div/table/tbody/tr/td/div/table/tbody/tr/td/table/tbody/tr/td/table/tbody/tr") 
 	private List<WebElement> lblRFQStatus;
 
+	@FindBy(xpath="//*[@class='QtyNumericTextBoxClass']") private Textbox txtQuantityREQ;
+	@FindBy(xpath=".//*[@class='add-to-cart-box']") private Button btnaddToCart;
+	
 	//**Constructor**//*
 
 	public RequisitioningPage(OrasiDriver driver){
@@ -648,5 +651,66 @@ public class RequisitioningPage {
 		}
 		driver.manage().timeouts().implicitlyWait(Constants.PAGE_TIMEOUT, TimeUnit.SECONDS);
 	}
+	
+	/**
+	 * @summary: Method to click Cart number with valid REQ Number
+	 * @author praveen namburi, @Version: Created 28-09-2016
+	 * @param comments
+	 */
+	public void clickCartwithREQNumber(){
+		tblRecentOrdersGrid.syncVisible();
+		btnSeeMore.syncEnabled(5);
+		btnSeeMore.click();
 
+		//Checking the rows in each page for REQ Number
+		List<WebElement> getRows = tblMainRecentOrdersGrid;
+		int rowsCount = getRows.size();
+		TestReporter.log("Total rows in RecentOrders Grid table: "+ rowsCount);
+		for(int row=1; row<=rowsCount; row++){
+			pl.isDomComplete(driver);
+			String getRFQStatus = driver.findElement
+					(By.xpath("//*[@id='gvRecentOdersGrid']/tbody/tr["+row+"]/td[3]/span")).getText();
+			TestReporter.logStep("REQNumber is : "+getRFQStatus);
+			if(!getRFQStatus.contains("-")){
+				driver.setPageTimeout(2);
+				driver.findElement(By.xpath(".//*[@id='gvRecentOdersGrid']/tbody/tr["+row+"]/td[1]/a")).click();
+				break;
+			}
+			if(row==rowsCount){
+				driver.findElement(By.partialLinkText(">")).click();
+			}
+		}
+	}
+
+	/**
+	 * @summary This Method captures the Quantity in Requisition Page
+	 * @author  Praveen Varma @date 28/9/16
+	 */
+	public void getQtyNumber(){
+		String quantity = txtQuantityREQ.getAttribute("value");
+		TestReporter.logStep( "Quantity : "+quantity);
+	} 
+	
+	/**
+	 * @summary This Method re-enters the Quantity in Requisition Page
+	 * @author  Praveen Varma, @date 28/09/16
+	 */
+	public void re_enterQuantity(String Qty){
+		getQtyNumber();
+		addToCart();	
+		txtQuantityREQ.clear();
+		txtQuantityREQ.safeSet(Qty);
+		addToCart();
+	}
+	
+	/**
+	 * @summary Method to click on Add-to-cart button.
+	 * @author  Praveen Varma, @date 28/09/16 
+	 */
+	public void addToCart(){
+	    btnaddToCart.syncVisible();
+	    btnaddToCart.click();
+	    lblCartItemAddedMessage.syncVisible(20, false);
+    }
+	
 }

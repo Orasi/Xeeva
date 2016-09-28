@@ -169,4 +169,29 @@ public class CartInformationPage {
 	
 	}
 	
+	/**
+	 * @Sumamry: Method to update the Quantity and verify save cart functionality.
+	 * @author: Praveen Namburi, @Version: 28-09-2016
+	 */
+	public void updateQuantityAndVerifySaveCartFunc(String Quantity){
+		int evenNum = 0;  
+		pageLoaded();
+		List<WebElement> cartInfoTableRows = driver.findElements(By.xpath("//table[@id='tblCartInfo']/tbody/tr"));
+		int getRowsCount = cartInfoTableRows.size();
+		TestReporter.log("Total no. of rows in Cart Info table : " + getRowsCount);
+			
+		for(int rows=1; rows<=getRowsCount-1; rows++){
+			if(rows % 2 == 0){
+		       evenNum = rows;
+		       //Sleeper.sleep(1000);
+		       String getItemNumber = driver.findElement(By.xpath("//table[@id='tblCartInfo']/tbody/"
+		    		  + "tr["+rows+"]/td[1]/a")).getText();
+		       TestReporter.log("Updating the quantity for the item number: " + getItemNumber);
+		       driver.findElement(By.xpath("//table[@id='tblCartInfo']/tbody/tr["+rows+"]/td[5]/input")).sendKeys(Quantity);
+		       
+			 }
+
+		}
+	}
+	
 }

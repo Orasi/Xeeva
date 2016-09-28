@@ -47,6 +47,9 @@ public class RecentOrderInformationPage {
 	@FindBy(xpath="//a[@id='aTab1']/span[2]") private Label lblLocalItems;
 	@FindBy(xpath="//a[@id='aTab2']/span") private Label lblGlobalItems;
 
+	@FindBy(xpath="//*[@title='Copy Item']") private List<WebElement> lstCopyItemGrid;
+	
+	
 	/**Constructor**/
 	public RecentOrderInformationPage(OrasiDriver driver){
 		this.driver = driver;
@@ -216,6 +219,34 @@ public class RecentOrderInformationPage {
 		}
 	}
 
+	/**
+	 * @summary This Method captures Item Number from Recent Orders Information
+	 * @author Praveen Varma
+	 * @date 28/9/16
+	 **/	
+	public String getItemNumber(){
+		String itemNumber = null;
+		List<WebElement> ItemNumberLinks = driver.findElements(By.xpath(xpath));
+		if(ItemNumberLinks.size()!=0){
+			for(WebElement href :ItemNumberLinks){
+				// Capture on Item Number
+				itemNumber = href.getText();
+				TestReporter.logStep( "Item Number : "+itemNumber);
+				break;
+			}
+		}else{
+			TestReporter.assertTrue(false, "No Item Links available for Selected Order!!");
+		}
+		return itemNumber;
+	}
+	
+	/**
+	 * @summary This Method Clicks on CopyItem Link from Recent Orders Information
+	 * @author  Praveen Varma @date 28/09/16
+	 **/	
+	public void click_CopyItemLink(){
+		lstCopyItemGrid.get(0).click();
+	}
 
 }
 

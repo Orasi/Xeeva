@@ -506,5 +506,16 @@ public class CostCenterPage {
 		btnContinueCheckOut.syncVisible(5, false);
 		btnContinueCheckOut.jsClick();
 	}
+	
+	/**
+	 * @summary Method  verify whether Quantity updated successfully
+	 * @author  Praveen Varma @date 28/09/16
+	 */
+	public void verifyUpdatedQuantity(String QtyValue){
+		TestReporter.logStep("Total size : "+lstQty.size());
+		String updatedQty =lstQty.get((lstQty.size()-1)).getAttribute("value");
+		TestReporter.logStep("Updated Quantity : "+updatedQty);
+		TestReporter.assertTrue(!updatedQty.equalsIgnoreCase(QtyValue), "Quantity Updated Successfully!!");
+	}
 
 }
