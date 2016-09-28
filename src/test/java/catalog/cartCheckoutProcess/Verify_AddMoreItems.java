@@ -111,7 +111,7 @@ public class Verify_AddMoreItems extends TestEnvironment{
 		TestReporter.logStep(" Click on Req Tab ");
 		reqPage.click_ReqTab();
 
-		// Verify And Add Items From Recent Orders 
+		// Verify And Add Items From Catalog Search
 		TestReporter.logStep("Cart CheckOut");
 		mainNav.cart_CheckOut();
 
@@ -134,7 +134,7 @@ public class Verify_AddMoreItems extends TestEnvironment{
 		TestReporter.logStep(" Click on Req Tab ");
 		reqPage.click_ReqTab();
 
-		// Verify And Add Items From Recent Orders 
+		// Verify And Add Items From Reject Orders 
 		TestReporter.logStep("Cart CheckOut");
 		mainNav.cart_CheckOut();
 

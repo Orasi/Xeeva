@@ -1,13 +1,18 @@
 package com.xeeva.catalog;
 
+import java.util.List;
 import java.util.ResourceBundle;
+
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+
 import com.orasi.core.interfaces.Button;
 import com.orasi.core.interfaces.Checkbox;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
 import com.orasi.utils.Constants;
 import com.orasi.utils.OrasiDriver;
 import com.orasi.utils.PageLoaded;
+import com.orasi.utils.TestReporter;
 
 /**
  * @summary This page contains Confirm Request Page objects
@@ -27,7 +32,7 @@ public class ConfirmRequestPage {
 	@FindBy(id ="btnCheckOutConfirm") private Button btnConfirm;
 	@FindBy(xpath =".//*[@for='chkNonBudgeted']") private Checkbox chkNonBudgeted;	
 	@FindBy(xpath =".//*[@for='chkBudgeted']") private Checkbox chkBudgeted;	
-	
+	@FindBy(xpath =".//*[@class='Datagridborder1 TDtextField100px']/tbody/tr/td[8]") private List<WebElement> lstTotalUSD;
 
 	/**Constructor**/
 	public ConfirmRequestPage(OrasiDriver driver){
@@ -74,5 +79,20 @@ public class ConfirmRequestPage {
 		btnConfirm.syncVisible(5, false);
 		btnConfirm.jsClick();
 	}
+	
+	
+	/**
+	 * @summary Method to Add Comments Line Level 
+	 * @author  Lalitha Banda
+	 * @date    28/09/16
+	 */
+	public void add_Comments(String inputString){
+		/**Reading Method available in CostCenter page for adding internal comments 
+		 * in Confirm Request Page 
+		 */
+		CostCenterPage ccPage = new CostCenterPage(driver);
+		ccPage.AddInternalComment(inputString);
+	}
+	
 
 }
