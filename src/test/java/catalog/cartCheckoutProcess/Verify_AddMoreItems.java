@@ -7,26 +7,25 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
-
 import com.orasi.utils.TestEnvironment;
 import com.orasi.utils.TestReporter;
 import com.orasi.utils.dataProviders.ExcelDataProvider;
 import com.xeeva.catalog.CostCenterPage;
 import com.xeeva.catalog.ItemDetailsPage;
+import com.xeeva.catalog.RecentOrderInformationPage;
 import com.xeeva.catalog.RequisitioningPage;
 import com.xeeva.catalog.SearchItems.GlobalItemsTab;
 import com.xeeva.login.LoginPage;
 import com.xeeva.navigation.MainNav;
 
 /**
- * @summary Test To verify update Cost Center at Line Level
+ * @summary Test To verify requester is able to add more items
  * @author  Lalitha Banda
- * @version	08/09/2016
+ * @version	26/09/2016
  * *
  */
 
-public class ChangeCC_LineLevel extends TestEnvironment{
-
+public class Verify_AddMoreItems extends TestEnvironment{
 
 	// **************
 	// Data Provider
@@ -43,7 +42,6 @@ public class ChangeCC_LineLevel extends TestEnvironment{
 		return new Object[][] {{}};
 	}
 
-
 	@BeforeTest
 	@Parameters({ "runLocation", "browserUnderTest", "browserVersion","operatingSystem", "environment" })
 	public void setup(@Optional String runLocation, String browserUnderTest,String browserVersion, String operatingSystem, String environment) {
@@ -53,7 +51,7 @@ public class ChangeCC_LineLevel extends TestEnvironment{
 		setOperatingSystem(operatingSystem);
 		setRunLocation(runLocation);
 		setTestEnvironment(environment);
-		testStart("AddingNonPriceAgreement");
+		testStart("Verify_AddMoreItems");
 	}
 
 	@AfterTest
@@ -63,7 +61,7 @@ public class ChangeCC_LineLevel extends TestEnvironment{
 
 	@Test(dataProvider = "dataScenario")
 	public void CostCenterLineLevel(String role, String location,String InternalComment,String GlobalItem,String UnitofMeasure,String Quantity,
-			String UnitPrice,String updateLineLevel,String updateHeaderLevel,String CCvalue,String Qtvalue){
+			String UnitPrice,String updateLineLevel,String updateHeaderLevel,String CCvalue,String QtValue){
 
 		// Application Login 
 		TestReporter.logStep("Login into application");
@@ -90,11 +88,68 @@ public class ChangeCC_LineLevel extends TestEnvironment{
 			itemdetails.add_TwoDiffrent_ItemsToCart(UnitPrice,Quantity,UnitofMeasure);
 		}
 
+		// Verify And Add Items From Recent Orders 
 		TestReporter.logStep("Cart CheckOut");
 		mainNav.cart_CheckOut();
 
+		TestReporter.logStep("Click on Add More Items ");
 		CostCenterPage ccPage = new CostCenterPage(getDriver());
-		ccPage.change_CC(updateLineLevel, CCvalue);
+		ccPage.click_ShopForMoreItems();
+
+		TestReporter.logStep("Adding Items from Search");
+		TestReporter.logStep("Clicking the GlobalItems Link");
+		reqPage.perform_CatalogSearch(GlobalItem);
+
+		TestReporter.logStep("Clicking the GlobalItems Link");
+		GlobalItemsTab globalitems = new GlobalItemsTab(getDriver());
+		globalitems.click_GlobalItemsTab();
+
+		TestReporter.logStep("ItemDetailsPage  - Modifing Item Details");
+		ItemDetailsPage itemdetails = new ItemDetailsPage(getDriver());
+		itemdetails.add_TwoDiffrent_ItemsToCart(UnitPrice,Quantity,UnitofMeasure);
+
+		TestReporter.logStep(" Click on Req Tab ");
+		reqPage.click_ReqTab();
+
+		// Verify And Add Items From Catalog Search
+		TestReporter.logStep("Cart CheckOut");
+		mainNav.cart_CheckOut();
+
+		TestReporter.logStep(" Click on Add More Items ");
+		ccPage.click_ShopForMoreItems();
+
+		TestReporter.logStep(" Click on Req Tab ");
+		reqPage.click_ReqTab();
+
+		TestReporter.logStep("Adding Items from Recent Orders");
+		RecentOrderInformationPage recentOrderInfoPage = new RecentOrderInformationPage(getDriver());
+		TestReporter.logStep("Navigating to Recent Order Information page.");
+		recentOrderInfoPage.click_ItemLink_RecentOrderPage();
+		recentOrderInfoPage.Click_ItemLink_RecentOrderInfoPage();
+
+		ItemDetailsPage itemDetailsPage = new ItemDetailsPage(getDriver());
+		TestReporter.logStep("Navigating to Item Details page.");
+		itemDetailsPage.selectUOMValueAndAddNonPriceItemToCart(UnitofMeasure);
+
+		TestReporter.logStep(" Click on Req Tab ");
+		reqPage.click_ReqTab();
+
+		// Verify And Add Items From Reject Orders 
+		TestReporter.logStep("Cart CheckOut");
+		mainNav.cart_CheckOut();
+
+		TestReporter.logStep(" Click on Add More Items ");
+		ccPage.click_ShopForMoreItems();
+
+		TestReporter.logStep(" Click on Req Tab ");
+		reqPage.click_ReqTab();
+
+		TestReporter.logStep("Add Item From Reject Orders Tab");
+		recentOrderInfoPage.click_RejectOrder();
+		recentOrderInfoPage.Click_ItemLink_RejectOrdersPage();
+
+		TestReporter.logStep("Navigating to Item Details page.");
+		itemDetailsPage.selectUOMValueAndAddNonPriceItemToCart(UnitofMeasure);
 
 		TestReporter.logStep("Application Logout");
 		mainNav.clickLogout();

@@ -6,15 +6,20 @@ import java.util.ResourceBundle;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
+import com.orasi.core.interfaces.Button;
 import com.orasi.core.interfaces.Element;
 import com.orasi.core.interfaces.Label;
 import com.orasi.core.interfaces.Link;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
+import com.orasi.utils.AlertHandler;
 import com.orasi.utils.Constants;
 import com.orasi.utils.OrasiDriver;
 import com.orasi.utils.Sleeper;
 import com.orasi.utils.TestReporter;
+import com.xeeva.catalog.SearchItems.LocalItemsTab;
 
 /**
  * @summary: This page class contains all the methods and locators of CartInformation page.
@@ -30,6 +35,7 @@ public class CartInformationPage {
 	@FindBy(xpath="//*[@id='tblCartInfo']/tbody") private WebElement tblCartInfo;
 	@FindBy(xpath="//a[@id='fancybox-close']") private Link lnkCloseCartInfo;
 	@FindBy(xpath ="//div/table[@id='customfa2']/tbody/tr/td") private Label lblCartEmptyText;
+	@FindBy(xpath="//input[@name='Button'][@value='Save Cart']") private Button btnSaveCart;
 	
 	/**Constructor**/
 	public CartInformationPage(OrasiDriver driver){
@@ -107,6 +113,9 @@ public class CartInformationPage {
 	public void closeCartInfoPage(){
 		driver.setPageTimeout(2);
 		lnkCloseCartInfo.isDisplayed();
+		//driver.setElementTimeout(Constants.ELEMENT_TIMEOUT);
+		//driver.executeJavaScript("arguments[0].click();", lnkCloseCartInfo);
+		lnkCloseCartInfo.syncVisible(20);
 		lnkCloseCartInfo.click();
 	}
 	
@@ -139,5 +148,130 @@ public class CartInformationPage {
 
 	}
 	
+	/**
+	 * @summary: Method to verify the rejected item is added to cart.
+	 * @author: Praveen Namburi, @Version: Created 27-09-2016
+	 * @param itemNumber
+	 */
+	public void verifyAddedCartItem_ForRejectedOrder(String itemNumber){
+		int evenNum = 0;
+		pageLoaded();
+		List<WebElement> cartInfoTableRows = driver.findElements(By.xpath("//table[@id='tblCartInfo']/tbody/tr"));
+		int getRowsCount = cartInfoTableRows.size();
+		TestReporter.log("Total no. of rows in Cart Info table : " + getRowsCount);
+		
+		for(int rows=1; rows<=getRowsCount-1; rows++){
+			if(rows % 2 == 0){
+	    		evenNum = rows;
+	    		Sleeper.sleep(2000);
+	    		String getItemNumber = driver.findElement(By.xpath("//table[@id='tblCartInfo']/tbody/tr["+rows+"]/td[1]/a")).getText();
+				if(getItemNumber.trim().equalsIgnoreCase(itemNumber)){
+					TestReporter.assertEquals(getItemNumber, itemNumber, 
+							"Rejected Item number added to cart successfully.");
+					break;
+			    }
+		     }
+
+	     }
+	
+	}
+	
+	/**
+	 * @Sumamry: Method to update the Quantity and verify save cart functionality.
+	 * @author: Praveen Namburi, @Version: 28-09-2016
+	 * @param: Quantity
+	 */
+	public void updateQuantityAndVerifySaveCartFunc(String Quantity){
+		int evenNum = 0;  
+		pageLoaded();
+		List<WebElement> cartInfoTableRows = driver.findElements(By.xpath("//table[@id='tblCartInfo']/tbody/tr"));
+		int getRowsCount = cartInfoTableRows.size();
+		TestReporter.log("Total no. of rows in Cart Info table : " + getRowsCount);
+		//Iterate even number rows	
+		for(int rows=1; rows<=getRowsCount-1; rows++){
+			if(rows % 2 == 0){
+		       evenNum = rows;
+		       String getItemNumber = driver.findElement(By.xpath("//table[@id='tblCartInfo']/tbody/"
+		    		  + "tr["+rows+"]/td[1]/a")).getText();
+		       TestReporter.log("Updating the quantity for the item number: " + getItemNumber);
+		       driver.findElement(By.xpath("//table[@id='tblCartInfo']/tbody/"
+			       		+ "tr["+rows+"]/td[5]/input")).clear();
+		       driver.findElement(By.xpath("//table[@id='tblCartInfo']/tbody/"
+		       		+ "tr["+rows+"]/td[5]/input")).sendKeys(Quantity);
+		       btnSaveCart.syncEnabled(20);
+		       btnSaveCart.click();
+		       //Handle Alert if present
+			   if(AlertHandler.isAlertPresent(driver, 6)){
+				   AlertHandler.handleAlert(driver, 6);
+			   }
+			   verify_UpdatedQuantity();
+		       break;
+			 }
+		}
+		
+	}
+
+	/**
+	 * @summary: Method to verify the message after updating the quantity in cart-Information page.
+	 * @author: Praveen Namburi, @version: Created 28-09-2016.
+	 */
+	public void verify_UpdatedQuantity(){
+		//Added wait statement to wait till the timeout for updated quantity 
+		//successfull message to be displayed.
+		WebDriverWait wait = new WebDriverWait(driver,10);
+		WebElement lblCartAddItemMessage =wait.until(ExpectedConditions.
+				visibilityOfElementLocated(By.xpath("//div[@id='divAppInfoMsg'][@class='addMessage']")));
+		String getUpdatedQuantityMessage = lblCartAddItemMessage.getText();
+		TestReporter.logStep("Message after updating the quantity in cartInfo page: "+ getUpdatedQuantityMessage);
+		TestReporter.assertTrue(getUpdatedQuantityMessage.contains("updated successfully"), 
+				"The Records have been updated successfully!");
+
+	}
+	
+	/**
+	 * @Sumamry: Method to update the Quantity and verify save cart functionality.
+	 * @author: Praveen Namburi, @Version: 28-09-2016
+	 */
+	public void deleteExistingCartItems(){
+		int evenNum = 0;  
+		pageLoaded();
+		List<WebElement> cartInfoTableRows = driver.findElements(By.xpath("//table[@id='tblCartInfo']/tbody/tr"));
+		int getRowsCount = cartInfoTableRows.size();
+		TestReporter.log("Total no. of rows in Cart Info table : " + getRowsCount);
+		//Iterate even number rows	
+		for(int rows=1; rows<=getRowsCount-1; rows++){
+			if(rows % 2 == 0){
+		       evenNum = rows;
+		       String getItemNumber = driver.findElement(By.xpath("//table[@id='tblCartInfo']/tbody/"
+		    		  + "tr["+rows+"]/td[1]")).getText();
+		       TestReporter.log("Deleting the existing Item - [" + getItemNumber + "] from cart.");
+		       driver.findElement(By.xpath("//table[@id='tblCartInfo']/tbody/tr["+rows+"]/td[8]/div/a[3]/i")).click();
+		       //Handle Alert if present
+			   if(AlertHandler.isAlertPresent(driver, 6)){
+				   AlertHandler.handleAlert(driver, 6);
+			   }
+			   verify_DeleteCartItems();
+			 }
+		   driver.setElementTimeout(Constants.ELEMENT_TIMEOUT);
+		}
+		
+	}
+	
+	/**
+	 * @summary: Method to verify the message after deleting the item from cart.
+	 * @author: Praveen Namburi, @version: Created 28-09-2016.
+	 */
+	public void verify_DeleteCartItems(){
+		//Added wait statement to wait till the timeout for Removed item 
+		//successfull message to be displayed.
+		WebDriverWait wait = new WebDriverWait(driver,10);
+		WebElement lblCartAddItemMessage =wait.until(ExpectedConditions.
+				visibilityOfElementLocated(By.xpath("//div[@id='divAppInfoMsg'][@class='addMessage']")));
+		String getItemRemovedMessage = lblCartAddItemMessage.getText();
+		TestReporter.logStep("Message after deleting the items from cart : "+ getItemRemovedMessage);
+		TestReporter.assertTrue(getItemRemovedMessage.contains("removed successfully"), 
+				"The item has been removed successfully!");
+
+	}
 	
 }

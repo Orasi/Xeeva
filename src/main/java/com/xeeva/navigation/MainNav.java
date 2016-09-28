@@ -15,16 +15,17 @@ import com.orasi.core.interfaces.Textbox;
 import com.orasi.core.interfaces.Webtable;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
 import com.orasi.utils.OrasiDriver;
+import com.orasi.utils.PageLoaded;
 import com.orasi.utils.Sleeper;
 import com.orasi.utils.TestReporter;
 
 public class MainNav {
-
+	PageLoaded pl = new PageLoaded();
 	private OrasiDriver driver = null;
 
 	/** Page Elements **/
 	@FindBy(linkText = "Logout") private Link lnkLogout;
-	@FindBy(id = "btnSaveCart")	private Button btnSaveCart;
+	@FindBy(xpath = ".//*[@value='Save Cart'][contains(@onclick, 'javascript')]")	private Button btnSaveCart;
 	@FindBy(id = "lnkShowPopup")	private Link lnkCartItem;
 	@FindBy(linkText = "tblCartInfo")	private Webtable cartTable;
 	@FindBy(xpath = ".//*[@id='tblCartInfo']/tbody/tr")	private List<WebElement> cartItemGridRows;
@@ -45,13 +46,14 @@ public class MainNav {
 	private Textbox txtItemUnitPrice;
 	@FindBy(xpath = ".//*[@id='tblItemDetails']/tbody/tr[2]/td[2]/a/div")
 	private Button btnAddToCart;
-	@FindBy(xpath = ".//tr[2]/td/table/tbody/tr/td/input") private Button btnsaveCartPopUp;
+	@FindBy(xpath = ".//*[@value='Save Cart'][contains(@onclick, 'javascript')]") private Button btnsaveCartPopUp;
 	@FindBy(xpath = "//*[@id='btnPopupCP']") private Button btnCheckOut;
 
 	/** Constructor **/
 
 	public MainNav(OrasiDriver driver) {
 		this.driver = driver;
+		pl.isDomComplete(driver);
 		ElementFactory.initElements(driver, this);
 	}
 
@@ -89,8 +91,7 @@ public class MainNav {
 	 * @date 14/9/16
 	 **/
 	public void SaveCart() {
-		if (btnSaveCart.isDisplayed()) {
-			btnSaveCart.syncVisible(3, false);
+		if (btnSaveCart.syncVisible(1, false)){
 			btnSaveCart.click();
 		} else {
 			TestReporter.logStep("Cart Empty to Save");
@@ -247,6 +248,12 @@ public class MainNav {
 
 	}
 
+	
+	// Method to Get Cart Items Count 
+	public int getCartItemsCount(){
+		pl.isDomComplete(driver);
+		return Integer.parseInt(lblCartValue.getText());
+	}
 
 	/**
 	 * @summary Verify Cart Items 
@@ -255,17 +262,16 @@ public class MainNav {
 	 **/
 	public boolean verifyCartValue(String ItemType){
 		boolean statsuFlag = false;
-		// lblCartValue element is not finding with page,element,script timeouts
-		Sleeper.sleep(10000);
+		pl.isDomComplete(driver);
 		TestReporter.logStep("Cart Having [" + lblCartValue.getText()+"] Items!!");
 		if(Integer.parseInt(lblCartValue.getText())>=2){
-			TestReporter.logStep("Cart Having [" + lblCartValue.getText()+"] Items!!");
 			statsuFlag = true;
 		}else{
 			statsuFlag = false;
 		}
 		return statsuFlag;
 	}
+	
 
 
 	/**
@@ -276,7 +282,6 @@ public class MainNav {
 	public void clickLogout() {
 		isLogoutDisplayed();
 		lnkLogout.click();
-		driver.setPageTimeout(2);
 		SaveCart();
 	}
 
@@ -284,16 +289,17 @@ public class MainNav {
 	// Method for Checkout the Cart
 	public void saveCartPopUp(){
 		pageLoaded();
-		btnsaveCartPopUp.isDisplayed();
 		btnsaveCartPopUp.jsClick();
-		driver.setPageTimeout(2);
+		pl.isDomComplete(driver);
 	}
 
 	// Method for Checkout the Cart
 	public void CheckOut(){
 		pageLoaded();
-		btnCheckOut.isDisplayed();
+		btnCheckOut.syncVisible(5, false);
 		btnCheckOut.click();
+		//Wait for the cart pop up to close
+		btnsaveCartPopUp.syncHidden(10);
 	}
 
 
@@ -306,5 +312,6 @@ public class MainNav {
 		clickCartItemsLink();
 		saveCartPopUp();
 		CheckOut();
+		
 	}
 }

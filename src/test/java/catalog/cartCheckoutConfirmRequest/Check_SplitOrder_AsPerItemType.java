@@ -1,4 +1,4 @@
-package catalog.cartCheckoutProcess;
+package catalog.cartCheckoutConfirmRequest;
 
 import org.testng.ITestContext;
 import org.testng.annotations.AfterTest;
@@ -7,10 +7,11 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
-
 import com.orasi.utils.TestEnvironment;
 import com.orasi.utils.TestReporter;
 import com.orasi.utils.dataProviders.ExcelDataProvider;
+import com.xeeva.catalog.CheckoutDetailPage;
+import com.xeeva.catalog.ConfirmRequestPage;
 import com.xeeva.catalog.CostCenterPage;
 import com.xeeva.catalog.ItemDetailsPage;
 import com.xeeva.catalog.RequisitioningPage;
@@ -19,14 +20,13 @@ import com.xeeva.login.LoginPage;
 import com.xeeva.navigation.MainNav;
 
 /**
- * @summary Test To verify update Cost Center at Line Level
+ * @summary Test To verify order splits by Item Type in check out details page
  * @author  Lalitha Banda
- * @version	08/09/2016
+ * @version	28/09/2016
  * *
  */
 
-public class ChangeCC_LineLevel extends TestEnvironment{
-
+public class Check_SplitOrder_AsPerItemType extends TestEnvironment{
 
 	// **************
 	// Data Provider
@@ -43,7 +43,6 @@ public class ChangeCC_LineLevel extends TestEnvironment{
 		return new Object[][] {{}};
 	}
 
-
 	@BeforeTest
 	@Parameters({ "runLocation", "browserUnderTest", "browserVersion","operatingSystem", "environment" })
 	public void setup(@Optional String runLocation, String browserUnderTest,String browserVersion, String operatingSystem, String environment) {
@@ -53,7 +52,7 @@ public class ChangeCC_LineLevel extends TestEnvironment{
 		setOperatingSystem(operatingSystem);
 		setRunLocation(runLocation);
 		setTestEnvironment(environment);
-		testStart("AddingNonPriceAgreement");
+		testStart("Check_SplitOrder_AsPerItemTypes");
 	}
 
 	@AfterTest
@@ -63,7 +62,7 @@ public class ChangeCC_LineLevel extends TestEnvironment{
 
 	@Test(dataProvider = "dataScenario")
 	public void CostCenterLineLevel(String role, String location,String InternalComment,String GlobalItem,String UnitofMeasure,String Quantity,
-			String UnitPrice,String updateLineLevel,String updateHeaderLevel,String CCvalue,String Qtvalue){
+			String UnitPrice,String updateLineLevel,String updateHeaderLevel,String CCvalue,String QtValue){
 
 		// Application Login 
 		TestReporter.logStep("Login into application");
@@ -93,8 +92,17 @@ public class ChangeCC_LineLevel extends TestEnvironment{
 		TestReporter.logStep("Cart CheckOut");
 		mainNav.cart_CheckOut();
 
+		TestReporter.logStep("Click on Continue CheckOut");
 		CostCenterPage ccPage = new CostCenterPage(getDriver());
-		ccPage.change_CC(updateLineLevel, CCvalue);
+		ccPage.click_ContinueCheckOut();
+
+		ConfirmRequestPage crPage = new ConfirmRequestPage(getDriver());
+		TestReporter.logStep("Click on Confirm ");
+		crPage.click_Confirm();
+
+		TestReporter.logStep("Verify Order splitted");
+		CheckoutDetailPage cdPage = new CheckoutDetailPage(getDriver());
+		cdPage.verify_SplitOrder();
 
 		TestReporter.logStep("Application Logout");
 		mainNav.clickLogout();
