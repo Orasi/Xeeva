@@ -1,7 +1,11 @@
 package com.xeeva.catalog;
 
 import java.util.ResourceBundle;
+import java.util.Set;
+
 import org.openqa.selenium.support.FindBy;
+
+import com.orasi.core.interfaces.Button;
 import com.orasi.core.interfaces.Label;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
 import com.orasi.utils.Constants;
@@ -25,6 +29,7 @@ public class CheckoutDetailPage {
 	/**Page Elements**/
 	@FindBy(xpath ="//table/tbody/tr[5]/td/span[1]") private Label lblOne;
 	@FindBy(xpath ="//table/tbody/tr[5]/td/span[3]") private Label lblTwo;
+	@FindBy(xpath=".//*[@class='buttonClass'][@value='Print your order.']") private Button btnPrintYourOrder;
 
 	/**Constructor**/
 	public CheckoutDetailPage(OrasiDriver driver){
@@ -61,6 +66,26 @@ public class CheckoutDetailPage {
 		}}
 	}
 
-	
+	/**
+	  * @summary Method to Click Print Your Order Button
+	  * @author  Lalitha Banda
+	  * @date    29/09/16
+	  */
+	 
+	 
+	 public void printYourOrder(String openWindowHandle) {
+	  pageLoaded();
+	  btnPrintYourOrder.syncVisible(5);
+	  btnPrintYourOrder.click();
+
+	  //To close all the other windows except the main window.
+	  Set<String> allWindowHandles = driver.getWindowHandles();
+	  for (String currentWindowHandle : allWindowHandles) {
+	   if (!currentWindowHandle.equals(openWindowHandle)) {
+	    driver.switchTo().window(currentWindowHandle);
+	    driver.close();
+	   }
+	  }
+	 }
 
 }

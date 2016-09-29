@@ -7,9 +7,11 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
+
 import com.orasi.utils.TestEnvironment;
 import com.orasi.utils.TestReporter;
 import com.orasi.utils.dataProviders.ExcelDataProvider;
+import com.xeeva.catalog.CheckoutDetailPage;
 import com.xeeva.catalog.ConfirmRequestPage;
 import com.xeeva.catalog.CostCenterPage;
 import com.xeeva.catalog.ItemDetailsPage;
@@ -27,7 +29,7 @@ import com.xeeva.navigation.MainNav;
  */
 
 public class Verify_CheckOutDetails_AddMoreItems extends TestEnvironment {
-
+	String openWindowHandle = null;
 	// **************
 	// Data Provider
 	// **************
@@ -58,7 +60,7 @@ public class Verify_CheckOutDetails_AddMoreItems extends TestEnvironment {
 
 	@AfterTest
 	public void close(ITestContext testResults){
-		endTest("TestAlert", testResults);
+		//endTest("TestAlert", testResults);
 	}
 
 	@Test(dataProvider = "dataScenario")
@@ -204,6 +206,11 @@ public class Verify_CheckOutDetails_AddMoreItems extends TestEnvironment {
 		// ConfirmRequest Page - Clicking on Confirm Button
 		TestReporter.logStep("Clicking on Confirm Button");
 		cReqPage.click_Confirm();
+
+		// CheckoutDetails Page - Clicking on Print Your Order Button
+		TestReporter.logStep("Clicking on Print Your Order Button");
+		CheckoutDetailPage cdPage = new CheckoutDetailPage(getDriver());
+		cdPage.printYourOrder(openWindowHandle);
 
 		// Application Logout
 		TestReporter.logStep("Application Logout");
