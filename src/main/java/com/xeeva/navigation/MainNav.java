@@ -14,6 +14,7 @@ import com.orasi.core.interfaces.Listbox;
 import com.orasi.core.interfaces.Textbox;
 import com.orasi.core.interfaces.Webtable;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
+import com.orasi.utils.Constants;
 import com.orasi.utils.OrasiDriver;
 import com.orasi.utils.PageLoaded;
 import com.orasi.utils.Sleeper;
@@ -252,6 +253,7 @@ public class MainNav {
 	// Method to Get Cart Items Count 
 	public int getCartItemsCount(){
 		pl.isDomComplete(driver);
+		driver.setElementTimeout(Constants.ELEMENT_TIMEOUT);
 		return Integer.parseInt(lblCartValue.getText());
 	}
 

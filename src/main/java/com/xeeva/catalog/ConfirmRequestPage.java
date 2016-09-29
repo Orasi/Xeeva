@@ -1,5 +1,6 @@
 package com.xeeva.catalog;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -21,19 +22,20 @@ import com.orasi.utils.TestReporter;
  */
 
 public class ConfirmRequestPage {
-	
+
 	PageLoaded pl = new PageLoaded();
 	private OrasiDriver driver = null;
 	private ResourceBundle userCredentialRepo = ResourceBundle.getBundle(Constants.USER_CREDENTIALS_PATH);
 	String xpath = ".//*[@id='customfa']/tbody/tr/td/select";
-	
+
 
 	/**Page Elements**/
 	@FindBy(id ="btnCheckOutConfirm") private Button btnConfirm;
 	@FindBy(xpath =".//*[@for='chkNonBudgeted']") private Checkbox chkNonBudgeted;	
 	@FindBy(xpath =".//*[@for='chkBudgeted']") private Checkbox chkBudgeted;	
 	@FindBy(xpath =".//*[@class='Datagridborder1 TDtextField100px']/tbody/tr/td[8]") private List<WebElement> lstTotalUSD;
-
+	@FindBy(css =".textAlignRight.borderRight>strong") private List<WebElement> lstTotalValues;
+	
 	/**Constructor**/
 	public ConfirmRequestPage(OrasiDriver driver){
 		this.driver = driver;
@@ -46,7 +48,7 @@ public class ConfirmRequestPage {
 	}
 
 	/**Page Interactions**/
-	
+
 	/**
 	 * @summary Method to click on non budgeted
 	 * @author  Lalitha Banda
@@ -68,7 +70,7 @@ public class ConfirmRequestPage {
 		chkBudgeted.syncVisible(5, false);
 		chkBudgeted.jsToggle();
 	}
-	
+
 	/**
 	 * @summary Method to click on confirm
 	 * @author  Lalitha Banda
@@ -79,8 +81,8 @@ public class ConfirmRequestPage {
 		btnConfirm.syncVisible(5, false);
 		btnConfirm.jsClick();
 	}
-	
-	
+
+
 	/**
 	 * @summary Method to Add Comments Line Level 
 	 * @author  Lalitha Banda
@@ -93,6 +95,5 @@ public class ConfirmRequestPage {
 		CostCenterPage ccPage = new CostCenterPage(driver);
 		ccPage.AddInternalComment(inputString);
 	}
-	
 
 }

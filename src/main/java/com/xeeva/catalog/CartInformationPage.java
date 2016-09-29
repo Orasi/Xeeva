@@ -36,6 +36,8 @@ public class CartInformationPage {
 	@FindBy(xpath="//a[@id='fancybox-close']") private Link lnkCloseCartInfo;
 	@FindBy(xpath ="//div/table[@id='customfa2']/tbody/tr/td") private Label lblCartEmptyText;
 	@FindBy(xpath="//input[@name='Button'][@value='Save Cart']") private Button btnSaveCart;
+	@FindBy(xpath="//table[@id='tblCartInfo']/tbody/tr") private List<WebElement> tblCartInformation;
+	@FindBy(xpath="//table[@id='tblCartInfo']/tbody/tr/td[5]/input") private List<WebElement> cartItemsList;
 	
 	/**Constructor**/
 	public CartInformationPage(OrasiDriver driver){
@@ -274,4 +276,39 @@ public class CartInformationPage {
 
 	}
 	
+	/**
+	 * @summary: Method to update the quantity values for cart-items in cart-info page.
+	 * @author: Praveen Namburi, @version: Created 29-09-2016
+	 */
+	public void UpdateQuantityAndSaveCart(String Quantity){
+		int evenNum=0;
+		pageLoaded();
+		List<WebElement> cartInfoTblRows = tblCartInformation;
+		int getRows = cartInfoTblRows.size();
+		TestReporter.log("Total no. of rows in Cart-Info table: " + getRows);
+		List<WebElement> cartItems = cartItemsList;
+		TestReporter.log("Total Items to be updated in cart: " + cartItems.size());
+		//Iterate even number rows	
+		for(int rows=1; rows<=getRows-1; rows++){
+			if(rows % 2 == 0){
+		       evenNum = rows;
+		       String getItemNumber = driver.findElement(By.xpath("//table[@id='tblCartInfo']/tbody/"
+		    		  + "tr["+rows+"]/td[1]")).getText();
+		       TestReporter.log("Updating the quantity value for the Item Number - [" + getItemNumber + "].");
+		       driver.findElement(By.xpath("//table[@id='tblCartInfo']/tbody/tr["+rows+"]/td[5]/input")).clear();
+		       driver.findElement(By.xpath("//table[@id='tblCartInfo']/tbody/tr["+rows+"]/td[5]/input")).sendKeys(Quantity);
+		       btnSaveCart.syncEnabled(20);
+		       btnSaveCart.click();
+		       //Handle Alert if present
+			   if(AlertHandler.isAlertPresent(driver, 6)){
+				   AlertHandler.handleAlert(driver, 6);
+			   }
+		       verify_UpdatedQuantity();
+		       Sleeper.sleep(3000);
+			}
+		   driver.setElementTimeout(Constants.ELEMENT_TIMEOUT);
+		}
+		
+		
+	}
 }
