@@ -27,6 +27,7 @@ import com.orasi.utils.TestReporter;
  */
 public class LocalItemsTab {
 	PageLoaded pl = new PageLoaded();
+	PageLoaded pageLoad = new PageLoaded();
 	private OrasiDriver driver = null;
 	private ResourceBundle userCredentialRepo = ResourceBundle.getBundle(Constants.USER_CREDENTIALS_PATH);
 
@@ -126,8 +127,9 @@ public class LocalItemsTab {
 	
 	public void clickCartItemsLink(){
 		pageLoaded();
-		driver.setPageTimeout(5);
-		//lnkCartItem.syncEnabled(30);
+		//driver.setPageTimeout(5);
+		pageLoad.isDomComplete(driver);
+		lnkCartItem.syncEnabled(30);
 		//lnkCartItem.jsClick();
 		driver.executeJavaScript("arguments[0].click();", lnkCartItem);
 	}
