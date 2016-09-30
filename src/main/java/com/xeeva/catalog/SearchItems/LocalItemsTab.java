@@ -106,8 +106,8 @@ public class LocalItemsTab {
 		}
 		
 		//Handle Alert if present
-		if(AlertHandler.isAlertPresent(driver, 6)){
-			AlertHandler.handleAlert(driver, 6);
+		if(AlertHandler.isAlertPresent(driver, 2)){
+			AlertHandler.handleAlert(driver, 2);
 		}
 		
 		//Added wait statement to wait until the Cart item added successfull message to be displayed.

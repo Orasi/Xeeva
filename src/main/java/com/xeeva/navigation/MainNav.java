@@ -318,4 +318,22 @@ public class MainNav {
 		
 	}
 	
+	/**
+	 * @summary Verify Cart Items 
+	 * @author Praveen Namburi
+	 * @date 30-09-2016
+	 **/
+	public boolean verifyCartItemsCount(String ItemType){
+		boolean statsuFlag = false;
+		pl.isDomComplete(driver);
+		TestReporter.logStep("Cart Having [" + lblCartValue.getText()+"] Items!!");
+		if(Integer.parseInt(lblCartValue.getText())>0){
+			statsuFlag = true;
+		}else{
+			statsuFlag = false;
+		}
+		return statsuFlag;
+	}
+	
+	
 }

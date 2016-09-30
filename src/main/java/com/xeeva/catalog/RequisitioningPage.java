@@ -263,7 +263,7 @@ public class RequisitioningPage {
 		catalogSearch.sendKeys(searchItem);
 		searchButton.syncVisible(20,false);
 		searchButton.click();
-		driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
+		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 
 	}
 

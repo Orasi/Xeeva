@@ -3,6 +3,7 @@ package com.xeeva.catalog;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -35,6 +36,7 @@ public class ConfirmRequestPage {
 	@FindBy(xpath =".//*[@for='chkBudgeted']") private Checkbox chkBudgeted;	
 	@FindBy(xpath =".//*[@class='Datagridborder1 TDtextField100px']/tbody/tr/td[8]") private List<WebElement> lstTotalUSD;
 	@FindBy(css =".textAlignRight.borderRight>strong") private List<WebElement> lstTotalValues;
+	@FindBy(xpath="//input[@name='Button4'][@value='Back']") private Button btnBack;
 	
 	/**Constructor**/
 	public ConfirmRequestPage(OrasiDriver driver){
@@ -157,5 +159,17 @@ public class ConfirmRequestPage {
 		TestReporter.assertTrue(ExpectedGrandTotal.equals(ActualGrandTotal[0]), "Grand Total available as sum of sub total and grand total tax");
 		TestReporter.logStep("Grand Total : "+ExpectedGrandTotal);
 		
+	}
+	
+	/**
+	 * @Summary: Method to click on Back button.
+	 * @author: Praveen Namburi, @Version: Created 30-09-2016
+	 */
+	public void clickbtnBack_ConfirmRequestPage(){
+		pageLoaded();
+		pl.isDomComplete(driver);
+		btnBack.syncEnabled(30);
+		driver.executeJavaScript("arguments[0].click();", btnBack);
+		driver.manage().timeouts().implicitlyWait(Constants.PAGE_TIMEOUT, TimeUnit.SECONDS);
 	}
 }
