@@ -3,6 +3,7 @@ package com.xeeva.catalog;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -35,6 +36,7 @@ public class ConfirmRequestPage {
 	@FindBy(xpath =".//*[@for='chkBudgeted']") private Checkbox chkBudgeted;	
 	@FindBy(xpath =".//*[@class='Datagridborder1 TDtextField100px']/tbody/tr/td[8]") private List<WebElement> lstTotalUSD;
 	@FindBy(css =".textAlignRight.borderRight>strong") private List<WebElement> lstTotalValues;
+	@FindBy(xpath="//input[@name='Button4'][@value='Back']") private Button btnBack;
 	
 	/**Constructor**/
 	public ConfirmRequestPage(OrasiDriver driver){
@@ -96,4 +98,78 @@ public class ConfirmRequestPage {
 		ccPage.AddInternalComment(inputString);
 	}
 
+	/**
+	 * @summary Method to calculate Sub total
+	 * @author  Lalitha Banda
+	 * @date    28/09/16
+	 */
+	public String verifySubTotal(){
+		double Total = 0 ;
+		// Adding Total from Each Line Item 
+		for(WebElement inputAmount : lstTotalUSD){
+			String[] amountArray = inputAmount.getText().split(" ");
+			Total = Total+Double.parseDouble(amountArray[0]);
+			
+		}
+		// Set precision for Sub Total Value 
+		String ExpectedSubTotal = new BigDecimal(String.valueOf(Total)).setScale(5, BigDecimal.ROUND_HALF_UP).toString();
+		// Reading Sub Total 
+		String[] ActualSubTotal = lstTotalValues.get(0).getText().split(" ");
+		
+		// Verify Sub Total 
+		TestReporter.assertTrue(ExpectedSubTotal.equals(ActualSubTotal[0]), "Subtotal is available as addition of all item total cost in requester currency");
+		TestReporter.logStep("Sub Total : "+ExpectedSubTotal);
+		return ExpectedSubTotal;
+	}
+	
+	/**
+	 * @summary Method to calculate Grand total tax
+	 * @author  Lalitha Banda
+	 * @date    29/09/16
+	 */
+	public String verifyGrandTotalTax(){
+		// Reading Grand total tax 
+		String[] ActualGrandTotalTax = lstTotalValues.get(1).getText().split(" ");
+		
+		// Verify Grand Total Tax  - For Catalog Grand Total Tax will not impact , should be 0 
+		TestReporter.assertTrue(ActualGrandTotalTax[0].equals("0.00000"), "Grand Total Value Verified!!");
+		TestReporter.logStep("Grand Total Tax : "+ActualGrandTotalTax[0]);
+		
+		return ActualGrandTotalTax[0];
+		
+	}
+	
+	/**
+	 * @summary Method to calculate Grand total 
+	 * @author  Lalitha Banda
+	 * @date    29/09/16
+	 */
+	public void verifyGrandTotal(){
+		String subTotal = verifySubTotal();
+		String grandTotalTax =  verifyGrandTotalTax();
+		
+		/**Calculate Grand total by adding Sub total and Grand total tax */
+		double grandTotal = Double.parseDouble(subTotal)+Double.parseDouble(grandTotalTax);
+		String ExpectedGrandTotal = new BigDecimal(String.valueOf(grandTotal)).setScale(5, BigDecimal.ROUND_HALF_UP).toString();
+		
+		// Reading Grand Total
+		String[] ActualGrandTotal = lstTotalValues.get(2).getText().split(" ");
+		
+		// Verifying  Grand Total 
+		TestReporter.assertTrue(ExpectedGrandTotal.equals(ActualGrandTotal[0]), "Grand Total available as sum of sub total and grand total tax");
+		TestReporter.logStep("Grand Total : "+ExpectedGrandTotal);
+		
+	}
+	
+	/**
+	 * @Summary: Method to click on Back button.
+	 * @author: Praveen Namburi, @Version: Created 30-09-2016
+	 */
+	public void clickbtnBack_ConfirmRequestPage(){
+		pageLoaded();
+		pl.isDomComplete(driver);
+		btnBack.syncEnabled(30);
+		driver.executeJavaScript("arguments[0].click();", btnBack);
+		driver.manage().timeouts().implicitlyWait(Constants.PAGE_TIMEOUT, TimeUnit.SECONDS);
+	}
 }

@@ -1,6 +1,7 @@
 package com.xeeva.catalog;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -527,6 +528,12 @@ public class CostCenterPage {
 		String updatedQty =lstQty.get((lstQty.size()-1)).getAttribute("value");
 		TestReporter.logStep("Updated Quantity : "+updatedQty);
 		TestReporter.assertTrue(!updatedQty.equalsIgnoreCase(QtyValue), "Quantity Updated Successfully!!");
+	}
+	
+	public String getCostCenterPageTitle(){
+		driver.manage().timeouts().implicitlyWait(Constants.PAGE_TIMEOUT, TimeUnit.SECONDS);
+		String actualPageTitle = driver.getTitle();
+		return actualPageTitle;
 	}
 
 }

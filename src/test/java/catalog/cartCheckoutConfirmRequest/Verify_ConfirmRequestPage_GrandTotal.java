@@ -1,4 +1,4 @@
-package catalog.cartCheckoutProcess;
+package catalog.cartCheckoutConfirmRequest;
 
 import org.testng.ITestContext;
 import org.testng.annotations.AfterTest;
@@ -7,27 +7,25 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
-
 import com.orasi.utils.TestEnvironment;
 import com.orasi.utils.TestReporter;
 import com.orasi.utils.dataProviders.ExcelDataProvider;
+import com.xeeva.catalog.ConfirmRequestPage;
 import com.xeeva.catalog.CostCenterPage;
 import com.xeeva.catalog.ItemDetailsPage;
 import com.xeeva.catalog.RequisitioningPage;
 import com.xeeva.catalog.SearchItems.GlobalItemsTab;
-import com.xeeva.catalog.SearchItems.LocalItemsTab;
 import com.xeeva.login.LoginPage;
 import com.xeeva.navigation.MainNav;
 
 /**
- * @summary Test To verify delete functionality in cost center page 
+ * @summary Test To verify SubTotal, GrandTotalTax and Grand Total Values in Confirm Request Page
  * @author  Lalitha Banda
- * @version	22/09/2016
+ * @version	28/09/2016
  * *
  */
 
-public class Verify_ItemDelete extends TestEnvironment{
-	public String itemType = "Delete";
+public class Verify_ConfirmRequestPage_GrandTotal extends TestEnvironment{
 
 	// **************
 	// Data Provider
@@ -53,7 +51,7 @@ public class Verify_ItemDelete extends TestEnvironment{
 		setOperatingSystem(operatingSystem);
 		setRunLocation(runLocation);
 		setTestEnvironment(environment);
-		testStart("Verify_SaveCart");
+		testStart("Verify_ConfirmRequestPage_GrandTotal");
 	}
 
 	@AfterTest
@@ -93,8 +91,13 @@ public class Verify_ItemDelete extends TestEnvironment{
 		TestReporter.logStep("Cart CheckOut");
 		mainNav.cart_CheckOut();
 
+		TestReporter.logStep("Click on Continue CheckOut");
 		CostCenterPage ccPage = new CostCenterPage(getDriver());
-		ccPage.verifyCostCenter(itemType,null,null,QtValue,null);
+		ccPage.click_ContinueCheckOut();
+
+		TestReporter.logStep("Verify Grand Total");
+		ConfirmRequestPage crPage = new ConfirmRequestPage(getDriver());
+		crPage.verifyGrandTotal();
 
 		TestReporter.logStep("Application Logout");
 		mainNav.clickLogout();
