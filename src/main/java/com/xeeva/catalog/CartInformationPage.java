@@ -3,6 +3,7 @@ package com.xeeva.catalog;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import org.apache.poi.xslf.usermodel.Placeholder;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -17,6 +18,7 @@ import com.orasi.core.interfaces.impl.internal.ElementFactory;
 import com.orasi.utils.AlertHandler;
 import com.orasi.utils.Constants;
 import com.orasi.utils.OrasiDriver;
+import com.orasi.utils.PageLoaded;
 import com.orasi.utils.Sleeper;
 import com.orasi.utils.TestReporter;
 import com.xeeva.catalog.SearchItems.LocalItemsTab;
@@ -26,7 +28,7 @@ import com.xeeva.catalog.SearchItems.LocalItemsTab;
  * @author praveen varma,@version: Created 8-9-2016
  */
 public class CartInformationPage {
-
+	PageLoaded pageLoad = new PageLoaded();
 	private OrasiDriver driver = null;
 	private ResourceBundle userCredentialRepo = ResourceBundle.getBundle(Constants.USER_CREDENTIALS_PATH);
 
@@ -38,6 +40,7 @@ public class CartInformationPage {
 	@FindBy(xpath="//input[@name='Button'][@value='Save Cart']") private Button btnSaveCart;
 	@FindBy(xpath="//table[@id='tblCartInfo']/tbody/tr") private List<WebElement> tblCartInformation;
 	@FindBy(xpath="//table[@id='tblCartInfo']/tbody/tr/td[5]/input") private List<WebElement> cartItemsList;
+	@FindBy(xpath="//div[@id='divAppInfoMsg'][@class='addMessage']") private Label lblCartAddItemMessage;
 	
 	/**Constructor**/
 	public CartInformationPage(OrasiDriver driver){
@@ -223,8 +226,8 @@ public class CartInformationPage {
 				visibilityOfElementLocated(By.xpath("//div[@id='divAppInfoMsg'][@class='addMessage']")));
 		String getUpdatedQuantityMessage = lblCartAddItemMessage.getText();
 		TestReporter.logStep("Message after updating the quantity in cartInfo page: "+ getUpdatedQuantityMessage);
-		TestReporter.assertTrue(getUpdatedQuantityMessage.contains("updated successfully"), 
-				"The Records have been updated successfully!");
+		TestReporter.assertTrue(getUpdatedQuantityMessage.contains("updated successfully") || getUpdatedQuantityMessage.contains("saved successfully"), 
+				"Quantity updated successfully!");
 
 	}
 	
@@ -293,20 +296,21 @@ public class CartInformationPage {
 		       String getItemNumber = driver.findElement(By.xpath("//table[@id='tblCartInfo']/tbody/"
 		    		  + "tr["+rows+"]/td[1]")).getText();
 		       TestReporter.log("Updating the quantity value for the Item Number - [" + getItemNumber + "].");
+		       driver.setElementTimeout(Constants.ELEMENT_TIMEOUT);
 		       driver.findElement(By.xpath("//table[@id='tblCartInfo']/tbody/tr["+rows+"]/td[5]/input")).clear();
 		       driver.findElement(By.xpath("//table[@id='tblCartInfo']/tbody/tr["+rows+"]/td[5]/input")).sendKeys(Quantity);
-		       btnSaveCart.syncEnabled(20);
+		       btnSaveCart.syncEnabled(30);
 		       btnSaveCart.click();
 		       //Handle Alert if present
-			   if(AlertHandler.isAlertPresent(driver, 6)){
-				   AlertHandler.handleAlert(driver, 6);
+			   if(AlertHandler.isAlertPresent(driver, 2)){
+				   AlertHandler.handleAlert(driver, 2);
 			   }
 		       verify_UpdatedQuantity();
-		       Sleeper.sleep(3000);
 			}
-		   driver.setElementTimeout(Constants.ELEMENT_TIMEOUT);
+			driver.setPageTimeout(3);
 		}
-		
-		
 	}
+	
+	
+	
 }

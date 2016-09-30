@@ -35,7 +35,7 @@ public class MainNav {
 	@FindBy(id = "txtUnitPrice")	private Textbox txtUnitPrice;
 	@FindBy(id = "btnSubmit")	private Button btnSubmit;
 	@FindBy(xpath = ".//*[@id='txtItem']")	private Textbox itemDescription;
-	@FindBy(xpath = ".//*[@id='spanCartValue']")	private Element lblCartValue;
+	@FindBy(xpath = "//span[@id='spanCartValue']")	private Element lblCartValue;
 
 
 	// Update Cart Items - for non price agreement cart Items verifications
@@ -253,7 +253,8 @@ public class MainNav {
 	// Method to Get Cart Items Count 
 	public int getCartItemsCount(){
 		pl.isDomComplete(driver);
-		driver.setElementTimeout(Constants.ELEMENT_TIMEOUT);
+		driver.setPageTimeout(5);
+		lblCartValue.syncEnabled(30);
 		return Integer.parseInt(lblCartValue.getText());
 	}
 
@@ -316,4 +317,5 @@ public class MainNav {
 		CheckOut();
 		
 	}
+	
 }
