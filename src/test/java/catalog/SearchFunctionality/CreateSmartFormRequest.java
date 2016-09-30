@@ -1,4 +1,4 @@
-package catalog;
+package catalog.SearchFunctionality;
 
 import org.testng.ITestContext;
 import org.testng.annotations.AfterTest;

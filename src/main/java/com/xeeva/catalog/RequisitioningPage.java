@@ -6,11 +6,8 @@ import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.orasi.core.interfaces.Button;
 import com.orasi.core.interfaces.Label;
@@ -172,8 +169,6 @@ public class RequisitioningPage {
 	private void click_Submit(){
 		pageLoaded();
 		btnSubmit.click();
-		driver.setPageTimeout(3,TimeUnit.SECONDS);
-
 	}
 
 	/**
@@ -243,8 +238,10 @@ public class RequisitioningPage {
 	 * @date 14/9/16
 	 **/
 	public void Verify_SmartFormItem(){
-		lblCartItemAddedMessage.syncVisible(5, false);
+		Sleeper.sleep(2000);
+		lblCartItemAddedMessage.syncVisible(15, false);
 		String getCartItemAddedMessage = lblCartItemAddedMessage.getText();
+		TestReporter.logStep(getCartItemAddedMessage);
 		TestReporter.assertTrue(getCartItemAddedMessage.equalsIgnoreCase("The item has been added successfully!"), "Item added to the cart.");
 	}
 
@@ -294,17 +291,21 @@ public class RequisitioningPage {
 
 		case "global": 
 			perform_CatalogSearch(ItemNumber);
-			globalItemsTab.syncVisible(5, false);
-			globalItemsTab.click();
-			System.out.println( "Global : " + ItemNumber+":"+get_SearchResultItem(searchItem_global));
+			Sleeper.sleep(2000);
+			//globalItemsTab.syncVisible(5, false);
+			//globalItemsTab.click();
+			driver.executeJavaScript("arguments[0].click();", globalItemsTab);
+			pl.isDomComplete(driver);
 			TestReporter.assertTrue(get_SearchResultItem(searchItem_global).trim().equalsIgnoreCase(ItemNumber), "Global Search Item verified !!");
 			break;
 
 		case "bpo":
 			perform_CatalogSearch(ItemNumber);
-			bpoItemsTab.syncVisible(5, false);
-			bpoItemsTab.click();
-			System.out.println( "BPO : " +ItemNumber+":"+get_SearchResultItem(searchItem_bpo));
+			Sleeper.sleep(2000);
+			//bpoItemsTab.syncVisible(5, false);
+			//bpoItemsTab.click();
+			driver.executeJavaScript("arguments[0].click();", bpoItemsTab);
+			pl.isDomComplete(driver);
 			TestReporter.assertTrue(get_SearchResultItem(searchItem_bpo).trim().equalsIgnoreCase(ItemNumber), "BPO Search Item verified !!");
 			break;
 

@@ -1,4 +1,4 @@
-package catalog;
+package catalog.SearchFunctionality;
 
 import org.testng.ITestContext;
 import org.testng.annotations.AfterTest;
@@ -58,11 +58,11 @@ public class VerifyCatalogSearch extends TestEnvironment {
 
 	@AfterTest
 	public void close(ITestContext testResults){
-		endTest("TestAlert", testResults);
+		//endTest("TestAlert", testResults);
 	}
 
 	@Test(dataProvider = "dataScenario")
-	public void smartForm(String role, String location,String searchItem,String local,String global,String bpo){
+	public void verifySearch(String role, String location,String searchItem,String local,String global,String bpo){
 
 		// Application Login 
 		TestReporter.logStep("Login into application");

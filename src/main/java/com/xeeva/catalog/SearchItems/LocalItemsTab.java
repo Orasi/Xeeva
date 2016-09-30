@@ -26,6 +26,7 @@ import com.orasi.utils.TestReporter;
  * @date    06/09/16
  */
 public class LocalItemsTab {
+	PageLoaded pl = new PageLoaded();
 	PageLoaded pageLoad = new PageLoaded();
 	private OrasiDriver driver = null;
 	private ResourceBundle userCredentialRepo = ResourceBundle.getBundle(Constants.USER_CREDENTIALS_PATH);
@@ -34,6 +35,7 @@ public class LocalItemsTab {
 	@FindBy(id = "aTab1")	private Link localItemsTab;
 	@FindBy(xpath = ".//*[@id='aTab1']/span[2]") private Label localCount;
 	@FindBy(xpath = ".//*[@id='gvLocalSearch']/tbody/tr/td/span") private  List<WebElement> localItemsGrid;
+	@FindBy(xpath = ".//*[@title='Inventory']") private  List<WebElement> inventoryItemsGrid;
 	@FindBy(xpath="//div[@id='countrydivcontainer']") private Label lblItemDescriptionTable;
 
 	//Add-to-cart-Item button
@@ -63,6 +65,7 @@ public class LocalItemsTab {
 	 **/
 	public void click_localItemsTab(){
 		localItemsTab.click();
+		pl.isDomComplete(driver);
 	}
 
 	/**
