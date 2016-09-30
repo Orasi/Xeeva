@@ -72,12 +72,14 @@ public class GlobalItemsTab {
 		String ItemNumber = null;
 
 		click_GlobalItemsTab();
-		List<WebElement> localItems= globalItemsGrid;
-		if(localItems.size()>0){
-			for(WebElement inputItem :localItems){
+		List<WebElement> globalItems= globalItemsGrid;
+		if(globalItems.size()>0){
+			for(WebElement inputItem :globalItems){
 				ItemNumber = inputItem.getText();
 				break;
 			}
+		}else{
+			TestReporter.assertFalse(!(globalItems.size()>0), "Global Items Count Empty!!");
 		}
 		return ItemNumber;
 	}

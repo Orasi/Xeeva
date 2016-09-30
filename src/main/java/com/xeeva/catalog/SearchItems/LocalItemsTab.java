@@ -2,6 +2,7 @@ package com.xeeva.catalog.SearchItems;
 
 import java.util.List;
 import java.util.ResourceBundle;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -15,6 +16,7 @@ import com.orasi.core.interfaces.impl.internal.ElementFactory;
 import com.orasi.utils.AlertHandler;
 import com.orasi.utils.Constants;
 import com.orasi.utils.OrasiDriver;
+import com.orasi.utils.PageLoaded;
 import com.orasi.utils.Sleeper;
 import com.orasi.utils.TestReporter;
 
@@ -24,6 +26,7 @@ import com.orasi.utils.TestReporter;
  * @date    06/09/16
  */
 public class LocalItemsTab {
+	PageLoaded pl = new PageLoaded();
 	private OrasiDriver driver = null;
 	private ResourceBundle userCredentialRepo = ResourceBundle.getBundle(Constants.USER_CREDENTIALS_PATH);
 
@@ -31,6 +34,7 @@ public class LocalItemsTab {
 	@FindBy(id = "aTab1")	private Link localItemsTab;
 	@FindBy(xpath = ".//*[@id='aTab1']/span[2]") private Label localCount;
 	@FindBy(xpath = ".//*[@id='gvLocalSearch']/tbody/tr/td/span") private  List<WebElement> localItemsGrid;
+	@FindBy(xpath = ".//*[@title='Inventory']") private  List<WebElement> inventoryItemsGrid;
 	@FindBy(xpath="//div[@id='countrydivcontainer']") private Label lblItemDescriptionTable;
 
 	//Add-to-cart-Item button
@@ -60,6 +64,7 @@ public class LocalItemsTab {
 	 **/
 	public void click_localItemsTab(){
 		localItemsTab.click();
+		pl.isDomComplete(driver);
 	}
 
 	/**

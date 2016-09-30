@@ -152,7 +152,7 @@ public class MainNav {
 
 		// Providing Update Values to Smart Form
 		TestReporter.logStep(itemDescription.getAttribute("value"));
-		txtQuantity.safeSet(Qty);
+		txtQuantity.sendKeys(Qty);
 		unitOfMeasure.select(UOM);
 		txtUnitPrice.safeSet(UP);
 		btnSubmit.click();
