@@ -63,5 +63,6 @@ public class SampleTest extends TestEnvironment{
     	
     	MainNav mainNav = new MainNav(getDriver());
     	TestReporter.assertTrue(mainNav.isLogoutDisplayed(), "Verify user is successfully logged in");
+    
     }
 }
