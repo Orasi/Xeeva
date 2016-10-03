@@ -172,4 +172,24 @@ public class ConfirmRequestPage {
 		driver.executeJavaScript("arguments[0].click();", btnBack);
 		driver.manage().timeouts().implicitlyWait(Constants.PAGE_TIMEOUT, TimeUnit.SECONDS);
 	}
+	
+	/**
+	 * @summary Method to click on checkbox- either Budget/Non-Budget and confirm the process.
+	 * @author  Praveen Namburi, @Version: Created 03-10-2016
+	 */
+	public void clickbtnConfirm(){
+		pl.isDomComplete(driver);
+		if(chkBudgeted.isDisplayed()){
+			click_Budgeted();
+		}else if (chkNonBudgeted.isDisplayed()) {
+			click_NonBudgeted();
+		}else {
+			btnConfirm.syncVisible(5, false);
+			driver.executeJavaScript("arguments[0].click();", btnConfirm);
+			driver.manage().timeouts().implicitlyWait(Constants.PAGE_TIMEOUT, TimeUnit.SECONDS);
+		}
+		
+	}
+	
+	
 }

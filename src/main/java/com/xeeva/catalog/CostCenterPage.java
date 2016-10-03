@@ -307,6 +307,8 @@ public class CostCenterPage {
 			break;
 
 		case "headerlevel" :
+			driver.setElementTimeout(Constants.ELEMENT_TIMEOUT);
+			lstCostCenterHeaderLevel.syncVisible(30);
 			lstCostCenterHeaderLevel.select(CC);
 			//Handle Alert if present
 			if(AlertHandler.isAlertPresent(driver, 6)){
@@ -504,6 +506,8 @@ public class CostCenterPage {
 	 * @date    28/09/16
 	 */
 	public void selectShippingAddress(){
+		pl.isDomComplete(driver);
+		lstShippingAdd.isEnabled();
 		new Select(lstShippingAdd).selectByIndex(0);
 	}
 
@@ -535,5 +539,45 @@ public class CostCenterPage {
 		String actualPageTitle = driver.getTitle();
 		return actualPageTitle;
 	}
+	
+	/**
+	 * @Summary: Method to select the CC value at header level and verify the CC is updated.
+	 * @author: Praveen Namburi, @Version: Created 03-10-2016
+	 * @param costCenter
+	 */
+	public void selectCCValueAtHeaderLevel(String costCenter){
+		driver.manage().timeouts().implicitlyWait(Constants.PAGE_TIMEOUT, TimeUnit.SECONDS);
+		lstCostCenterHeaderLevel.syncEnabled(30);
+		selectShippingAddress();
+		lstCostCenterHeaderLevel.select(costCenter.toUpperCase().trim());
+		if(AlertHandler.isAlertPresent(driver, 6)){
+			AlertHandler.handleAlert(driver, 6);
+		}
+		// Waiting for CC updated message to be visible. 
+		verify_CostCenterUpdatedAtHeaderLevel();
+		pageLoaded();
+		driver.setElementTimeout(Constants.ELEMENT_TIMEOUT);
+		// Click on Continue CheckOut.
+		TestReporter.logStep("Click on 'Continue CheckOut' button.");
+		btnContinueCheckOut.syncVisible(5, false);
+		btnContinueCheckOut.jsClick();
+	}
+	
+	/**
+	 * @summary: Method to verify the CostCenter/PAR is Updated at HeaderLevel.
+	 * @author: Praveen Namburi, @Version: Created 03-10-2016.
+	 */
+	public void verify_CostCenterUpdatedAtHeaderLevel(){
+		//Added wait statement to wait until the Cart item added successfull message to be displayed.
+		WebDriverWait wait = new WebDriverWait(driver,3);
+		WebElement lblCartAddItemMessage =wait.until(ExpectedConditions.
+				visibilityOfElementLocated(By.xpath("//div[@id='divAppInfoMsg'][@class='addMessage']")));
+		String getCCupdatedMessage = lblCartItemAddedMessage.getText();
+		TestReporter.logStep("Message after changing the Cost Center/PAR at CC_level : "+ getCCupdatedMessage);
+		TestReporter.assertTrue(getCCupdatedMessage.contains("Cost Center/PAR has been updated"), 
+				"The Cost Center/PAR has been updated.");
 
-}
+	}
+		
+ }
+
