@@ -98,7 +98,6 @@ public class CheckoutDetailPage {
 	 * @author  praveen varma
 	 * @date    29/09/16
 	 */
-	
 	public void requestConfirmation(){
 		verify_CartNumber();
 		verify_SplitOrder();
