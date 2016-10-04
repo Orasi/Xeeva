@@ -549,6 +549,7 @@ public class CostCenterPage {
 		driver.manage().timeouts().implicitlyWait(Constants.PAGE_TIMEOUT, TimeUnit.SECONDS);
 		lstCostCenterHeaderLevel.syncEnabled(30);
 		selectShippingAddress();
+		Sleeper.sleep(2000);
 		lstCostCenterHeaderLevel.select(costCenter.toUpperCase().trim());
 		if(AlertHandler.isAlertPresent(driver, 6)){
 			AlertHandler.handleAlert(driver, 6);
@@ -559,7 +560,7 @@ public class CostCenterPage {
 		driver.setElementTimeout(Constants.ELEMENT_TIMEOUT);
 		// Click on Continue CheckOut.
 		TestReporter.logStep("Click on 'Continue CheckOut' button.");
-		btnContinueCheckOut.syncVisible(5, false);
+		btnContinueCheckOut.syncEnabled(15,false);
 		btnContinueCheckOut.jsClick();
 	}
 	

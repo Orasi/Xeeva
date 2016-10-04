@@ -74,7 +74,7 @@ public class ConfirmRequestPage {
 	 */
 	public void click_NonBudgeted(){
 		pl.isDomComplete(driver);
-		chkNonBudgeted.syncVisible(5, false);
+		chkNonBudgeted.syncVisible(3, false);
 		chkNonBudgeted.click();
 	}
 
@@ -85,7 +85,7 @@ public class ConfirmRequestPage {
 	 */
 	public void click_Budgeted(){
 		pageLoaded();
-		chkBudgeted.syncVisible(5, false);
+		chkBudgeted.syncVisible(3, false);
 		chkBudgeted.jsToggle();
 	}
 
@@ -200,7 +200,7 @@ public class ConfirmRequestPage {
 		}else if (chkNonBudgeted.isDisplayed()) {
 			click_NonBudgeted();
 		}else {
-			btnConfirm.syncVisible(5, false);
+			btnConfirm.syncVisible(2, false);
 			driver.executeJavaScript("arguments[0].click();", btnConfirm);
 			driver.manage().timeouts().implicitlyWait(Constants.PAGE_TIMEOUT, TimeUnit.SECONDS);
 		}
