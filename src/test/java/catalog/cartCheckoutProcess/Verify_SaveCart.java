@@ -23,7 +23,6 @@ import com.xeeva.navigation.MainNav;
  * @version	22/09/2016
  * *
  */
-
 public class Verify_SaveCart extends TestEnvironment{
 	public String itemType = "SaveCart";
 
@@ -92,7 +91,7 @@ public class Verify_SaveCart extends TestEnvironment{
 		mainNav.cart_CheckOut();
 		
 		CostCenterPage ccPage = new CostCenterPage(getDriver());
-		ccPage.verifyCostCenter(itemType,null,null,QtValue);
+		ccPage.verifyCostCenter(itemType,null,null,QtValue,null);
 
 		TestReporter.logStep("Application Logout");
 		mainNav.clickLogout();

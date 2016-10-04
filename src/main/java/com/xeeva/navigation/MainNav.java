@@ -14,6 +14,7 @@ import com.orasi.core.interfaces.Listbox;
 import com.orasi.core.interfaces.Textbox;
 import com.orasi.core.interfaces.Webtable;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
+import com.orasi.utils.Constants;
 import com.orasi.utils.OrasiDriver;
 import com.orasi.utils.PageLoaded;
 import com.orasi.utils.Sleeper;
@@ -34,7 +35,7 @@ public class MainNav {
 	@FindBy(id = "txtUnitPrice")	private Textbox txtUnitPrice;
 	@FindBy(id = "btnSubmit")	private Button btnSubmit;
 	@FindBy(xpath = ".//*[@id='txtItem']")	private Textbox itemDescription;
-	@FindBy(xpath = ".//*[@id='spanCartValue']")	private Element lblCartValue;
+	@FindBy(xpath = "//span[@id='spanCartValue']")	private Element lblCartValue;
 
 
 	// Update Cart Items - for non price agreement cart Items verifications
@@ -151,7 +152,7 @@ public class MainNav {
 
 		// Providing Update Values to Smart Form
 		TestReporter.logStep(itemDescription.getAttribute("value"));
-		txtQuantity.safeSet(Qty);
+		txtQuantity.sendKeys(Qty);
 		unitOfMeasure.select(UOM);
 		txtUnitPrice.safeSet(UP);
 		btnSubmit.click();
@@ -248,6 +249,14 @@ public class MainNav {
 
 	}
 
+	
+	// Method to Get Cart Items Count 
+	public int getCartItemsCount(){
+		pl.isDomComplete(driver);
+		driver.setPageTimeout(5);
+		lblCartValue.syncEnabled(30);
+		return Integer.parseInt(lblCartValue.getText());
+	}
 
 	/**
 	 * @summary Verify Cart Items 
@@ -256,7 +265,7 @@ public class MainNav {
 	 **/
 	public boolean verifyCartValue(String ItemType){
 		boolean statsuFlag = false;
-		//Sleeper.sleep(15000);
+		pl.isDomComplete(driver);
 		TestReporter.logStep("Cart Having [" + lblCartValue.getText()+"] Items!!");
 		if(Integer.parseInt(lblCartValue.getText())>=2){
 			statsuFlag = true;
@@ -265,6 +274,7 @@ public class MainNav {
 		}
 		return statsuFlag;
 	}
+	
 
 
 	/**
@@ -289,6 +299,7 @@ public class MainNav {
 	// Method for Checkout the Cart
 	public void CheckOut(){
 		pageLoaded();
+		btnCheckOut.syncVisible(5, false);
 		btnCheckOut.click();
 		//Wait for the cart pop up to close
 		btnsaveCartPopUp.syncHidden(10);
@@ -306,4 +317,23 @@ public class MainNav {
 		CheckOut();
 		
 	}
+	
+	/**
+	 * @summary Verify Cart Items 
+	 * @author Praveen Namburi
+	 * @date 30-09-2016
+	 **/
+	public boolean verifyCartItemsCount(String ItemType){
+		boolean statsuFlag = false;
+		pl.isDomComplete(driver);
+		TestReporter.logStep("Cart Having [" + lblCartValue.getText()+"] Items!!");
+		if(Integer.parseInt(lblCartValue.getText())>0){
+			statsuFlag = true;
+		}else{
+			statsuFlag = false;
+		}
+		return statsuFlag;
+	}
+	
+	
 }

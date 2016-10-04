@@ -8,7 +8,7 @@
 	<parameter name="operatingSystem" value="windows" />
  	<test name="VerifyCatalogSearch">
 		<classes>
-			<class name="catalog.VerifyCatalogSearch" />
+			<class name="catalog.SearchFunctionality.VerifyCatalogSearch" />
 		</classes>
 	</test> 
 </suite> <!-- Suite -->

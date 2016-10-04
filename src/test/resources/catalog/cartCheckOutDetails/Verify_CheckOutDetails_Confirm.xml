@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="Catalog Test Suite" parallel="tests" thread-count="1">
+<suite name="Quick Test Example" parallel="tests" thread-count="1">
 	<parameter name="browserUnderTest" value="chrome" />
 	<parameter name="environment" value="test" />
 	<parameter name="runLocation" value="local" />
 	<parameter name="browserVersion" value="" />
 	<parameter name="operatingSystem" value="windows" />
- 	<test name="CancelRequisition_RecentOrdersList">
+ 	<test name="Verify_CheckOutDetails_Confirm">
 		<classes>
-			<class name="catalog.CancelRequisition_RecentOrdersList" />
+			<class name="catalog.CartCheckoutDetails.Verify_CheckOutDetails_Confirm" />
 		</classes>
 	</test> 
 </suite> <!-- Suite -->
