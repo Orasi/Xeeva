@@ -89,11 +89,7 @@ public class VerReq_AddSmartFormItem_PerformCheckOut extends TestEnvironment{
 			
 			// Requisition Page  - Navigating to requisition page.
 			RequisitioningPage reqPage = new RequisitioningPage(getDriver());
-			TestReporter.logStep("Navigate to Requisitioning Page.");
-			reqPage.click_ReqTab();
-			
-			// Click on Requisition Tab.
-			TestReporter.logStep("Click on Requisition link.");
+			TestReporter.logStep("Navigate to Requisitioning Page to click on Requisition link..");
 			reqPage.click_ReqTab();
 
 			// Create Smart Form Request.
