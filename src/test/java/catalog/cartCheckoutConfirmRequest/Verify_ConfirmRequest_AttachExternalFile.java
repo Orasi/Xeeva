@@ -119,10 +119,3 @@ public class Verify_ConfirmRequest_AttachExternalFile  extends TestEnvironment  
 
 }
 
-
-
-
-
-
-
-

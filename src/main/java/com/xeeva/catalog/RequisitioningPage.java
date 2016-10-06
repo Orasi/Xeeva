@@ -158,7 +158,9 @@ public class RequisitioningPage {
 	 **/
 	private void click_SmartFormRequest(){
 		pageLoaded();
-		smartFormRequest.click();
+		pl.isDomComplete(driver);
+		smartFormRequest.syncVisible(15);
+		driver.executeJavaScript("arguments[0].click();", smartFormRequest);
 	}
 
 

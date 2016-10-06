@@ -118,11 +118,3 @@ public class Verify_ConfirmRequest_AttachInternalFile  extends TestEnvironment  
 	}
 
 }
-
-
-
-
-
-
-
-

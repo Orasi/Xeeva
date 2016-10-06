@@ -79,7 +79,7 @@ public class ConfirmRequestPage {
 	 */
 	public void click_NonBudgeted(){
 		pl.isDomComplete(driver);
-		chkNonBudgeted.syncVisible(5, false);
+		chkNonBudgeted.syncVisible(3, false);
 		chkNonBudgeted.click();
 	}
 
@@ -90,7 +90,7 @@ public class ConfirmRequestPage {
 	 */
 	public void click_Budgeted(){
 		pageLoaded();
-		chkBudgeted.syncVisible(5, false);
+		chkBudgeted.syncVisible(3, false);
 		chkBudgeted.jsToggle();
 	}
 
@@ -205,7 +205,7 @@ public class ConfirmRequestPage {
 		}else if (chkNonBudgeted.isDisplayed()) {
 			click_NonBudgeted();
 		}else {
-			btnConfirm.syncVisible(5, false);
+			btnConfirm.syncVisible(2, false);
 			driver.executeJavaScript("arguments[0].click();", btnConfirm);
 			driver.manage().timeouts().implicitlyWait(Constants.PAGE_TIMEOUT, TimeUnit.SECONDS);
 		}
@@ -221,9 +221,9 @@ public class ConfirmRequestPage {
 		String fileLocation = System.getProperty("user.home") + "\\temp.txt";
 		
 		pageLoaded();
-		
 		//click the attach file link for the first item in the cart
 		driver.executeJavaScript("arguments[0].click();", lstAttachFile.get(0));
+		pl.isDomComplete(driver);
 		//click whether its an internal or external file depending on the element parameter
 		driver.executeJavaScript("arguments[0].click();", typeOfAttachment);
 		//Use the file handler class to create a text file if it doesn't already exist on the system
@@ -234,11 +234,7 @@ public class ConfirmRequestPage {
 		//Click upload
 		btnUpload.jsClick();
 
-       //Handle Alert if present
-	   if(AlertHandler.isAlertPresent(driver, 1)){
-		   TestReporter.log("Too many files were already uploaded");
-		   AlertHandler.handleAlert(driver, 1);
-	   }
+
 
 	}
 
