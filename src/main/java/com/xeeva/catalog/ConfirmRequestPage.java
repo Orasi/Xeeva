@@ -9,8 +9,11 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
+
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+
 import com.orasi.core.interfaces.Button;
 import com.orasi.core.interfaces.Checkbox;
 import com.orasi.core.interfaces.Element;
@@ -18,8 +21,10 @@ import com.orasi.core.interfaces.Link;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
 import com.orasi.utils.AlertHandler;
 import com.orasi.utils.Constants;
+import com.orasi.utils.FileHandler;
 import com.orasi.utils.OrasiDriver;
 import com.orasi.utils.PageLoaded;
+import com.orasi.utils.Sleeper;
 import com.orasi.utils.TestReporter;
 
 /**
@@ -47,9 +52,9 @@ public class ConfirmRequestPage {
 	// 
 	@FindBy(xpath = "//*[@title='Upload File(s)']") private List<WebElement> lstAttachFile;
 	@FindBy(xpath = "//*[@title='Show Attachments']") private List<WebElement> lstshowAttachment;
-	@FindBy(linkText ="Catalog_ExternalFileAttachment.xlsx") private Link lnkUploadedFile;
+	@FindBy(id ="lblAttach_0") private Link lnkUploadedFile;
 	@FindBy(id ="ajaxUploadButton") private Button btnUpload;
-	@FindBy(xpath ="//*[@id='lbl_uploadfile']/div/a") private WebElement btnBrowse;
+	@FindBy(id ="txtUploadFile") private Button btnBrowse;
 	@FindBy(id ="rbtnInternal") private WebElement btnInternal;
 	@FindBy(id ="rbtnExternal") private WebElement btnExternal;
 	@FindBy(xpath =".//*[@id='fancybox-close']") private Element eleClose;
@@ -212,39 +217,29 @@ public class ConfirmRequestPage {
 	 * @author  Lalitha Banda
 	 * @date    03/10/16
 	 */
-	public boolean attachfile(WebElement Element,String filename){
-		boolean statusFlag = false;
-
+	public void attachfile(WebElement typeOfAttachment,String filename){
+		String fileLocation = System.getProperty("user.home") + "\\temp.txt";
+		
 		pageLoaded();
+		
+		//click the attach file link for the first item in the cart
 		driver.executeJavaScript("arguments[0].click();", lstAttachFile.get(0));
-		driver.executeJavaScript("arguments[0].click();", Element);
-		btnBrowse.click();
-		try {Thread.sleep(3000);}catch (InterruptedException e){ e.printStackTrace();}
-
-		String fileLocation = System.getProperty("user.dir") + "\\src\\test\\resources\\datasheets\\" + filename+".xlsx";
-		TestReporter.logStep(fileLocation);
-
-		StringSelection filepath = new StringSelection(fileLocation);
-		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(filepath, null);
-
-		try {
-			Robot robot = new Robot();
-			robot.keyPress(KeyEvent.VK_CONTROL);
-			robot.keyPress(KeyEvent.VK_V);
-			robot.keyRelease(KeyEvent.VK_V);
-			robot.keyRelease(KeyEvent.VK_CONTROL);
-			robot.keyPress(KeyEvent.VK_ENTER);
-			robot.keyRelease(KeyEvent.VK_ENTER);
-
-		} catch (AWTException e) {e.printStackTrace();}
-
-		//Handle Alert if present
-		if(AlertHandler.isAlertPresent(driver, 6)){
-			AlertHandler.handleAlert(driver, 6);
-		}
+		//click whether its an internal or external file depending on the element parameter
+		driver.executeJavaScript("arguments[0].click();", typeOfAttachment);
+		//Use the file handler class to create a text file if it doesn't already exist on the system
+		FileHandler fh = new FileHandler();
+		fh.createNewFile(fileLocation);
+		//bypass the file system dialog box for uploading a file
+		btnBrowse.sendKeys(fileLocation);
+		//Click upload
 		btnUpload.jsClick();
-		statusFlag = true;
-		return statusFlag;
+
+       //Handle Alert if present
+	   if(AlertHandler.isAlertPresent(driver, 1)){
+		   TestReporter.log("Too many files were already uploaded");
+		   AlertHandler.handleAlert(driver, 1);
+	   }
+
 	}
 
 
@@ -255,8 +250,11 @@ public class ConfirmRequestPage {
 	 * @date    03/10/16
 	 */
 	public void  perform_FileAttachmentProcess(String filetype,String filename){
-		if(filetype.contains("External")?attachfile(btnExternal,filename):false);
-		if(filetype.contains("Internal")?attachfile(btnInternal,filename):false);
+		if(filetype.contains("External")){
+			attachfile(btnExternal,filename);
+		}else {
+			attachfile(btnInternal,filename);
+		}
 	}
 
 	/**
@@ -269,17 +267,16 @@ public class ConfirmRequestPage {
 		pageLoaded();
 		pl.isDomComplete(driver);
 		driver.executeJavaScript("arguments[0].click();", lstshowAttachment.get(0));
+		Sleeper.sleep(1000);
+		
 		// Verify Attachment 
-		if(lnkUploadedFile.getText().contains(fileName)){
-			TestReporter.assertTrue(true, "File Attached Sucessfully!!");
-		}
+		TestReporter.assertTrue(lnkUploadedFile.getText().contains(fileName), "Verify that the file was attached successfully");
+
 		// Closing PopUp
-		if(AlertHandler.isAlertPresent(driver, 5)){
-			AlertHandler.handleAlert(driver, 5);
-		}else{
-			eleClose.syncVisible(5, false);
-			driver.executeJavaScript("arguments[0].click();", eleClose);	
-		}
+		eleClose.syncVisible(5, false);
+		driver.executeJavaScript("arguments[0].click();", eleClose);
+		pl.isDomComplete(driver);
+
 
 	}
 

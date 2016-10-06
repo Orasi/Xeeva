@@ -32,7 +32,7 @@ public class Verify_ConfirmRequest_AttachExternalFile  extends TestEnvironment  
 	// **************
 
 	String fileType = "External";
-	String fileName = "Catalog_ExternalFileAttachment";
+	String fileName = "temp";
 
 
 	@DataProvider(name = "dataScenario")

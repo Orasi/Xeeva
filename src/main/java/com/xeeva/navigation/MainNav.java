@@ -65,12 +65,7 @@ public class MainNav {
 	}
 
 	public boolean isLogoutDisplayed() {
-		try {
-			Thread.sleep(3000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		Sleeper.sleep(1000);
 		return lnkLogout.syncVisible(20, false);
 	}
 
