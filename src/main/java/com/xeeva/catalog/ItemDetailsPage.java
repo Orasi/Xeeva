@@ -131,7 +131,7 @@ public class ItemDetailsPage {
 
 	public void  modify_ItemDetails(String UP,String Qty,String UOM){
 		txtunitPrice.clear();
-		txtunitPrice.isDisplayed();
+		txtunitPrice.syncVisible(10);
 		txtunitPrice.safeSet(UP);
 		txtQuantity.clear();
 		txtQuantity.safeSet(Qty);
@@ -147,9 +147,8 @@ public class ItemDetailsPage {
 
 	public void modifyItemDetails(String UnitPrice, String Quantity, String strUOMValue){
 		modify_ItemDetails(UnitPrice,Quantity,strUOMValue);
-		btnAddToCart.isDisplayed();
+		btnAddToCart.syncVisible(5);
 		btnAddToCart.click();
-		driver.setElementTimeout(Constants.ELEMENT_TIMEOUT);
 		lblCartItemAddedMessage.syncVisible(15, false);
 		String getCartItemAddedMessage = lblCartItemAddedMessage.getText();
 		TestReporter.assertTrue(getCartItemAddedMessage.equalsIgnoreCase("The item has been added successfully!"), "Item added to the cart.");

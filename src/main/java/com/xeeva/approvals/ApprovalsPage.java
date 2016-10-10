@@ -75,7 +75,6 @@ public class ApprovalsPage {
 	public void click_ApprovalsTab(){
 		approvalsTab.syncVisible(30, false);
 		driver.executeJavaScript("arguments[0].click();", approvalsTab);
-		driver.manage().timeouts().implicitlyWait(Constants.PAGE_TIMEOUT, TimeUnit.SECONDS);
 	}
 
 	/**

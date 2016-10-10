@@ -125,7 +125,6 @@ public class CostCenterPage {
 	 */
 	public void AddInternalComment(String InternalComment){
 		lblCC.syncVisible(30, false);
-		lblCC.isDisplayed();
 		click_InternalComment();
 		txtInternalComment.safeSet(InternalComment);
 		btnSaveComments.click();
@@ -507,7 +506,6 @@ public class CostCenterPage {
 	 */
 	public void selectShippingAddress(){
 		pl.isDomComplete(driver);
-		lstShippingAdd.isEnabled();
 		new Select(lstShippingAdd).selectByIndex(0);
 	}
 

@@ -65,12 +65,7 @@ public class MainNav {
 	}
 
 	public boolean isLogoutDisplayed() {
-		try {
-			Thread.sleep(3000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		Sleeper.sleep(3000);
 		return lnkLogout.syncVisible(20, false);
 	}
 
@@ -94,6 +89,9 @@ public class MainNav {
 		if (btnSaveCart.syncVisible(1, false)){
 			btnSaveCart.click();
 		} else {
+			/** if cart having Zero Items, Pop will not get Displayed , 
+			 * in such Case Logger logs Msg as below
+			 */
 			TestReporter.logStep("Cart Empty to Save");
 		}
 	}
@@ -247,7 +245,7 @@ public class MainNav {
 
 	}
 
-	
+
 	// Method to Get Cart Items Count 
 	public int getCartItemsCount(){
 		pl.isDomComplete(driver);
@@ -271,7 +269,7 @@ public class MainNav {
 		}
 		return statsuFlag;
 	}
-	
+
 
 
 	/**
@@ -312,9 +310,9 @@ public class MainNav {
 		clickCartItemsLink();
 		saveCartPopUp();
 		CheckOut();
-		
+
 	}
-	
+
 	/**
 	 * @summary Verify Cart Items 
 	 * @author Praveen Namburi
@@ -331,6 +329,6 @@ public class MainNav {
 		}
 		return statsuFlag;
 	}
-	
-	
+
+
 }

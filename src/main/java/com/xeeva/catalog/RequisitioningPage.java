@@ -484,7 +484,6 @@ public class RequisitioningPage {
 	 * @return getItemNumber
 	 */
 	public String  getItemNumberFromCatalog(){
-		driver.setPageTimeout(2);
 		String getItemNumber = null;
 		String getLocalItemsCount = lblLocalItems.getText();
 		TestReporter.log("Local-Items Count is: "+ getLocalItemsCount);
@@ -722,7 +721,6 @@ public class RequisitioningPage {
 					(By.xpath("//*[@id='gvRecentOdersGrid']/tbody/tr["+row+"]/td[3]/span")).getText();
 			TestReporter.logStep("REQNumber is : "+getRFQStatus);
 			if(!getRFQStatus.contains("-")){
-				driver.setPageTimeout(2);
 				driver.findElement(By.xpath(".//*[@id='gvRecentOdersGrid']/tbody/tr["+row+"]/td[1]/a")).click();
 				break;
 			}

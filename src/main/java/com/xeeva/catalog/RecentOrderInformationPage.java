@@ -95,7 +95,6 @@ public class RecentOrderInformationPage {
 		pageLoaded();
 		lnkItemNumber.syncVisible(10, false);
 		lnkItemNumber.click();
-		driver.setPageTimeout(3);
 	}
 
 	/**

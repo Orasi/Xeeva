@@ -73,10 +73,10 @@ public class ProductComparisonTab {
 		pageLoaded();
 		select_UOM(UOM);
 		driver.executeJavaScript("arguments[0].click();", lstAddToCart.get(0));
-		driver.setPageTimeout(3);
-		lblCartItemAddedMessage.isDisplayed();
+		if(lblCartItemAddedMessage.isDisplayed()){
 		TestReporter.logStep( "Confirmation Message : " +lblCartItemAddedMessage.getText());
 		TestReporter.assertTrue(lblCartItemAddedMessage.getText().contains("added successfully!"), "Item Added to Cart !!");
+		}
 	}
 
 }
