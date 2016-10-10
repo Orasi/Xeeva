@@ -8,11 +8,13 @@ import java.awt.event.KeyEvent;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
 import com.orasi.core.interfaces.Button;
 import com.orasi.core.interfaces.Checkbox;
 import com.orasi.core.interfaces.Element;
@@ -20,6 +22,8 @@ import com.orasi.core.interfaces.Label;
 import com.orasi.core.interfaces.Link;
 import com.orasi.core.interfaces.Listbox;
 import com.orasi.core.interfaces.Textbox;
+import com.orasi.core.interfaces.Webtable;
+import com.orasi.core.interfaces.impl.WebtableImpl;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
 import com.orasi.utils.Constants;
 import com.orasi.utils.OrasiDriver;
@@ -80,6 +84,30 @@ public class QuotePage {
 	@FindBy(xpath = "//*[@id='ddlDestinationType']/option[2]")	private Listbox lstDestinationInternal;
 	@FindBy(id="ddlDestinationType") private Listbox lstDestination;	
 	@FindBy(css = ".fa.fa-reply.font16px.cursor-pointer") private Link lnkRevertOwnership;
+
+	@FindBy(id="btnRFQSearch") private Button btnSearch;
+	@FindBy(id="lnkRFQ") private Link lnkQuote;
+	@FindBy(xpath="//table[@id='tblRFQ']/tbody/tr") private List<WebElement> tblRFQ;
+	
+	//RFQ Information
+	@FindBy(id="ddlUOM") private Listbox lstUOM;
+	@FindBy(xpath="//table/tbody/tr[2]/td/table/tbody/tr[3]/td[4]/i") private Link lnkRequiredByCalender;
+	@FindBy(xpath="//table/tbody/tr[2]/td/table/tbody/tr[3]/td[6]/i") private Link lnkQuoteDueCalender;
+	@FindBy(id="btnApply") private Button btnApply;
+	@FindBy(id="tblRFQLines") private Webtable tblRFQLines;
+	@FindBy(id="chkAll") private Checkbox chkALLRFQLines;
+	@FindBy(xpath="//div[@id='divAppInfoMsg'][@class='addMessage']") private Label lblInfoMsg;
+	@FindBy(xpath="//table[@id='tblRFQ']/tbody/tr") private Webtable tblRFQLine;
+	@FindBy(xpath="//*[@title='Edit RFQ Detail']") private List<WebElement> lstEditRFQs;
+	
+	// Select supplier
+	@FindBy(id="txtSearchSupplier") private Textbox txtSelectSupplier;
+	@FindBy(xpath="//table[@id='tblLeftManuRFQLine']/tbody/tr[1]/td[1]/input") private Checkbox chkSelectAll;
+	@FindBy(xpath="//div[@id='DivSupplierFilters']/table/tbody/tr") private List<WebElement> tblSupplierDetails;
+	@FindBy(id="btnAddSupplier") private Button btnAddSupplier;
+	@FindBy(id="btnSubmit") private Button btnSubmit;
+	@FindBy(id="btnSend") private Button btnSend;
+	@FindBy(id="btnContinue") private Button btnContinue;
 
 
 	//**Constructor**//*
@@ -202,7 +230,7 @@ public class QuotePage {
 	/**
 	 * @summary: Method to verify the message after taking the ownership in .
 	 * @author: Praveen Namburi, @version: Created 10-04-2016.
-	 */
+	 *//*
 	public void verify_LineItemsSaved(){
 		WebDriverWait wait = new WebDriverWait(driver,3);
 		WebElement lblLineItemsSaved =wait.until(ExpectedConditions.
@@ -211,13 +239,13 @@ public class QuotePage {
 		TestReporter.assertTrue(getLineItemsSaved.contains("The Line Items "), 
 				"The Line Items have been saved successfully!");
 
-	}
+	}*/
 
 
 	/**
 	 * @summary: Method to verify the message after RFQ Info Submitted
 	 * @author: Praveen Namburi, @version: Created 10-04-2016.
-	 */
+	 *//*
 	public void verify_RFQSubmitted(){
 		pl.isDomComplete(driver);
 		WebDriverWait wait = new WebDriverWait(driver,3);
@@ -228,7 +256,7 @@ public class QuotePage {
 				"The RFQ has been submitted for pre-approval successfully!");
 
 	}
-
+*/
 
 	/**
 	 * @summary Method to perform Submit RFQ
@@ -350,4 +378,204 @@ public class QuotePage {
 		return returnValue;
 	}
 
+	/**
+	 * @summary: Method to search RFQ with Draft status and click on Edit link.
+	 * @author: Praveen Namburi, @Version: Created 07-10-2016
+	 * @param RFQNumber
+	 */
+	public void filterAndEditRFQ_withDraftStatus(String RFQNumber){
+		pageLoaded();
+		txtRFQNumber.syncVisible(5);
+		txtRFQNumber.set(RFQNumber);
+		btnSearch.syncEnabled(5,false);
+		driver.executeJavaScript("arguments[0].click();",btnSearch);
+		driver.setPageTimeout(3);
+		pl.isDomComplete(driver);
+		List<WebElement> requisitionTblRows = tblRFQ;
+		int totalRows = requisitionTblRows.size();
+		TestReporter.log("Total rows in Requisition table: " + totalRows);
+		for(int row=1; row<=totalRows-1; row++){
+			if(row % 2 == 0){
+			   String getRFQNumber = driver.findElement(By.xpath("//table[@id='tblRFQ']/tbody/"
+						+ "tr["+row+"]/td[4]/span")).getText().trim();
+			   String getStatus = driver.findElement(By.xpath("//table[@id='tblRFQ']/tbody/"
+						+ "tr["+row+"]/td[9]")).getText().trim();
+			   if(getRFQNumber.equalsIgnoreCase(RFQNumber) && getStatus.contains("Draft")){
+				  driver.findElement(By.xpath("//table[@id='tblRFQ']/tbody/"
+						+ "tr["+row+"]/td[2]/div/a[3]/i")).jsClick();
+				  break;
+			   }
+			}
+		}
+		driver.setElementTimeout(Constants.ELEMENT_TIMEOUT);
+	}
+
+	/**
+	 * @summary: Method to set RFQ-Info and chk all RFQ Line items to continue. 
+	 * @author: Praveen Namburi, @Version: Created 07-10-2016
+	 * @param UOM, @param quantity
+	 */
+	public void setRFQInfoAndContinue(String UOM,String quantity){
+		pl.isDomComplete(driver);
+		lstUOM.syncVisible(5, false);
+		lstUOM.select(UOM);
+		txtQuantity.syncVisible(5);
+		txtQuantity.set(quantity);
+		selectReqBy_And_QuoteDueDates(lnkRequiredByCalender);
+		chkALLRFQLines.syncEnabled(5, false);
+		driver.executeJavaScript("arguments[0].click();",chkALLRFQLines);
+		btnApply.syncEnabled(5, false);
+		btnApply.jsClick();
+		tblRFQLines.isDisplayed();
+		btnSave.isEnabled();
+		btnSave.jsClick();
+		verify_LineItemsSaved();
+		
+		
+	}
+	
+	/**
+	 * @Summary: Method to select the Quote Reqby/Due Date from calender.
+	 * @author: Praveen Namburi. @Version: Created 07-10-2016
+	 */
+	public void selectReqBy_And_QuoteDueDates(WebElement element){
+		lnkQuoteDueCalender.syncVisible(10);
+		driver.executeJavaScript("arguments[0].click();", element);
+		List<WebElement> nextMonthArrows = driver.findElements(By.xpath("html/body/div[@class='calendar']/"
+				+ "table/thead/tr[2]/td[4]"));
+		int loopCount=0;
+		for(WebElement nextMonth : nextMonthArrows){
+			Sleeper.sleep(1000);
+			nextMonth.click();
+			List<WebElement> selectDates = driver.findElements(By.xpath("html/body/div[@class='calendar']/"
+					+ "table/tbody/tr[4]/td[@class='day']"));
+			for(WebElement selWeekDate : selectDates){
+				pl.isDomComplete(driver);
+				selWeekDate.click();
+				loopCount++;
+				break;
+			}
+			if(loopCount>0) break;
+		}
+	}
+	
+	/**
+	 * @summary: Method to verify the Line Items have been saved successfully.
+	 * @author: Praveen Namburi, @version: Created 07-10-2016.
+	 */
+	public void verify_LineItemsSaved(){
+		WebDriverWait wait = new WebDriverWait(driver,10);
+		wait.until(ExpectedConditions.
+				visibilityOfElementLocated(By.xpath("//div[@id='divAppInfoMsg'][@class='addMessage']")));
+		String getLineItemsMessage = lblInfoMsg.getText();
+		TestReporter.logStep("Message after updating the Line Items: "+ getLineItemsMessage);
+		TestReporter.assertTrue(getLineItemsMessage.contains("saved successfully") , 
+				"The Line Items have been saved successfully!");
+
+	}
+	
+	/**
+	 * @Summary: Method to select and add supplier to the list.
+	 * @author: Praveen Namburi, @Version: Created 07-10-2016 
+	 * @param supplier
+	 */
+	public void selectSupplier(String supplier){
+		pl.isDomComplete(driver);
+		btnContinue.syncEnabled(5,false);
+		btnContinue.jsClick();
+		txtSelectSupplier.syncVisible(10,false);
+		txtSelectSupplier.set(supplier);
+		WebDriverWait wait = new WebDriverWait(driver,7);
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='DivSupplierFilters']")));
+		List<WebElement> supplierTable = tblSupplierDetails;
+		pl.isDomComplete(driver);
+		String getSupplierName = supplierTable.get(0).getText().trim();
+		TestReporter.log("Selected the supplier:" + getSupplierName);
+		supplierTable.get(0).click();
+		chkSelectAll.syncEnabled(5, false);
+		chkSelectAll.jsClick();
+		btnAddSupplier.syncEnabled(10);
+		btnAddSupplier.jsClick();
+		verify_SupplierIsAdded();
+		
+	}
+	
+	/**
+	 * @summary: Method to verify the supplier has been added successfully.
+	 * @author: Praveen Namburi, @version: Created 07-10-2016.
+	 */
+	public void verify_SupplierIsAdded(){
+		WebDriverWait wait = new WebDriverWait(driver,5);
+		wait.until(ExpectedConditions.
+				visibilityOfElementLocated(By.xpath("//div[@id='divAppInfoMsg'][@class='addMessage']")));
+		String getSupplierAddedMessage = lblInfoMsg.getText();
+		TestReporter.logStep("Message after adding the Supplier: "+ getSupplierAddedMessage);
+		TestReporter.assertTrue(getSupplierAddedMessage.contains("added successfully") , 
+				"The supplier has been added successfully!");
+
+	}
+	
+	/**
+	 * @Summary: Method to click on Submit button in Supplier selection screen.
+	 * @author: Praveen Namburi, @Version: Craeted 10-10-2016
+	 */
+	public void clickSubmit(){
+		pl.isDomComplete(driver);
+		btnSubmit.syncEnabled(5);
+		btnSubmit.jsClick();
+	}
+	
+	/**
+	 * @Summary: Method to click on SendRFQ button.
+	 * @author: Praveen Namburi, @Version: Craeted 10-10-2016
+	 */
+	public void clickSendRFQ(){
+		pl.isDomComplete(driver);
+		btnSend.syncVisible(6,false);
+		driver.executeJavaScript("arguments[0].click();", btnSend);
+	}
+	
+	/**
+	 * @summary: Method to verify the RFQ has been submitted successfully.
+	 * @author: Praveen Namburi, @version: Created 07-10-2016.
+	 */
+	public void verify_RFQSubmitted(){
+		WebDriverWait wait = new WebDriverWait(driver,5);
+		wait.until(ExpectedConditions.
+				visibilityOfElementLocated(By.xpath("//div[@id='divAppInfoMsg'][@class='addMessage']")));
+		String getRFQSubmittedMessage = lblInfoMsg.getText();
+		TestReporter.logStep("Message after sending the RFQ: "+ getRFQSubmittedMessage);
+		TestReporter.assertTrue(getRFQSubmittedMessage.contains("submitted successfully") , 
+				"The RFQ has been submitted successfully!");
+
+	}
+	
+	/**
+	 * @summary: Method to verify the RFQ status after submitting RFQ.
+	 * @author: Praveen Namburi, @Version: Craeted 10-10-2016.
+	 * @param RFQNumber
+	 */
+	public void verify_RFQStatus_AfterSubmittingRFQ(String RFQNumber){
+		tblRFQLine.syncVisible(6,false);
+		List<WebElement> requisitionTblRows = tblRFQ;
+		int totalRows = requisitionTblRows.size();
+		TestReporter.log("Total rows in Requisition table: " + totalRows);
+		for(int row=1; row<=totalRows; row++){
+			if(row % 2 == 0){
+			   String getRFQNumber = driver.findElement(By.xpath("//table[@id='tblRFQ']/tbody/"
+			   		  + "tr["+row+"]/td[4]/span")).getText();
+			   TestReporter.log("RFQ Number is: " + getRFQNumber);
+			   String getStatus = driver.findElement(By.xpath("//table[@id='tblRFQ']/tbody/"
+			   		  + "tr["+row+"]/td[9]")).getText().trim();
+			   TestReporter.log("RFQ Number is: " + getStatus);
+			   if(getRFQNumber.equalsIgnoreCase(RFQNumber) && getStatus.contains("Active") ){
+				   TestReporter.assertTrue(getStatus.contains("Active"), "RFQ Status is 'Active'.");
+				  break;
+			   }
+			}
+		}
+	  
+	}
+	
+	
 }
