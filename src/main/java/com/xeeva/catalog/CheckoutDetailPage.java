@@ -21,11 +21,11 @@ import com.orasi.utils.TestReporter;
  */
 
 public class CheckoutDetailPage {
-	
+
 	PageLoaded pl = new PageLoaded();
 	private OrasiDriver driver = null;
 	private ResourceBundle userCredentialRepo = ResourceBundle.getBundle(Constants.USER_CREDENTIALS_PATH);
-	
+
 	/**Page Elements**/
 	@FindBy(xpath ="//table/tbody/tr[5]/td/span[1]") private Label lblOne;
 	@FindBy(xpath ="//table/tbody/tr[5]/td/span[3]") private Label lblTwo;
@@ -82,7 +82,7 @@ public class CheckoutDetailPage {
 			TestReporter.assertTrue(true, "Shopping Cart Number" + "  :  " + lblCartNumber.getText());
 	}
 
-	
+
 	/**
 	 * @summary Method to Verify Email Confirmation message
 	 * @author  praveen varma
@@ -92,7 +92,16 @@ public class CheckoutDetailPage {
 		if(lnkEmailConfirmation.isDisplayed())
 			TestReporter.assertTrue(true, ""+lnkEmailConfirmation.getText().trim());
 	}
-	
+
+	/**
+	 * @summary Method to read REQ Number 
+	 * @author Lalitha Banda
+	 * @date    06/10/2016
+	 */
+	public String readRFQNumber(){
+		return lblNumberOne.getText().trim();
+	}
+
 	/**
 	 * @summary Method to Verify Request Confirmation Information
 	 * @author  praveen varma
@@ -102,9 +111,10 @@ public class CheckoutDetailPage {
 		verify_CartNumber();
 		verify_SplitOrder();
 		emailConfirmation();
+
 	}
-		
-	
+
+
 	/**
 	 * @summary Method to Click Print Your Order Button
 	 * @author  Lalitha Banda
