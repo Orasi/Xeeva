@@ -253,8 +253,8 @@ public class ApprovalsPage {
 	 * @date    10/10/2016
 	 */
 	public void perform_RFQSearch(String rfqNumber){
-		// Wait Till RFQ input loaded fully
 		Sleeper.sleep(5000);
+		txtRFQ.syncVisible(10);
 		txtRFQ.sendKeys(rfqNumber);
 		click_Search();
 
