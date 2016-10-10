@@ -28,7 +28,7 @@ import com.xeeva.review.ReviewPage;
  * *
  */
 
-public class VerifyApproverPerformAction extends TestEnvironment{
+public class VerifyApproverAbleToPerformAction extends TestEnvironment{
 	public String RequisitionType = "serviceRequestGeneral";
 
 	// **************
@@ -130,6 +130,9 @@ public class VerifyApproverPerformAction extends TestEnvironment{
 		TestReporter.logStep("********************************************************************************");
 		TestReporter.logStep("Login as Buyer to Perform 'Submit for Pre Approval' Process");
 		TestReporter.logStep("********************************************************************************");
+		/*String RFQ_Number ="3439";
+		LoginPage loginPage = new LoginPage(getDriver());
+		MainNav mainNav = new MainNav(getDriver());*/
 
 		// Application Login 
 		TestReporter.logStep("Login as Buyer");
@@ -164,7 +167,7 @@ public class VerifyApproverPerformAction extends TestEnvironment{
 		mainNav.clickLogout();
 
 		TestReporter.logStep("********************************************************************************");
-		TestReporter.logStep("Login as Approver to verify Verify Finance Approver Approves Request");
+		TestReporter.logStep("Login as Approver to  Verify Finance Approver Approves Request");
 		TestReporter.logStep("********************************************************************************");
 
 		// Application Login 

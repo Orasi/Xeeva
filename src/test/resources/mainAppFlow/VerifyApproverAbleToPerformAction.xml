@@ -8,7 +8,7 @@
 	<parameter name="operatingSystem" value="windows" />
  	<test name="VerifyFinanceApproverApprovesRequest">
 		<classes>
-			<class name="mainAppFlow.VerifyApproverPerformAction" />
+			<class name="mainAppFlow.VerifyApproverAbleToPerformAction" />
 		</classes>
 	</test> 
 </suite> <!-- Suite -->
