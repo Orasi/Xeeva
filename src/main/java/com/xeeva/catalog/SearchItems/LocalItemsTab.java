@@ -43,6 +43,7 @@ public class LocalItemsTab {
 	@FindBy(xpath="//div[@id='divAppInfoMsg'][@class='addMessage']") private Label lblCartItemAddedMessage;
 
 	//Cart-Item link
+	//@FindBy(css="#lnkShowPopup") private Link lnkCartItem;
 	@FindBy(xpath="//a[@id='lnkShowPopup']") private Link lnkCartItem;
 
 	/**Constructor**/
@@ -126,13 +127,12 @@ public class LocalItemsTab {
 	}
 	
 	public void clickCartItemsLink(){
-		pageLoaded();
-		//driver.setPageTimeout(5);
-		pageLoad.isDomComplete(driver);
-		lnkCartItem.syncEnabled(30);
-		//lnkCartItem.jsClick();
-		driver.executeJavaScript("arguments[0].click();", lnkCartItem);
-	}
-
+		  pageLoaded();
+		  //driver.setPageTimeout(5);
+		  pageLoad.isDomComplete(driver);
+		  lnkCartItem.syncEnabled(30);
+		  //lnkCartItem.jsClick();
+		  driver.executeJavaScript("arguments[0].click();", lnkCartItem);
+		 }
 }
 

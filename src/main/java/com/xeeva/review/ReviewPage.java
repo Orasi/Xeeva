@@ -40,11 +40,11 @@ public class ReviewPage {
 
 	//**Page Interactions**//*
 
-	public void reviewRFQ(String text){
+	public void reviewRFQ(String inputString){
 		pl.isDomComplete(driver);
 		txtRFQNumber.syncVisible(5);
-		txtRFQNumber.sendKeys(text);
-		btnSearch.jsClick();
+		txtRFQNumber.sendKeys(inputString);
+		driver.executeJavaScript("arguments[0].click();",btnSearch);
 		driver.executeJavaScript("arguments[0].click();",lstEditRFQDetail.get(0));
 		driver.executeJavaScript("arguments[0].click();",chkDetails);
 		driver.executeJavaScript("arguments[0].click();",btnApprove);
