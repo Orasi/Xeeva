@@ -82,7 +82,6 @@ public class CheckoutDetailPage {
 			TestReporter.assertTrue(true, "Shopping Cart Number" + "  :  " + lblCartNumber.getText());
 	}
 
-
 	/**
 	 * @summary Method to Verify Email Confirmation message
 	 * @author  praveen varma

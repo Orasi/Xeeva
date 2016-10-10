@@ -143,8 +143,9 @@ public class RequisitioningPage {
 	 * @date 14/9/16
 	 **/
 	public void click_ReqTab(){
+		/*ReqTab.syncVisible(20, false);
+		ReqTab.click();*/
 		ReqTab.syncVisible(30, false);
-		//ReqTab.click();
 		driver.executeJavaScript("arguments[0].click();", ReqTab);
 		driver.manage().timeouts().implicitlyWait(Constants.PAGE_TIMEOUT, TimeUnit.SECONDS);
 	}
@@ -256,6 +257,8 @@ public class RequisitioningPage {
 	// This method to performs catalog search 
 	//Added the step - searchButton.syncVisible(20,false) by Praveen - 14-09-2016.
 	public void  perform_CatalogSearch(String searchItem){
+		catalogSearch.clear();
+		catalogSearch.safeSet(searchItem);
 		pageLoaded();	
 		if(!catalogSearch.getAttribute("value").contains("Enter")){catalogSearch.clear();}
 		btnSeeMore.syncVisible(8, false);
@@ -500,14 +503,57 @@ public class RequisitioningPage {
 			TestReporter.assertTrue(false," 'No Records Found !!' in Local Items tab. ");
 		}
 		return getItemNumber;
+	  
+	  }	
+	  
+	  /**
+	   * @summary: Method to cancel the requisition record and verify them.
+	   * @author praveen namburi, @Version: Created 23-09-2016
+	   * @param comments
+	   */
+	  public void cancelRequisitionFromRecentOrders(String comments){
+		  tblRecentOrdersGrid.syncVisible();
+		  btnSeeMore.syncEnabled(5);
+		  //btnSeeMore.click();
+		  driver.executeJavaScript("arguments[0].click();", btnSeeMore);
+		  List<WebElement> getRows = tblMainRecentOrdersGrid;
+		  int rowsCount = getRows.size();
+		  TestReporter.log("Total rows in RecentOrders Grid table: "+ rowsCount);
+			  
+		    for(int row=1; row<=rowsCount; row++){
+				String getStatus = driver.findElement(By.xpath("//*[@id='gvRecentOdersGrid']/tbody/"
+						+ "tr["+ row +"]/td[8]/span")).getText();
+				if(!getStatus.contains("Canceled By Requester")){
+					driver.setElementTimeout(2);
+					driver.findElement(By.xpath("//*[@id='gvRecentOdersGrid']/tbody"
+							+ "/tr["+ row +"]/td[13]/div/a/i")).jsClick();
+					//Handle Alert if present
+					if(AlertHandler.isAlertPresent(driver, 6)){
+						AlertHandler.handleAlert(driver, 6);
+					}
+					txtComments.syncVisible(5);
+					txtComments.safeSet(comments);
+					btnCommentsSubmit.syncVisible(5);
+					btnCommentsSubmit.click();
+					Sleeper.sleep(5000);
+					String getStatusAfterCancelReqLink = driver.findElement(By.xpath("//*[@id='gvRecentOdersGrid']/tbody/"
+							+ "tr["+ row +"]/td[8]/span")).getText();
+					TestReporter.logStep("Get Status After Cancel Requisition: "+getStatusAfterCancelReqLink);
+					TestReporter.assertTrue(getStatusAfterCancelReqLink.contains("Canceled By Requester"), 
+							"Cancelled the requisition record sucessfully.");
+					break;
+		       }
+		    }
+	  }
+	 
+	  
 
-	}	
 
 	/**
 	 * @summary: Method to cancel the requisition record and verify them.
 	 * @author praveen namburi, @Version: Created 23-09-2016
 	 * @param comments
-	 */
+	 *//*
 	public void cancelRequisitionFromRecentOrders(String comments){
 		tblRecentOrdersGrid.syncVisible();
 		btnSeeMore.syncEnabled(5);
@@ -542,7 +588,7 @@ public class RequisitioningPage {
 			}
 		}
 	}
-
+*/
 	/**
 	 * @Summary: Method to get the Cart number from Rejected Orders.
 	 * @author: Praveen Namburi, @version: Created 26-09-2016

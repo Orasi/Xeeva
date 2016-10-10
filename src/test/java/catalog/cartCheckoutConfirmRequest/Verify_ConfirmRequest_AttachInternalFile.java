@@ -32,7 +32,7 @@ public class Verify_ConfirmRequest_AttachInternalFile  extends TestEnvironment  
 	// **************
 
 	String fileType = "Internal";
-	String fileName = "Catalog_ExternalFileAttachment";
+	String fileName = "temp";
 
 
 	@DataProvider(name = "dataScenario")
@@ -118,11 +118,3 @@ public class Verify_ConfirmRequest_AttachInternalFile  extends TestEnvironment  
 	}
 
 }
-
-
-
-
-
-
-
-

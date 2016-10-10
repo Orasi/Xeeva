@@ -83,7 +83,6 @@ public class MainNav {
 
 	public void clickCartItemsLink() {
 		driver.executeJavaScript("arguments[0].click();", lnkCartItem);
-		driver.setPageTimeout(4);
 	}
 
 	/**
@@ -112,7 +111,6 @@ public class MainNav {
 				TestReporter.logStep( "Item Number Fronm Cart Rows : "+links.get(0).getText());
 				if(links.get(0).getText().equalsIgnoreCase(itemNumber)){
 					// clicking on Cart Item Edit
-					driver.setPageTimeout(3);
 					driver.executeJavaScript("arguments[0].click();", links.get(2));
 					break;
 				}
@@ -253,7 +251,6 @@ public class MainNav {
 	// Method to Get Cart Items Count 
 	public int getCartItemsCount(){
 		pl.isDomComplete(driver);
-		driver.setPageTimeout(5);
 		lblCartValue.syncEnabled(30);
 		return Integer.parseInt(lblCartValue.getText());
 	}

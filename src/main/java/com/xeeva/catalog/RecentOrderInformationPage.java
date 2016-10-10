@@ -3,11 +3,12 @@ package com.xeeva.catalog;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 import com.orasi.core.interfaces.Button;
 import com.orasi.core.interfaces.Label;
 import com.orasi.core.interfaces.Link;
@@ -25,10 +26,12 @@ import com.orasi.utils.TestReporter;
  * @author  Praveen Namburi, @version: Created 07-09-2016.
  */
 public class RecentOrderInformationPage {
+
+	
 	PageLoaded pl = new PageLoaded();
 	private OrasiDriver driver = null;
 	private ResourceBundle userCredentialRepo = ResourceBundle.getBundle(Constants.USER_CREDENTIALS_PATH);
-
+	//String xpath = "//tr/td/table/tbody/tr/td/table/tbody/tr/td[4]/a";
 	String xpath = ".//*[@id='gvRecentOdersGrid']/tbody/tr/td[1]/a";
 
 	/**Page Elements**/
@@ -114,7 +117,6 @@ public class RecentOrderInformationPage {
 		}
 	}
 
-
 	/**
 	 * @Summary: Method to click on Price Agreement Item link from Recent Orders page.
 	 * @author: Praveen Namburi, @version: Created on 14-09-2016
@@ -135,6 +137,7 @@ public class RecentOrderInformationPage {
 						String getItemNumLink = itemNumLink.getText();
 						TestReporter.log("Clicking on Item Number link for Price agreement item : " + getItemNumLink);
 						itemNumLink.click();
+						driver.setPageTimeout(3);
 						//driver.setPageTimeout(3);
 						break;
 					}
