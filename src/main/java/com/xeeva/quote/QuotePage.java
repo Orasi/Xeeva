@@ -222,6 +222,7 @@ public class QuotePage {
 		txtRFQNumber.sendKeys(text);
 		btnRFQSearch.syncVisible(10);
 		driver.executeJavaScript("arguments[0].click();",btnRFQSearch);
+		Sleeper.sleep(2000);
 		pl.isDomComplete(driver);
 		click_TakeOwnership();
 		click_EditRFQDetail();

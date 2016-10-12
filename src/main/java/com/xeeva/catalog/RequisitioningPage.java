@@ -203,7 +203,7 @@ public class RequisitioningPage {
 	private void createMaterialRequest(String ID,String UNSPS,String SS,String CategoryType ,String Category,String SubCategory,
 			String MN,String MPN,String Quantity,String UOM,String Price){
 		itemDescription.sendKeys(ID);
-		txtUNSPS.safeSet(UNSPS);
+		txtUNSPS.set(UNSPS);
 		txtSS.safeSet(SS);
 		categoryType.select(CategoryType);
 		category.select(Category);
