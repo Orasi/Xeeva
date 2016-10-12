@@ -23,7 +23,6 @@ import com.orasi.core.interfaces.Link;
 import com.orasi.core.interfaces.Listbox;
 import com.orasi.core.interfaces.Textbox;
 import com.orasi.core.interfaces.Webtable;
-import com.orasi.core.interfaces.impl.WebtableImpl;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
 import com.orasi.utils.Constants;
 import com.orasi.utils.OrasiDriver;
@@ -88,7 +87,7 @@ public class QuotePage {
 	@FindBy(id="btnRFQSearch") private Button btnSearch;
 	@FindBy(id="lnkRFQ") private Link lnkQuote;
 	@FindBy(xpath="//table[@id='tblRFQ']/tbody/tr") private List<WebElement> tblRFQ;
-	
+
 	//RFQ Information
 	//@FindBy(id="ddlUOM") private Listbox lstUOM;
 	@FindBy(xpath="//table/tbody/tr[2]/td/table/tbody/tr[3]/td[4]/i") private Link lnkRequiredByCalender;
@@ -99,7 +98,7 @@ public class QuotePage {
 	//@FindBy(xpath="//div[@id='divAppInfoMsg'][@class='addMessage']") private Label lblInfoMsg;
 	@FindBy(xpath="//table[@id='tblRFQ']/tbody/tr") private Webtable tblRFQLine;
 	@FindBy(xpath="//*[@title='Edit RFQ Detail']") private List<WebElement> lstEditRFQs;
-	
+
 	// Select supplier
 	//@FindBy(id="txtSearchSupplier") private Textbox txtSelectSupplier;
 	@FindBy(xpath="//table[@id='tblLeftManuRFQLine']/tbody/tr[1]/td[1]/input") private Checkbox chkSelectAll;
@@ -116,7 +115,7 @@ public class QuotePage {
 	@FindBy(id="tblRFQLines") private Webtable tblRFQLines;
 	@FindBy(id="chkAll") private Checkbox chkALLRFQLines;
 	@FindBy(xpath="//div[@id='divAppInfoMsg'][@class='addMessage']") private Label lblInfoMsg;
-	 
+
 	// Select supplier
 	@FindBy(id="txtSearchSupplier") private Textbox txtSelectSupplier;
 	//@FindBy(xpath="//table[@id='tblLeftManuRFQLine']/tbody/tr[1]/td[1]/input") private Checkbox chkSelectAll;
@@ -124,7 +123,13 @@ public class QuotePage {
 	@FindBy(id="btnAddSupplier") private Button btnAddSupplier;
 	@FindBy(id="btnSubmit") private Button btnSubmit;
 	@FindBy(id="btnSend") private Button btnSend;
-	 
+
+
+	// Quote - Filter Your Criteria
+	@FindBy(xpath=".//*[@title='Respond']") private Link lnkRespond;
+	@FindBy(id="btnViewResponses") private Button btnViewResponces;
+	@FindBy(xpath=".//*[@for='chkAll']") private Checkbox chkAll;
+	@FindBy(id="btnProcess") private Button btnProcess;
 
 	//**Constructor**//*
 
@@ -273,7 +278,7 @@ public class QuotePage {
 				"The RFQ has been submitted for pre-approval successfully!");
 
 	}
-*/
+	  */
 
 	/**
 	 * @summary Method to perform Submit RFQ
@@ -413,15 +418,15 @@ public class QuotePage {
 		TestReporter.log("Total rows in Requisition table: " + totalRows);
 		for(int row=1; row<=totalRows-1; row++){
 			if(row % 2 == 0){
-			   String getRFQNumber = driver.findElement(By.xpath("//table[@id='tblRFQ']/tbody/"
+				String getRFQNumber = driver.findElement(By.xpath("//table[@id='tblRFQ']/tbody/"
 						+ "tr["+row+"]/td[4]/span")).getText().trim();
-			   String getStatus = driver.findElement(By.xpath("//table[@id='tblRFQ']/tbody/"
+				String getStatus = driver.findElement(By.xpath("//table[@id='tblRFQ']/tbody/"
 						+ "tr["+row+"]/td[9]")).getText().trim();
-			   if(getRFQNumber.equalsIgnoreCase(RFQNumber) && getStatus.contains("Draft")){
-				  driver.findElement(By.xpath("//table[@id='tblRFQ']/tbody/"
-						+ "tr["+row+"]/td[2]/div/a[3]/i")).jsClick();
-				  break;
-			   }
+				if(getRFQNumber.equalsIgnoreCase(RFQNumber) && getStatus.contains("Draft")){
+					driver.findElement(By.xpath("//table[@id='tblRFQ']/tbody/"
+							+ "tr["+row+"]/td[2]/div/a[3]/i")).jsClick();
+					break;
+				}
 			}
 		}
 		driver.setElementTimeout(Constants.ELEMENT_TIMEOUT);
@@ -447,10 +452,10 @@ public class QuotePage {
 		btnSave.isEnabled();
 		btnSave.jsClick();
 		verify_LineItemsSaved();
-		
-		
+
+
 	}
-	
+
 	/**
 	 * @Summary: Method to select the Quote Reqby/Due Date from calender.
 	 * @author: Praveen Namburi. @Version: Created 07-10-2016
@@ -475,7 +480,7 @@ public class QuotePage {
 			if(loopCount>0) break;
 		}
 	}
-	
+
 	/**
 	 * @summary: Method to verify the Line Items have been saved successfully.
 	 * @author: Praveen Namburi, @version: Created 07-10-2016.
@@ -490,7 +495,7 @@ public class QuotePage {
 				"The Line Items have been saved successfully!");
 
 	}
-	
+
 	/**
 	 * @Summary: Method to select and add supplier to the list.
 	 * @author: Praveen Namburi, @Version: Created 07-10-2016 
@@ -514,9 +519,9 @@ public class QuotePage {
 		btnAddSupplier.syncEnabled(10);
 		btnAddSupplier.jsClick();
 		verify_SupplierIsAdded();
-		
+
 	}
-	
+
 	/**
 	 * @summary: Method to verify the supplier has been added successfully.
 	 * @author: Praveen Namburi, @version: Created 07-10-2016.
@@ -531,7 +536,7 @@ public class QuotePage {
 				"The supplier has been added successfully!");
 
 	}
-	
+
 	/**
 	 * @Summary: Method to click on Submit button in Supplier selection screen.
 	 * @author: Praveen Namburi, @Version: Craeted 10-10-2016
@@ -541,7 +546,7 @@ public class QuotePage {
 		btnSubmit.syncEnabled(5);
 		btnSubmit.jsClick();
 	}
-	
+
 	/**
 	 * @Summary: Method to click on SendRFQ button.
 	 * @author: Praveen Namburi, @Version: Craeted 10-10-2016
@@ -551,7 +556,7 @@ public class QuotePage {
 		btnSend.syncVisible(6,false);
 		driver.executeJavaScript("arguments[0].click();", btnSend);
 	}
-	
+
 	/**
 	 * @summary: Method to verify the RFQ has been submitted successfully.
 	 * @author: Praveen Namburi, @version: Created 07-10-2016.
@@ -566,7 +571,7 @@ public class QuotePage {
 				"The RFQ has been submitted successfully!");
 
 	}
-	
+
 	/**
 	 * @summary: Method to verify the RFQ status after submitting RFQ.
 	 * @author: Praveen Namburi, @Version: Craeted 10-10-2016.
@@ -579,22 +584,80 @@ public class QuotePage {
 		TestReporter.log("Total rows in Requisition table: " + totalRows);
 		for(int row=1; row<=totalRows; row++){
 			if(row % 2 == 0){
-			   String getRFQNumber = driver.findElement(By.xpath("//table[@id='tblRFQ']/tbody/"
-			   		  + "tr["+row+"]/td[4]/span")).getText();
-			   TestReporter.log("RFQ Number is: " + getRFQNumber);
-			   String getStatus = driver.findElement(By.xpath("//table[@id='tblRFQ']/tbody/"
-			   		  + "tr["+row+"]/td[9]")).getText().trim();
-			   TestReporter.log("RFQ Number is: " + getStatus);
-			   if(getRFQNumber.equalsIgnoreCase(RFQNumber) && getStatus.contains("Active") ){
-				   TestReporter.assertTrue(getStatus.contains("Active"), "RFQ Status is 'Active'.");
-				  break;
-			   }
+				String getRFQNumber = driver.findElement(By.xpath("//table[@id='tblRFQ']/tbody/"
+						+ "tr["+row+"]/td[4]/span")).getText();
+				TestReporter.log("RFQ Number is: " + getRFQNumber);
+				String getStatus = driver.findElement(By.xpath("//table[@id='tblRFQ']/tbody/"
+						+ "tr["+row+"]/td[9]")).getText().trim();
+				TestReporter.log("RFQ Number is: " + getStatus);
+				if(getRFQNumber.equalsIgnoreCase(RFQNumber) && getStatus.contains("Active") ){
+					TestReporter.assertTrue(getStatus.contains("Active"), "RFQ Status is 'Active'.");
+					break;
+				}
 			}
 		}
-	  
+
+	}
+
+
+	/**
+	 * @summary Method to perform Attach File Internal/External
+	 * @author  Lalitha Banda
+	 * @date    12/10/16
+	 */
+	public void performSearch_ByStatus(String inputOption){
+		lstStatus.isEnabled();
+		driver.executeJavaScript("arguments[0].click();", lstStatus);
+		driver.setElementTimeout(Constants.ELEMENT_TIMEOUT);
+		lstStatuses.get(0).click();
+		Sleeper.sleep(1000);
+		// Select input Status 
+		lstStatuses.get(Integer.parseInt(inputOption)).click();
+		driver.executeJavaScript("arguments[0].click();",btnRFQSearch);
+	}
+
+	/**
+	 * @summary Method to Click Respond on Filtered RFQ
+	 * @author  Lalitha Banda
+	 * @date    12/10/16
+	 */
+	public void click_Respond(){
+		lnkRespond.syncVisible(5);
+		lnkRespond.click();
+		lnkRespond.syncHidden(5);
+	}
+	
+	/**
+	 * @summary Method to Click View Responces
+	 * @author  Lalitha Banda
+	 * @date    12/10/16
+	 */
+	public void click_ViewResponces(){
+		btnViewResponces.syncVisible(5);
+		btnViewResponces.click();
+	}
+	
+	/**
+	 * @summary Method to clcik Check all - Supplier Responces
+	 * @author  Lalitha Banda
+	 * @date    12/10/16
+	 */
+	public void check_AllSupplierResponces(){
+		chkAll.syncVisible(5);
+		chkAll.click();
 	}
 	
 	
+	/**
+	 * @summary  Method to click on Process 
+	 * @author  Lalitha Banda
+	 * @date    12/10/16
+	 */
+	public void clcik_Process(){
+		btnProcess.syncVisible(5);
+		btnProcess.click();
+	}
+
 }
 
 
