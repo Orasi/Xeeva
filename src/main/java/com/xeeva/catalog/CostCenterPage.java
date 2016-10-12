@@ -1,4 +1,5 @@
 package com.xeeva.catalog;
+
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
@@ -41,7 +42,7 @@ public class CostCenterPage {
 	String xpath = ".//*[@id='customfa']/tbody/tr/td/select";
 
 
-	/**Page Elements**/
+	//**Page Elements**//*
 	@FindBy(id ="countrydivcontainer") private Element costCenterContainer;	
 	@FindBy(xpath="//*[@id='customfa']/tbody") private WebElement tblCostCenterInfo;
 	@FindBy(id ="ddlApplyCC") private Listbox lstCostCenterHeaderLevel;
@@ -82,7 +83,7 @@ public class CostCenterPage {
 	@FindBy(xpath=".//*[@id='ddlshippingaddress']") private WebElement lstShippingAdd;
 
 
-	/**Constructor**/
+	//**Constructor**//*
 	public CostCenterPage(OrasiDriver driver){
 		this.driver = driver;
 		ElementFactory.initElements(driver, this);
@@ -125,7 +126,6 @@ public class CostCenterPage {
 	 */
 	public void AddInternalComment(String InternalComment){
 		lblCC.syncVisible(30, false);
-		lblCC.isDisplayed();
 		click_InternalComment();
 		txtInternalComment.safeSet(InternalComment);
 		btnSaveComments.click();
@@ -173,14 +173,8 @@ public class CostCenterPage {
 
 	/**
 	 * @summary Method to verify Cost Center
-	 * @author  Lalitha Banda
-	 * @date    20/09/16
-	 */
-	/**
-	 * @param verifyType
-	 * @param itemNumber
-	 * @param CCValue
-	 * @param QuantityValue
+	 * @author  Lalitha Banda, @date    20/09/16
+	 * @param verifyType, @param itemNumber,@param CCValue,@param QuantityValue
 	 * @return
 	 */
 	public boolean verifyCostCenter(String verifyType,String itemNumber,String CCValue,String QuantityValue,String ItemDescription){
@@ -292,7 +286,7 @@ public class CostCenterPage {
 	public void change_CC(String changeType,String CC){
 		// after cart check out, application taking time to load cost center page 
 		lblCC.syncVisible(30, false);
-		lblCC.isDisplayed();
+		//lblCC.isDisplayed();
 		switch(changeType.toLowerCase()){
 
 		case "linelevel" : 
@@ -428,7 +422,7 @@ public class CostCenterPage {
 		int loopCount=0;
 		for(WebElement nextMonth : nextMonthArrows){
 			nextMonth.click();
-			driver.setElementTimeout(Constants.ELEMENT_TIMEOUT);
+			driver.setElementTimeout(3);
 			List<WebElement> selectDates = driver.findElements(By.xpath("html/body/div[@class='calendar']/"
 					+ "table/tbody/tr[4]/td[@class='day']"));
 			for(WebElement selWeekDate : selectDates){
@@ -507,7 +501,6 @@ public class CostCenterPage {
 	 */
 	public void selectShippingAddress(){
 		pl.isDomComplete(driver);
-		lstShippingAdd.isEnabled();
 		new Select(lstShippingAdd).selectByIndex(0);
 	}
 
@@ -525,7 +518,7 @@ public class CostCenterPage {
 	
 	/**
 	 * @summary Method  verify whether Quantity updated successfully
-	 * @author  Praveen Varma @date 28/09/16
+	 * @author  Praveen Varma, @date 28/09/16
 	 */
 	public void verifyUpdatedQuantity(String QtyValue){
 		TestReporter.logStep("Total size : "+lstQty.size());
@@ -535,7 +528,7 @@ public class CostCenterPage {
 	}
 	
 	public String getCostCenterPageTitle(){
-		driver.manage().timeouts().implicitlyWait(Constants.PAGE_TIMEOUT, TimeUnit.SECONDS);
+		//driver.manage().timeouts().implicitlyWait(Constants.PAGE_TIMEOUT, TimeUnit.SECONDS);
 		String actualPageTitle = driver.getTitle();
 		return actualPageTitle;
 	}
@@ -557,7 +550,7 @@ public class CostCenterPage {
 		// Waiting for CC updated message to be visible. 
 		verify_CostCenterUpdatedAtHeaderLevel();
 		pageLoaded();
-		driver.setElementTimeout(Constants.ELEMENT_TIMEOUT);
+		//driver.setElementTimeout(Constants.ELEMENT_TIMEOUT);
 		// Click on Continue CheckOut.
 		TestReporter.logStep("Click on 'Continue CheckOut' button.");
 		btnContinueCheckOut.syncEnabled(15,false);
@@ -581,4 +574,3 @@ public class CostCenterPage {
 	}
 		
  }
-

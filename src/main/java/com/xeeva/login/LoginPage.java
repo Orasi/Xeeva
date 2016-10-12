@@ -63,5 +63,23 @@ public class LoginPage {
 		btnLogin.click();
 	}
 	
+	/**
+	 * This method logins to the application.  Note -  User name provided to this method is reading at runtime
+	 * @author
+	 * @param username
+	 * @param location
+	 * @param password
+	 */
+	public void loginWithRuntimeUsername(String role, String location){
+		txtUsername.set(role);
+		txtPassword.set(userCredentialRepo.getString("PASSWORD"));
+		
+		if (lstLocation.syncVisible(1, false)){
+			lstLocation.select(location);
+		}
+		btnLogin.syncVisible(90, false);
+		btnLogin.click();
+	}
+	
 	
 }

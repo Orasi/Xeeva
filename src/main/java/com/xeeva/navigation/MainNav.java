@@ -37,7 +37,6 @@ public class MainNav {
 	@FindBy(xpath = ".//*[@id='txtItem']")	private Textbox itemDescription;
 	@FindBy(xpath = "//span[@id='spanCartValue']")	private Element lblCartValue;
 
-
 	// Update Cart Items - for non price agreement cart Items verifications
 	@FindBy(xpath = ".//*[@id='tblItemDetails']/tbody/tr[2]/td[2]/input")
 	private Textbox txtItemQuantity;
@@ -51,7 +50,6 @@ public class MainNav {
 	@FindBy(xpath = "//*[@id='btnPopupCP']") private Button btnCheckOut;
 
 	/** Constructor **/
-
 	public MainNav(OrasiDriver driver) {
 		this.driver = driver;
 		pl.isDomComplete(driver);
@@ -65,7 +63,7 @@ public class MainNav {
 	}
 
 	public boolean isLogoutDisplayed() {
-		Sleeper.sleep(1000);
+		Sleeper.sleep(3000);
 		return lnkLogout.syncVisible(20, false);
 	}
 
@@ -74,8 +72,7 @@ public class MainNav {
 	 * @summary  Method to click on Cart-Items Link
 	 * @author Lalitha Banda
 	 * @date 14/9/16
-	 **/
-
+	 */
 	public void clickCartItemsLink() {
 		driver.executeJavaScript("arguments[0].click();", lnkCartItem);
 	}
@@ -89,6 +86,9 @@ public class MainNav {
 		if (btnSaveCart.syncVisible(1, false)){
 			btnSaveCart.click();
 		} else {
+			/** if cart having Zero Items, Pop will not get Displayed , 
+			 * in such Case Logger logs Msg as below
+			 */
 			TestReporter.logStep("Cart Empty to Save");
 		}
 	}
@@ -112,8 +112,6 @@ public class MainNav {
 			}
 	}
 
-
-
 	/**
 	 * @summary  Method to verify Smart Form Item Added to Cart
 	 * @author Lalitha Banda
@@ -127,8 +125,6 @@ public class MainNav {
 		TestReporter.logStep("Actual :" + ItemDescription + ": "+ "Expected : " + Expected);
 		TestReporter.assertTrue(Expected.contains(ItemDescription),"Smart Form Item Verified!!");
 	}
-
-
 
 	/**
 	 * @summary This Method Verifications For Smart Form Items updated with UOM
@@ -242,7 +238,6 @@ public class MainNav {
 
 	}
 
-	
 	// Method to Get Cart Items Count 
 	public int getCartItemsCount(){
 		pl.isDomComplete(driver);
@@ -266,8 +261,6 @@ public class MainNav {
 		}
 		return statsuFlag;
 	}
-	
-
 
 	/**
 	 * @summary Method for Application Logout
@@ -279,7 +272,6 @@ public class MainNav {
 		lnkLogout.click();
 		SaveCart();
 	}
-
 
 	// Method for Checkout the Cart
 	public void saveCartPopUp(){
@@ -297,7 +289,6 @@ public class MainNav {
 		btnsaveCartPopUp.syncHidden(10);
 	}
 
-
 	/**
 	 * @summary Method 'to click on Cart Check Out 
 	 * @author Lalitha Banda
@@ -307,9 +298,9 @@ public class MainNav {
 		clickCartItemsLink();
 		saveCartPopUp();
 		CheckOut();
-		
+
 	}
-	
+
 	/**
 	 * @summary Verify Cart Items 
 	 * @author Praveen Namburi
@@ -326,6 +317,6 @@ public class MainNav {
 		}
 		return statsuFlag;
 	}
-	
-	
+
+
 }

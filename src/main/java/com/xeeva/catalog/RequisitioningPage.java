@@ -147,7 +147,7 @@ public class RequisitioningPage {
 		ReqTab.click();*/
 		ReqTab.syncVisible(30, false);
 		driver.executeJavaScript("arguments[0].click();", ReqTab);
-		driver.manage().timeouts().implicitlyWait(Constants.PAGE_TIMEOUT, TimeUnit.SECONDS);
+		//driver.manage().timeouts().implicitlyWait(Constants.PAGE_TIMEOUT, TimeUnit.SECONDS);
 	}
 
 
@@ -203,7 +203,7 @@ public class RequisitioningPage {
 	private void createMaterialRequest(String ID,String UNSPS,String SS,String CategoryType ,String Category,String SubCategory,
 			String MN,String MPN,String Quantity,String UOM,String Price){
 		itemDescription.sendKeys(ID);
-		txtUNSPS.safeSet(UNSPS);
+		txtUNSPS.set(UNSPS);
 		txtSS.safeSet(SS);
 		categoryType.select(CategoryType);
 		category.select(Category);
@@ -265,7 +265,7 @@ public class RequisitioningPage {
 		catalogSearch.sendKeys(searchItem);
 		searchButton.syncVisible(20,false);
 		searchButton.click();
-		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+		//driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 
 	}
 
@@ -484,7 +484,6 @@ public class RequisitioningPage {
 	 * @return getItemNumber
 	 */
 	public String  getItemNumberFromCatalog(){
-		driver.setPageTimeout(2);
 		String getItemNumber = null;
 		String getLocalItemsCount = lblLocalItems.getText();
 		TestReporter.log("Local-Items Count is: "+ getLocalItemsCount);
@@ -635,7 +634,8 @@ public class RequisitioningPage {
 	 * @param cart, @param RFQ, @param OrderDesc, @param location
 	 */
 	public void enterSearchCriteriaAndVerifyRejectedOrders(String location){
-		driver.manage().timeouts().implicitlyWait(7, TimeUnit.SECONDS);
+		//driver.manage().timeouts().implicitlyWait(7, TimeUnit.SECONDS);
+		driver.setElementTimeout(7);
 		pageLoaded();
 		Sleeper.sleep(4000);
 		String cartValue = getCart_RejectedOrders();
@@ -656,7 +656,8 @@ public class RequisitioningPage {
 		lstLocation.select(location);
 		btnSearch.syncVisible(5);
 		driver.executeJavaScript("arguments[0].click();", btnSearch);
-		driver.manage().timeouts().implicitlyWait(6, TimeUnit.SECONDS);
+		driver.setElementTimeout(5);
+		//driver.manage().timeouts().implicitlyWait(6, TimeUnit.SECONDS);
 		//Verifying the Filtered Rejected Oder details.
 		List<WebElement> rejectedOrdersResult = tblRejectedOrdersResult;
 		int getRowsCount = rejectedOrdersResult.size();
@@ -670,7 +671,7 @@ public class RequisitioningPage {
 		}else{
 			TestReporter.assertTrue(false, "No Records found!!!");
 		}
-
+		driver.setElementTimeout(Constants.ELEMENT_TIMEOUT);
 	}
 
 	/**
@@ -699,7 +700,8 @@ public class RequisitioningPage {
 				if(getRFQStatus.trim().contains("Cancelled")) break;  
 			}
 		}
-		driver.manage().timeouts().implicitlyWait(Constants.PAGE_TIMEOUT, TimeUnit.SECONDS);
+		driver.setElementTimeout(3);
+		//driver.manage().timeouts().implicitlyWait(Constants.PAGE_TIMEOUT, TimeUnit.SECONDS);
 	}
 	
 	/**
@@ -722,7 +724,6 @@ public class RequisitioningPage {
 					(By.xpath("//*[@id='gvRecentOdersGrid']/tbody/tr["+row+"]/td[3]/span")).getText();
 			TestReporter.logStep("REQNumber is : "+getRFQStatus);
 			if(!getRFQStatus.contains("-")){
-				driver.setPageTimeout(2);
 				driver.findElement(By.xpath(".//*[@id='gvRecentOdersGrid']/tbody/tr["+row+"]/td[1]/a")).click();
 				break;
 			}
@@ -736,9 +737,10 @@ public class RequisitioningPage {
 	 * @summary This Method captures the Quantity in Requisition Page
 	 * @author  Praveen Varma @date 28/9/16
 	 */
-	public void getQtyNumber(){
+	public String getQtyNumber(){
 		String quantity = txtQuantityREQ.getAttribute("value");
-		TestReporter.logStep( "Quantity : "+quantity);
+		//TestReporter.log( "Quantity : "+quantity);
+		return quantity;
 	} 
 	
 	/**
@@ -746,7 +748,8 @@ public class RequisitioningPage {
 	 * @author  Praveen Varma, @date 28/09/16
 	 */
 	public void re_enterQuantity(String Qty){
-		getQtyNumber();
+		String qtyNumber = getQtyNumber();
+		TestReporter.log( "Quantity : "+qtyNumber);
 		addToCart();	
 		txtQuantityREQ.clear();
 		txtQuantityREQ.safeSet(Qty);

@@ -32,7 +32,6 @@ import com.orasi.utils.TestReporter;
  * @author  Lalitha Banda
  * @date    28/09/16
  */
-
 public class ConfirmRequestPage {
 
 	PageLoaded pl = new PageLoaded();
@@ -105,16 +104,14 @@ public class ConfirmRequestPage {
 		btnConfirm.jsClick();
 	}
 
-
 	/**
 	 * @summary Method to Add Comments Line Level 
 	 * @author  Lalitha Banda
 	 * @date    28/09/16
 	 */
 	public void add_Comments(String inputString){
-		/**Reading Method available in CostCenter page for adding internal comments 
-		 * in Confirm Request Page 
-		 */
+		//Reading Method available in CostCenter page for adding internal comments 
+		//in Confirm Request Page 
 		CostCenterPage ccPage = new CostCenterPage(driver);
 		ccPage.AddInternalComment(inputString);
 	}
@@ -191,7 +188,8 @@ public class ConfirmRequestPage {
 		pl.isDomComplete(driver);
 		btnBack.syncEnabled(30);
 		driver.executeJavaScript("arguments[0].click();", btnBack);
-		driver.manage().timeouts().implicitlyWait(Constants.PAGE_TIMEOUT, TimeUnit.SECONDS);
+		driver.setElementTimeout(5);
+		//driver.manage().timeouts().implicitlyWait(Constants.PAGE_TIMEOUT, TimeUnit.SECONDS);
 	}
 	
 	/**
@@ -207,7 +205,8 @@ public class ConfirmRequestPage {
 		}else {
 			btnConfirm.syncVisible(2, false);
 			driver.executeJavaScript("arguments[0].click();", btnConfirm);
-			driver.manage().timeouts().implicitlyWait(Constants.PAGE_TIMEOUT, TimeUnit.SECONDS);
+			driver.setElementTimeout(5);
+			//driver.manage().timeouts().implicitlyWait(Constants.PAGE_TIMEOUT, TimeUnit.SECONDS);
 		}
 		
 	}
@@ -234,11 +233,7 @@ public class ConfirmRequestPage {
 		//Click upload
 		btnUpload.jsClick();
 
-
-
 	}
-
-
 
 	/**
 	 * @summary Method to perform Attach File Internal/External
@@ -264,16 +259,14 @@ public class ConfirmRequestPage {
 		pl.isDomComplete(driver);
 		driver.executeJavaScript("arguments[0].click();", lstshowAttachment.get(0));
 		Sleeper.sleep(1000);
-		
 		// Verify Attachment 
 		TestReporter.assertTrue(lnkUploadedFile.getText().contains(fileName), "Verify that the file was attached successfully");
-
 		// Closing PopUp
 		eleClose.syncVisible(5, false);
 		driver.executeJavaScript("arguments[0].click();", eleClose);
 		pl.isDomComplete(driver);
 
-
 	}
 
+	
 }

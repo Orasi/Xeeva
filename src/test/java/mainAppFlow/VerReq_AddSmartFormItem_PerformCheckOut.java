@@ -7,7 +7,6 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
-
 import com.orasi.utils.TestEnvironment;
 import com.orasi.utils.TestReporter;
 import com.orasi.utils.dataProviders.ExcelDataProvider;
@@ -15,7 +14,6 @@ import com.xeeva.catalog.CheckoutDetailPage;
 import com.xeeva.catalog.ConfirmRequestPage;
 import com.xeeva.catalog.CostCenterPage;
 import com.xeeva.catalog.RequisitioningPage;
-import com.xeeva.catalog.SearchItems.LocalItemsTab;
 import com.xeeva.login.LoginPage;
 import com.xeeva.navigation.MainNav;
 
@@ -33,8 +31,7 @@ public class VerReq_AddSmartFormItem_PerformCheckOut extends TestEnvironment{
 		@DataProvider(name = "dataScenario")
 		public Object[][] scenarios() {
 			try {
-				Object[][] excelData = new ExcelDataProvider("/datasheets/VerReq_AddSmartFormItem_PerformCheckOut.xlsx",
-						"AddSmartFormItem").getTestData();
+				Object[][] excelData = new ExcelDataProvider("/datasheets/VerReq_AddSmartFormItem_PerformCheckOut.xlsx","AddSmartFormItem").getTestData();
 				return excelData;
 			}
 			catch (RuntimeException e){

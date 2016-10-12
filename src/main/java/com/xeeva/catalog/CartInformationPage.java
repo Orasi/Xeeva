@@ -116,7 +116,6 @@ public class CartInformationPage {
 	 * @author: Praveen Namburi, @version: Created 12-09-2016
 	 */
 	public void closeCartInfoPage(){
-		driver.setPageTimeout(2);
 		lnkCloseCartInfo.isDisplayed();
 		//driver.setElementTimeout(Constants.ELEMENT_TIMEOUT);
 		//driver.executeJavaScript("arguments[0].click();", lnkCloseCartInfo);
@@ -257,7 +256,7 @@ public class CartInformationPage {
 			   }
 			   verify_DeleteCartItems();
 			 }
-		   driver.setElementTimeout(Constants.ELEMENT_TIMEOUT);
+		   //driver.setElementTimeout(Constants.ELEMENT_TIMEOUT);
 		}
 		
 	}
@@ -309,7 +308,6 @@ public class CartInformationPage {
 			   }
 		       verify_UpdatedQuantity();
 			}
-			driver.setPageTimeout(3);
 		}
 	}
 	

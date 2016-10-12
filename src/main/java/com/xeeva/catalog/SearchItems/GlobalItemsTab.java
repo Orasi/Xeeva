@@ -26,7 +26,7 @@ public class GlobalItemsTab {
 	private OrasiDriver driver = null;
 	private ResourceBundle userCredentialRepo = ResourceBundle.getBundle(Constants.USER_CREDENTIALS_PATH);
 
-	/**Page Elements**/
+	//**Page Elements**/
 	@FindBy(id = "aTab2")	private Link globalItemsTab;
 	@FindBy(css = "#lblGlobalCount") private Label globalCount;
 	@FindBy(css = ".css-label") private List<WebElement> chkCompare;
@@ -50,12 +50,11 @@ public class GlobalItemsTab {
 
 	/**Page Interactions**/
 
-
 	/**
 	 * @summary Click on Global Item Tab 	
 	 * @author Lalitha Banda
 	 * @date 14/9/16
-	 **/
+	 */
 	public void click_GlobalItemsTab(){
 		pl.isDomComplete(driver);
 		globalItemsTab.syncVisible(20, false);
@@ -68,7 +67,7 @@ public class GlobalItemsTab {
 	 * @summary Method to read global Item Numbers 	
 	 * @author Lalitha Banda
 	 * @date 14/9/16
-	 **/
+	 */
 	public String  getGlobalItemNumber(){
 		String ItemNumber = null;
 
@@ -90,18 +89,18 @@ public class GlobalItemsTab {
 	 * @summary Method to click Add-To-Cart Button
 	 * @author Lalitha Banda
 	 * @date 14/9/16
-	 **/
+	 */
 	public void click_AddToCartButton(){
 		AddToCart.syncVisible(10, false);
 		AddToCart.click();
-		driver.setPageTimeout(3);
+		//driver.setPageTimeout(3);
 	}
 
 	/**
 	 * @summary Method to Read Number of Records from Global Table
 	 * @author Lalitha Banda
 	 * @date 14/9/16
-	 **/
+	 */
 	public int read_GlobalItemsCount(){
 		return Integer.parseInt(globalCount.getText().replaceAll("\\D+", ""));
 	}
@@ -111,7 +110,7 @@ public class GlobalItemsTab {
 	 * @summary Method to compare selected Item from Comparison Screen
 	 * @author Lalitha Banda
 	 * @date 14/9/16
-	 **/
+	 */
 	public void perform_ItemsComparison(){
 		TestReporter.assertTrue(read_GlobalItemsCount()>3, read_GlobalItemsCount() +" - Global Item Records available!!");
 		for(int i=0;i<3;i++){
@@ -123,7 +122,7 @@ public class GlobalItemsTab {
 	/**
 	 * @summary Method to select GlobalItems from Comparison screen.
 	 * @author Praveen Namburi,@Version: Created 16-09-2016
-	 **/
+	 */
 	public void selectGlobalItems_FromComparison(){
 		TestReporter.assertTrue(read_GlobalItemsCount()>3, read_GlobalItemsCount() +" - Global Item Records available!!");
 		click_GlobalItemsTab();
