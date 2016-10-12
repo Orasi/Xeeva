@@ -411,7 +411,7 @@ public class QuotePage {
 		txtRFQNumber.set(RFQNumber);
 		btnSearch.syncEnabled(5,false);
 		driver.executeJavaScript("arguments[0].click();",btnSearch);
-		driver.setPageTimeout(3);
+		//driver.setPageTimeout(3);
 		pl.isDomComplete(driver);
 		List<WebElement> requisitionTblRows = tblRFQ;
 		int totalRows = requisitionTblRows.size();
