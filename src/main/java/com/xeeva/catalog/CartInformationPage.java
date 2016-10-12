@@ -256,7 +256,7 @@ public class CartInformationPage {
 			   }
 			   verify_DeleteCartItems();
 			 }
-		   driver.setElementTimeout(Constants.ELEMENT_TIMEOUT);
+		   //driver.setElementTimeout(Constants.ELEMENT_TIMEOUT);
 		}
 		
 	}
