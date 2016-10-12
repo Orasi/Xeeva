@@ -402,12 +402,12 @@ public class QuotePage {
 	 */
 	public void filterAndEditRFQ_withDraftStatus(String RFQNumber){
 		pageLoaded();
-		txtRFQNumber.syncVisible(5);
+		txtRFQNumber.syncVisible(7,false);
 		txtRFQNumber.set(RFQNumber);
-		btnSearch.syncEnabled(5,false);
-		driver.executeJavaScript("arguments[0].click();",btnSearch);
-		driver.setPageTimeout(3);
 		pl.isDomComplete(driver);
+		btnSearch.syncVisible(7,false);
+		driver.executeJavaScript("arguments[0].click();",btnSearch);
+		Sleeper.sleep(4000);
 		List<WebElement> requisitionTblRows = tblRFQ;
 		int totalRows = requisitionTblRows.size();
 		TestReporter.log("Total rows in Requisition table: " + totalRows);

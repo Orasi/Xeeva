@@ -218,16 +218,12 @@ public class VerifyBuyer_submitsRFQtoSuppliers extends TestEnvironment{
 		mainNav.clickLogout();
 
 		TestReporter.logStep("********************************************************************************");
-		TestReporter.logStep("Login as Buyer and Vsubmit RFQ to Suppliers.");
+		TestReporter.logStep("Login as Buyer and submit RFQ to Suppliers.");
 		TestReporter.logStep("********************************************************************************");
 		
 		// Application Login 
 		TestReporter.logStep("Launch the application and Login with valid 'BUYER' credentials.");
 		loginPage.loginWithCredentials(BuyerRole,location);
-		
-		// Requisition Page  - Navigating to requisition page.
-		TestReporter.logStep("Navigate to Requisitioning Page to click on Requisition link");
-		reqPage.click_ReqTab();
 		
 		// Navigating to RFQ page and click on Quote link.
 		QuotePage quotePage = new QuotePage(getDriver());
