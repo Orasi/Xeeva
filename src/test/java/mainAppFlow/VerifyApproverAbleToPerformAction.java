@@ -130,9 +130,6 @@ public class VerifyApproverAbleToPerformAction extends TestEnvironment{
 		TestReporter.logStep("********************************************************************************");
 		TestReporter.logStep("Login as Buyer to Perform 'Submit for Pre Approval' Process");
 		TestReporter.logStep("********************************************************************************");
-		/*String RFQ_Number ="3439";
-		LoginPage loginPage = new LoginPage(getDriver());
-		MainNav mainNav = new MainNav(getDriver());*/
 
 		// Application Login 
 		TestReporter.logStep("Login as Buyer");
