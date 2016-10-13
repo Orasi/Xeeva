@@ -262,36 +262,6 @@ public class QuotePage {
 
 	}
 
-	/**
-	 * @summary: Method to verify the message after taking the ownership in .
-	 * @author: Praveen Namburi, @version: Created 10-04-2016.
-	 *//*
-	public void verify_LineItemsSaved(){
-		WebDriverWait wait = new WebDriverWait(driver,3);
-		WebElement lblLineItemsSaved =wait.until(ExpectedConditions.
-				visibilityOfElementLocated(By.xpath("//div[@id='divAppInfoMsg'][@class='addMessage']")));
-		String getLineItemsSaved = lblLineItemsSaved.getText();
-		TestReporter.assertTrue(getLineItemsSaved.contains("The Line Items "), 
-				"The Line Items have been saved successfully!");
-
-	}*/
-
-
-	/**
-	 * @summary: Method to verify the message after RFQ Info Submitted
-	 * @author: Praveen Namburi, @version: Created 10-04-2016.
-	 *//*
-	public void verify_RFQSubmitted(){
-		pl.isDomComplete(driver);
-		WebDriverWait wait = new WebDriverWait(driver,3);
-		WebElement lblRFQSubmittedMessage =wait.until(ExpectedConditions.
-				visibilityOfElementLocated(By.xpath("//div[@id='divAppInfoMsg'][@class='addMessage']")));
-		String getRFQSubmittedMessage = lblRFQSubmittedMessage.getText();
-		TestReporter.assertTrue(getRFQSubmittedMessage.contains("The RFQ has been submitted"), 
-				"The RFQ has been submitted for pre-approval successfully!");
-
-	}
-	  */
 
 	/**
 	 * @summary Method to perform Submit RFQ
