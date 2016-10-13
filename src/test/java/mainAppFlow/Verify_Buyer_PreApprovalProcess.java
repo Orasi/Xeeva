@@ -61,7 +61,7 @@ public class Verify_Buyer_PreApprovalProcess extends TestEnvironment{
 
 	@AfterTest
 	public void close(ITestContext testResults){
-		endTest("TestAlert", testResults);
+		//endTest("TestAlert", testResults);
 	}
 
 	@Test(dataProvider = "dataScenario")
@@ -69,7 +69,7 @@ public class Verify_Buyer_PreApprovalProcess extends TestEnvironment{
 			String CategoryType,String Category,String SubCategory,String MN,String MPN,
 			String Quantity,String UnitofMeasure,String Price,String changeType,String selectCC,String BuyerRole,String Taxtype,String TaxCode,String ItemName){
 
-		 String[] QuantityArray = Quantity.split(";");
+		String[] QuantityArray = Quantity.split(";");
 		String[] UOMArray = UnitofMeasure.split(";");
 		String[] UPArray = Price.split(";");
 
@@ -135,7 +135,7 @@ public class Verify_Buyer_PreApprovalProcess extends TestEnvironment{
 		// ReviewPage - Reviewing the RFQNumber
 		TestReporter.logStep("Reviewing the RFQNumber");
 		ReviewPage rPage = new ReviewPage(getDriver());
-		rPage.reviewRFQ(RFQ_Number);
+		//rPage.reviewRFQ(RFQ_Number);
 
 		// QuotePage - Clicking on QuoteTab 
 		TestReporter.logStep("Clicking on QuoteTab");
@@ -159,8 +159,6 @@ public class Verify_Buyer_PreApprovalProcess extends TestEnvironment{
 		//Application Logout
 		TestReporter.logStep("Application Logout");
 		mainNav.clickLogout();
-		
-		
 		
 
 	}
