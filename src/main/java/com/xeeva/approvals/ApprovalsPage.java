@@ -89,7 +89,9 @@ public class ApprovalsPage {
 	public String ReadRFQNumber(){
 		String returnValue = null;
 		if(selectOrderToApprove()!=0){
-			returnValue = driver.findElement(By.xpath(ReqRow+"["+selectOrderToApprove()+"]//td[8]/span")).getText();
+			TestReporter.logStep("Selected Row : "+selectOrderToApprove());
+			if(driver.findElement(By.xpath(ReqRow+"["+selectOrderToApprove()+"]//td[8]/span")).isDisplayed()){
+			returnValue = driver.findElement(By.xpath(ReqRow+"["+selectOrderToApprove()+"]//td[8]/span")).getText();}
 		}else{
 			TestReporter.assertTrue(false, "No records found with 'Waiting For Approval' status!!");
 		}
@@ -253,8 +255,9 @@ public class ApprovalsPage {
 	 * @date    10/10/2016
 	 */
 	public void perform_RFQSearch(String rfqNumber){
-		// Wait Till RFQ input loaded fully
+		pl.isDomComplete(driver);
 		Sleeper.sleep(5000);
+		txtRFQ.clear();
 		txtRFQ.sendKeys(rfqNumber);
 		click_Search();
 
