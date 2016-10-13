@@ -7,7 +7,6 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
-
 import com.orasi.utils.TestEnvironment;
 import com.orasi.utils.TestReporter;
 import com.orasi.utils.dataProviders.ExcelDataProvider;
@@ -201,6 +200,8 @@ public class VerifyApproverAbleToPerformAction extends TestEnvironment{
 		// Perform RFQ search 
 		TestReporter.logStep("RFQ Search");
 		approvalPage.perform_RFQSearch(rfqNumber);
+		String getStatus  = approvalPage.read_RFQStatus();
+		TestReporter.logStep("RFQ Status  : "+getStatus);
 
 		//Application Logout
 		TestReporter.logStep("Application Logout");

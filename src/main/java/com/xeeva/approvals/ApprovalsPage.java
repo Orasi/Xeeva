@@ -84,14 +84,17 @@ public class ApprovalsPage {
 	 * @date  05/10/16
 	 **/
 	public void click_REQ(){
-		driver.findElement(By.xpath(ReqRow+"["+selectOrderToApprove()+"]//td[7]/div/a")).click();
+		pl.isDomComplete(driver,5);
+		driver.executeJavaScript("arguments[0].click();", 
+				driver.findElement(By.xpath(ReqRow+"["+selectOrderToApprove()+"]//td[7]/div/a")));
+		//driver.findElement(By.xpath(ReqRow+"["+selectOrderToApprove()+"]//td[7]/div/a")).click();
 	}
 	public String ReadRFQNumber(){
 		String returnValue = null;
 		if(selectOrderToApprove()!=0){
 			TestReporter.logStep("Selected Row : "+selectOrderToApprove());
 			if(driver.findElement(By.xpath(ReqRow+"["+selectOrderToApprove()+"]//td[8]/span")).isDisplayed()){
-			returnValue = driver.findElement(By.xpath(ReqRow+"["+selectOrderToApprove()+"]//td[8]/span")).getText();}
+				returnValue = driver.findElement(By.xpath(ReqRow+"["+selectOrderToApprove()+"]//td[8]/span")).getText();}
 		}else{
 			TestReporter.assertTrue(false, "No records found with 'Waiting For Approval' status!!");
 		}
@@ -117,8 +120,9 @@ public class ApprovalsPage {
 	 * @date  10/10/16
 	 **/
 	public void click_Search(){
-		btnSearch.syncVisible(10);
+		btnSearch.syncVisible(15);
 		driver.executeJavaScript("arguments[0].click();", btnSearch);
+		driver.setElementTimeout(Constants.ELEMENT_TIMEOUT);
 	}
 	/**
 	 * @summary  Method to click on GL/CC Edit Link
@@ -271,14 +275,33 @@ public class ApprovalsPage {
 	public String read_RFQStatus(){
 		String status =null;
 		pageLoaded();
+		click_ApprovalsTab();
 		pl.isDomInteractive(driver);
-		// Click on Search for Updated status 
-		click_Search();
 		int reqRecordsCount = ReqDetailsGrid.size();
 		System.out.println("No of REQ Records : "+reqRecordsCount);
 		for(int iterator=1;iterator<=reqRecordsCount;){
 			String expectedStatus = driver.findElement(By.xpath(ReqRow+"["+iterator+"]/td[14]")).getText().trim();
-			status = expectedStatus;
+			driver.setElementTimeout(Constants.ELEMENT_TIMEOUT);
+			click_Search();
+			pl.isDomComplete(driver, 5);
+			System.out.println("Record Status : "+expectedStatus);
+			
+			if(expectedStatus.equalsIgnoreCase("Waiting for Approval")){
+				// Performing Approval Process
+				performApprovalProcess();	
+			}
+			// Reading REQ Status  			
+			do{
+				Sleeper.sleep(3000);
+				click_ApprovalsTab();
+				pl.isDomComplete(driver);
+				String requiredStatus = driver.findElement(By.xpath(ReqRow+"["+iterator+"]/td[14]")).getText().trim();
+				System.out.println("Required Record Status : "+requiredStatus);
+				if(requiredStatus.equalsIgnoreCase("Released")){
+					status = requiredStatus;
+					break;
+				}
+			}while(expectedStatus.equalsIgnoreCase("In-Progress"));
 			break;
 		}
 		return status;
