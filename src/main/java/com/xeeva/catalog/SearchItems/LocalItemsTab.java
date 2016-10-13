@@ -127,7 +127,7 @@ public class LocalItemsTab {
 	 
 	 public void clickCartItemsLink(){
 	    pageLoaded();
-	    pageLoad.isDomComplete(driver);
+	    pl.isDomComplete(driver);
 	    lnkCartItem.syncEnabled(30);
 	    driver.executeJavaScript("arguments[0].click();", lnkCartItem);
 	   }
