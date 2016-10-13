@@ -528,7 +528,7 @@ public class QuotePage {
 	 * @author: Praveen Namburi, @Version: Craeted 10-10-2016
 	 */
 	public void clickSubmit(){
-		pl.isDomComplete(driver);
+		pl.isDomComplete(driver,5);
 		btnSubmit.syncEnabled(5);
 		btnSubmit.jsClick();
 	}
@@ -572,10 +572,10 @@ public class QuotePage {
 			if(row % 2 == 0){
 				String getRFQNumber = driver.findElement(By.xpath("//table[@id='tblRFQ']/tbody/"
 						+ "tr["+row+"]/td[4]/span")).getText();
-				TestReporter.log("RFQ Number is: " + getRFQNumber);
+				//TestReporter.log("RFQ Number is: " + getRFQNumber);
 				String getStatus = driver.findElement(By.xpath("//table[@id='tblRFQ']/tbody/"
 						+ "tr["+row+"]/td[9]")).getText().trim();
-				TestReporter.log("RFQ Number is: " + getStatus);
+				//TestReporter.log("RFQ Number is: " + getStatus);
 				if(getRFQNumber.equalsIgnoreCase(RFQNumber) && getStatus.contains("Active") ){
 					TestReporter.assertTrue(getStatus.contains("Active"), "RFQ Status is 'Active'.");
 					break;
