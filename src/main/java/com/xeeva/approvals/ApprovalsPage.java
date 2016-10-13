@@ -88,6 +88,7 @@ public class ApprovalsPage {
 	}
 	public String ReadRFQNumber(){
 		String returnValue = null;
+		driver.findElement(By.xpath(ReqRow+"["+selectOrderToApprove()+"]//td[8]/span")).syncVisible(10, false);
 		if(selectOrderToApprove()!=0){
 			returnValue = driver.findElement(By.xpath(ReqRow+"["+selectOrderToApprove()+"]//td[8]/span")).getText();
 		}else{

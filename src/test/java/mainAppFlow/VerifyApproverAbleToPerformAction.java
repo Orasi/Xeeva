@@ -172,7 +172,7 @@ public class VerifyApproverAbleToPerformAction extends TestEnvironment{
 		loginPage.loginWithRuntimeUsername(approverRole.trim(),location);
 
 		// Navigating to Approvals Page
-		TestReporter.logStep("Clicking the GlobalItems Link");
+		TestReporter.logStep("Navigating to Approvals Page");
 		ApprovalsPage approvalPage = new ApprovalsPage(getDriver());
 
 		// Reading Available Row for Approval Process

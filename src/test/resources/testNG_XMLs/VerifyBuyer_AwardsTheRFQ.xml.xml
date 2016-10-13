@@ -8,7 +8,7 @@
 	<parameter name="operatingSystem" value="windows" />
  	<test name="VerifyBuyer_AwardsTheRFQ">
 		<classes>
-			<class name="mainAppFlow.VerifyBuyer_AwardsTheRFQ" />
+			<class name="sandbox.VerifyBuyer_AwardsTheRFQ" />
 		</classes>
 	</test> 
 </suite> <!-- Suite -->

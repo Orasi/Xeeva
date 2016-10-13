@@ -151,8 +151,9 @@ public class QuotePage {
 	 */
 	public void click_quoteTab(){
 		pl.isDomComplete(driver);
+		quoteTab.syncVisible(10, false);
 		driver.executeJavaScript("arguments[0].click();",quoteTab);
-		driver.manage().timeouts().implicitlyWait(Constants.PAGE_TIMEOUT, TimeUnit.SECONDS);
+		//driver.manage().timeouts().implicitlyWait(Constants.PAGE_TIMEOUT, TimeUnit.SECONDS);
 	}
 
 
@@ -287,6 +288,7 @@ public class QuotePage {
 	 */
 	public void SubmitRFQ(String inputRFQ){
 		pl.isDomComplete(driver);
+		chkSelect.syncVisible(6, false);
 		driver.executeJavaScript("arguments[0].click();",chkSelect);
 		click_Save();
 		click_SubmitForPreApproval(inputRFQ);
@@ -461,7 +463,7 @@ public class QuotePage {
 	 * @author: Praveen Namburi. @Version: Created 07-10-2016
 	 */
 	public void selectReqBy_And_QuoteDueDates(WebElement element){
-		lnkQuoteDueCalender.syncVisible(10);
+		lnkRequiredByCalender.syncVisible(10);
 		driver.executeJavaScript("arguments[0].click();", element);
 		List<WebElement> nextMonthArrows = driver.findElements(By.xpath("html/body/div[@class='calendar']/"
 				+ "table/thead/tr[2]/td[4]"));
@@ -543,7 +545,7 @@ public class QuotePage {
 	 */
 	public void clickSubmit(){
 		pl.isDomComplete(driver);
-		btnSubmit.syncEnabled(5);
+		btnSubmit.syncVisible(5,false);
 		btnSubmit.jsClick();
 	}
 
@@ -578,18 +580,27 @@ public class QuotePage {
 	 * @param RFQNumber
 	 */
 	public void verify_RFQStatus_AfterSubmittingRFQ(String RFQNumber){
-		tblRFQLine.syncVisible(6,false);
+		pageLoaded();
+		txtRFQNumber.syncVisible(7,false);
+		txtRFQNumber.sendKeys(RFQNumber);
+		driver.executeJavaScript("arguments[0].click();",lstStatus);
+		//driver.executeJavaScript("arguments[0].click();",lstStatuses.get(0));
+		driver.executeJavaScript("arguments[0].click();",lstStatuses.get(3));
+		btnSearch.syncVisible(5);
+		driver.executeJavaScript("arguments[0].click();",btnSearch);
+		Sleeper.sleep(4000);
+		//pl.isDomComplete(driver);
 		List<WebElement> requisitionTblRows = tblRFQ;
 		int totalRows = requisitionTblRows.size();
 		TestReporter.log("Total rows in Requisition table: " + totalRows);
-		for(int row=1; row<=totalRows; row++){
+		for(int row=1; row<=totalRows-1; row++){
 			if(row % 2 == 0){
 				String getRFQNumber = driver.findElement(By.xpath("//table[@id='tblRFQ']/tbody/"
 						+ "tr["+row+"]/td[4]/span")).getText();
 				TestReporter.log("RFQ Number is: " + getRFQNumber);
 				String getStatus = driver.findElement(By.xpath("//table[@id='tblRFQ']/tbody/"
 						+ "tr["+row+"]/td[9]")).getText().trim();
-				TestReporter.log("RFQ Number is: " + getStatus);
+				TestReporter.log("RFQ Status is: " + getStatus);
 				if(getRFQNumber.equalsIgnoreCase(RFQNumber) && getStatus.contains("Active") ){
 					TestReporter.assertTrue(getStatus.contains("Active"), "RFQ Status is 'Active'.");
 					break;

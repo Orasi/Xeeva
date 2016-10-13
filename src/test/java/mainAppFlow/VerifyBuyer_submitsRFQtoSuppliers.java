@@ -8,6 +8,7 @@ import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
+import com.orasi.utils.Sleeper;
 import com.orasi.utils.TestEnvironment;
 import com.orasi.utils.TestReporter;
 import com.orasi.utils.dataProviders.ExcelDataProvider;
@@ -216,7 +217,7 @@ public class VerifyBuyer_submitsRFQtoSuppliers extends TestEnvironment{
 		//Application Logout
 		TestReporter.logStep("Application Logout");
 		mainNav.clickLogout();
-
+		
 		TestReporter.logStep("********************************************************************************");
 		TestReporter.logStep("Login as Buyer and submit RFQ to Suppliers.");
 		TestReporter.logStep("********************************************************************************");
