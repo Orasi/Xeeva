@@ -241,7 +241,7 @@ public class RequisitioningPage {
 	 * @date 14/9/16
 	 **/
 	public void Verify_SmartFormItem(){
-		Sleeper.sleep(3000);
+		Sleeper.sleep(2000);
 		lblCartItemAddedMessage.syncVisible(15, false);
 		String getCartItemAddedMessage = lblCartItemAddedMessage.getText();
 		TestReporter.logStep(getCartItemAddedMessage);
@@ -548,46 +548,6 @@ public class RequisitioningPage {
 	  
 
 
-	/**
-	 * @summary: Method to cancel the requisition record and verify them.
-	 * @author praveen namburi, @Version: Created 23-09-2016
-	 * @param comments
-	 *//*
-	public void cancelRequisitionFromRecentOrders(String comments){
-		tblRecentOrdersGrid.syncVisible();
-		btnSeeMore.syncEnabled(5);
-		//btnSeeMore.click();
-		driver.executeJavaScript("arguments[0].click();", btnSeeMore);
-		List<WebElement> getRows = tblMainRecentOrdersGrid;
-		int rowsCount = getRows.size();
-		TestReporter.log("Total rows in RecentOrders Grid table: "+ rowsCount);
-
-		for(int row=1; row<=rowsCount; row++){
-			String getStatus = driver.findElement(By.xpath("//*[@id='gvRecentOdersGrid']/tbody/"
-					+ "tr["+ row +"]/td[8]/span")).getText();
-			if(!getStatus.contains("Canceled By Requester")){
-				driver.setElementTimeout(2);
-				driver.findElement(By.xpath("//*[@id='gvRecentOdersGrid']/tbody"
-						+ "/tr["+ row +"]/td[13]/div/a/i")).jsClick();
-				//Handle Alert if present
-				if(AlertHandler.isAlertPresent(driver, 6)){
-					AlertHandler.handleAlert(driver, 6);
-				}
-				txtComments.syncVisible(5);
-				txtComments.safeSet(comments);
-				btnCommentsSubmit.syncVisible(5);
-				btnCommentsSubmit.click();
-				Sleeper.sleep(5000);
-				String getStatusAfterCancelReqLink = driver.findElement(By.xpath("//*[@id='gvRecentOdersGrid']/tbody/"
-						+ "tr["+ row +"]/td[8]/span")).getText();
-				TestReporter.logStep("Get Status After Cancel Requisition: "+getStatusAfterCancelReqLink);
-				TestReporter.assertTrue(getStatusAfterCancelReqLink.contains("Canceled By Requester"), 
-						"Cancelled the requisition record sucessfully.");
-				break;
-			}
-		}
-	}
-*/
 	/**
 	 * @Summary: Method to get the Cart number from Rejected Orders.
 	 * @author: Praveen Namburi, @version: Created 26-09-2016

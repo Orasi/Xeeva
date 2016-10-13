@@ -135,7 +135,6 @@ public class Verify_Buyer_PreApprovalProcess extends TestEnvironment{
 		// ReviewPage - Reviewing the RFQNumber
 		TestReporter.logStep("Reviewing the RFQNumber");
 		ReviewPage rPage = new ReviewPage(getDriver());
-		//rPage.reviewRFQ(RFQ_Number);
 
 		// QuotePage - Clicking on QuoteTab 
 		TestReporter.logStep("Clicking on QuoteTab");
