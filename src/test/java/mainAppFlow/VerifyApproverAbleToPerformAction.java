@@ -200,6 +200,8 @@ public class VerifyApproverAbleToPerformAction extends TestEnvironment{
 		// Perform RFQ search 
 		TestReporter.logStep("RFQ Search");
 		approvalPage.perform_RFQSearch(rfqNumber);
+		
+		//Reading RFQ Status
 		String getStatus  = approvalPage.read_RFQStatus();
 		TestReporter.logStep("RFQ Status  : "+getStatus);
 

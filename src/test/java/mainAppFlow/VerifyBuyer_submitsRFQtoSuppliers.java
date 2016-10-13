@@ -28,7 +28,7 @@ import com.xeeva.review.ReviewPage;
 public class VerifyBuyer_submitsRFQtoSuppliers extends TestEnvironment{
 
 	public String RequisitionType = "serviceRequestGeneral";
-	
+
 	// **************
 	// Data Provider
 	// **************
@@ -43,8 +43,8 @@ public class VerifyBuyer_submitsRFQtoSuppliers extends TestEnvironment{
 			TestReporter.assertTrue(false, "An error occured with accessing the data provider: " + e);
 		}
 		return new Object[][] {{}};
-    }
-	
+	}
+
 	/**
 	 * @Description: To initialize the driver and setup the environment.
 	 * @param runLocation,browserUnderTest,@param browserVersion
@@ -70,7 +70,7 @@ public class VerifyBuyer_submitsRFQtoSuppliers extends TestEnvironment{
 	public void close(ITestContext testResults){
 		endTest("TestAlert", testResults);
 	}
-	
+
 	/**
 	 * @Description: Main business-logic of the test-case resides here.
 	 * @param role,location
@@ -80,7 +80,7 @@ public class VerifyBuyer_submitsRFQtoSuppliers extends TestEnvironment{
 			String CategoryType,String Category,String SubCategory,String MN,String MPN,
 			String Quantity,String UnitofMeasure,String Price,String changeType,String selectCC,String BuyerRole,String Taxtype,
 			String TaxCode,String ItemName,String ExpectedMsg,String ExpectedStatus,String supplier){
-		
+
 		String[] QuantityArray = Quantity.split(";");
 		String[] UOMArray = UnitofMeasure.split(";");
 		String[] UPArray = Price.split(";");
@@ -148,7 +148,6 @@ public class VerifyBuyer_submitsRFQtoSuppliers extends TestEnvironment{
 		// ReviewPage - Reviewing the RFQNumber
 		TestReporter.logStep("Reviewing the RFQNumber");
 		ReviewPage rPage = new ReviewPage(getDriver());
-		rPage.reviewRFQ(RFQ_Number);
 
 		// QuotePage - Clicking on QuoteTab 
 		TestReporter.logStep("Clicking on QuoteTab");
@@ -213,6 +212,10 @@ public class VerifyBuyer_submitsRFQtoSuppliers extends TestEnvironment{
 		TestReporter.logStep("RFQ Search");
 		approvalPage.perform_RFQSearch(rfqNumber);
 
+		//REading RFQ Status
+		String getStatus  = approvalPage.read_RFQStatus();
+		TestReporter.logStep("RFQ Status  : "+getStatus);
+
 		//Application Logout
 		TestReporter.logStep("Application Logout");
 		mainNav.clickLogout();
@@ -220,41 +223,41 @@ public class VerifyBuyer_submitsRFQtoSuppliers extends TestEnvironment{
 		TestReporter.logStep("********************************************************************************");
 		TestReporter.logStep("Login as Buyer and submit RFQ to Suppliers.");
 		TestReporter.logStep("********************************************************************************");
-		
+
 		// Application Login 
 		TestReporter.logStep("Launch the application and Login with valid 'BUYER' credentials.");
 		loginPage.loginWithCredentials(BuyerRole,location);
-		
+
 		// Navigating to RFQ page and click on Quote link.
 		QuotePage quotePage = new QuotePage(getDriver());
 		TestReporter.logStep("Navigate to Requisitioning page and click on Quote link.");
 		quotePage.click_quoteTab();
-		
+
 		// Quote Page - Filter and Edit RFQ with Draft Status.
 		TestReporter.logStep(" Navigate to Quotepage - Filter and Edit RFQ with Draft Status.");
 		quotePage.filterAndEditRFQ_withDraftStatus(RFQ_Number);
-		
+
 		// Update and Save - 'RFQ Information' and Continue.
 		TestReporter.logStep("Update and Save - 'RFQ Information' and Continue.");
 		quotePage.setRFQInfoAndContinue(UOMArray[1], QuantityArray[0]);
-		
+
 		// Select and add supplier to the list.
 		TestReporter.logStep("Select and add supplier to the list.");
 		quotePage.selectSupplier(supplier);
-		
+
 		// Submit and send RFQ to suppliers.
 		TestReporter.logStep("Submit and send RFQ to suppliers.");
 		quotePage.clickSubmit();
 		quotePage.clickSendRFQ();
-		
+
 		// verify_RFQStatus_AfterSubmittingRFQ
 		TestReporter.logStep("Verifying whether the RFQStatus is changed to Active.");
 		quotePage.verify_RFQStatus_AfterSubmittingRFQ(RFQ_Number);
-		
+
 		//Application Logout
 		TestReporter.logStep("Application Logout");
 		mainNav.clickLogout();
-				
+
 	}
-			
+
 }

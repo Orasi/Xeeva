@@ -513,7 +513,7 @@ public class QuotePage {
 	 * @author: Praveen Namburi, @version: Created 07-10-2016.
 	 */
 	public void verify_SupplierIsAdded(){
-		WebDriverWait wait = new WebDriverWait(driver,5);
+		WebDriverWait wait = new WebDriverWait(driver,10);
 		wait.until(ExpectedConditions.
 				visibilityOfElementLocated(By.xpath("//div[@id='divAppInfoMsg'][@class='addMessage']")));
 		String getSupplierAddedMessage = lblInfoMsg.getText();
