@@ -499,6 +499,7 @@ public class QuotePage {
 		pl.isDomComplete(driver);
 		String getSupplierName = supplierTable.get(0).getText().trim();
 		TestReporter.log("Selected the supplier:" + getSupplierName);
+		Sleeper.sleep(1000);
 		supplierTable.get(0).click();
 		chkSelectAll.syncEnabled(5, false);
 		chkSelectAll.jsClick();
@@ -509,19 +510,20 @@ public class QuotePage {
 	}
 
 	/**
-	 * @summary: Method to verify the supplier has been added successfully.
-	 * @author: Praveen Namburi, @version: Created 07-10-2016.
-	 */
-	public void verify_SupplierIsAdded(){
-		WebDriverWait wait = new WebDriverWait(driver,10);
-		wait.until(ExpectedConditions.
-				visibilityOfElementLocated(By.xpath("//div[@id='divAppInfoMsg'][@class='addMessage']")));
-		String getSupplierAddedMessage = lblInfoMsg.getText();
-		TestReporter.logStep("Message after adding the Supplier: "+ getSupplierAddedMessage);
-		TestReporter.assertTrue(getSupplierAddedMessage.contains("added successfully") , 
-				"The supplier has been added successfully!");
+	  * @summary: Method to verify the supplier has been added successfully.
+	  * @author: Praveen Namburi, @version: Created 07-10-2016.
+	  */
+	 public void verify_SupplierIsAdded(){
+	  WebDriverWait wait = new WebDriverWait(driver,10);
+	  wait.until(ExpectedConditions.
+	    visibilityOfElementLocated(By.xpath("//div[@id='divAppInfoMsg'][@class='addMessage']")));
+	  String getSupplierAddedMessage = lblInfoMsg.getText();
+	  TestReporter.logStep("Message after adding the Supplier: "+ getSupplierAddedMessage);
+	  TestReporter.assertTrue(getSupplierAddedMessage.contains("added successfully") , 
+	    "The supplier has been added successfully!");
+	  lblInfoMsg.syncHidden(9, false);
 
-	}
+	 }
 
 	/**
 	 * @Summary: Method to click on Submit button in Supplier selection screen.
