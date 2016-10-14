@@ -520,6 +520,7 @@ public class QuotePage {
 		TestReporter.logStep("Message after adding the Supplier: "+ getSupplierAddedMessage);
 		TestReporter.assertTrue(getSupplierAddedMessage.contains("added successfully") , 
 				"The supplier has been added successfully!");
+		driver.findElement(By.xpath("//div[@id='divAppInfoMsg'][@class='addMessage']")).syncHidden(9, false);
 
 	}
 
