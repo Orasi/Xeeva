@@ -1,0 +1,30 @@
+<<<<<<< HEAD
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Quick Test Example" parallel="tests" thread-count="1">
+	<parameter name="browserUnderTest" value="chrome" />
+	<parameter name="environment" value="test" />
+	<parameter name="runLocation" value="local" />
+	<parameter name="browserVersion" value="" />
+	<parameter name="operatingSystem" value="windows" />
+ 	<test name="Verify_ConfirmRequestPage_AddComments">
+		<classes>
+			<class name="catalog.cartCheckoutConfirmRequest.Verify_ConfirmRequestPage_AddComments" />
+		</classes>
+	</test> 
+=======
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Quick Test Example" parallel="tests" thread-count="1">
+	<parameter name="browserUnderTest" value="chrome" />
+	<parameter name="environment" value="test" />
+	<parameter name="runLocation" value="local" />
+	<parameter name="browserVersion" value="" />
+	<parameter name="operatingSystem" value="windows" />
+ 	<test name="Verify_ConfirmRequestPage_AddComments">
+		<classes>
+			<class name="catalog.cartCheckoutConfirmRequest.Verify_ConfirmRequestPage_AddComments" />
+		</classes>
+	</test> 
+>>>>>>> 8796da97823c477f0d45031c645d0ae11addde7b
+</suite> <!-- Suite -->

@@ -14,6 +14,7 @@ import com.orasi.core.interfaces.Listbox;
 import com.orasi.core.interfaces.Textbox;
 import com.orasi.core.interfaces.Webtable;
 import com.orasi.core.interfaces.impl.internal.ElementFactory;
+import com.orasi.utils.Constants;
 import com.orasi.utils.OrasiDriver;
 import com.orasi.utils.PageLoaded;
 import com.orasi.utils.Sleeper;
@@ -34,8 +35,7 @@ public class MainNav {
 	@FindBy(id = "txtUnitPrice")	private Textbox txtUnitPrice;
 	@FindBy(id = "btnSubmit")	private Button btnSubmit;
 	@FindBy(xpath = ".//*[@id='txtItem']")	private Textbox itemDescription;
-	@FindBy(xpath = ".//*[@id='spanCartValue']")	private Element lblCartValue;
-
+	@FindBy(xpath = "//span[@id='spanCartValue']")	private Element lblCartValue;
 
 	// Update Cart Items - for non price agreement cart Items verifications
 	@FindBy(xpath = ".//*[@id='tblItemDetails']/tbody/tr[2]/td[2]/input")
@@ -50,7 +50,6 @@ public class MainNav {
 	@FindBy(xpath = "//*[@id='btnPopupCP']") private Button btnCheckOut;
 
 	/** Constructor **/
-
 	public MainNav(OrasiDriver driver) {
 		this.driver = driver;
 		pl.isDomComplete(driver);
@@ -64,12 +63,7 @@ public class MainNav {
 	}
 
 	public boolean isLogoutDisplayed() {
-		try {
-			Thread.sleep(3000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		Sleeper.sleep(3000);
 		return lnkLogout.syncVisible(20, false);
 	}
 
@@ -78,11 +72,9 @@ public class MainNav {
 	 * @summary  Method to click on Cart-Items Link
 	 * @author Lalitha Banda
 	 * @date 14/9/16
-	 **/
-
+	 */
 	public void clickCartItemsLink() {
 		driver.executeJavaScript("arguments[0].click();", lnkCartItem);
-		driver.setPageTimeout(4);
 	}
 
 	/**
@@ -94,6 +86,9 @@ public class MainNav {
 		if (btnSaveCart.syncVisible(1, false)){
 			btnSaveCart.click();
 		} else {
+			/** if cart having Zero Items, Pop will not get Displayed , 
+			 * in such Case Logger logs Msg as below
+			 */
 			TestReporter.logStep("Cart Empty to Save");
 		}
 	}
@@ -111,14 +106,11 @@ public class MainNav {
 				TestReporter.logStep( "Item Number Fronm Cart Rows : "+links.get(0).getText());
 				if(links.get(0).getText().equalsIgnoreCase(itemNumber)){
 					// clicking on Cart Item Edit
-					driver.setPageTimeout(3);
 					driver.executeJavaScript("arguments[0].click();", links.get(2));
 					break;
 				}
 			}
 	}
-
-
 
 	/**
 	 * @summary  Method to verify Smart Form Item Added to Cart
@@ -133,8 +125,6 @@ public class MainNav {
 		TestReporter.logStep("Actual :" + ItemDescription + ": "+ "Expected : " + Expected);
 		TestReporter.assertTrue(Expected.contains(ItemDescription),"Smart Form Item Verified!!");
 	}
-
-
 
 	/**
 	 * @summary This Method Verifications For Smart Form Items updated with UOM
@@ -151,7 +141,7 @@ public class MainNav {
 
 		// Providing Update Values to Smart Form
 		TestReporter.logStep(itemDescription.getAttribute("value"));
-		txtQuantity.safeSet(Qty);
+		txtQuantity.sendKeys(Qty);
 		unitOfMeasure.select(UOM);
 		txtUnitPrice.safeSet(UP);
 		btnSubmit.click();
@@ -248,10 +238,10 @@ public class MainNav {
 
 	}
 
-	
 	// Method to Get Cart Items Count 
 	public int getCartItemsCount(){
 		pl.isDomComplete(driver);
+		lblCartValue.syncEnabled(30);
 		return Integer.parseInt(lblCartValue.getText());
 	}
 
@@ -271,8 +261,6 @@ public class MainNav {
 		}
 		return statsuFlag;
 	}
-	
-
 
 	/**
 	 * @summary Method for Application Logout
@@ -284,7 +272,6 @@ public class MainNav {
 		lnkLogout.click();
 		SaveCart();
 	}
-
 
 	// Method for Checkout the Cart
 	public void saveCartPopUp(){
@@ -302,7 +289,6 @@ public class MainNav {
 		btnsaveCartPopUp.syncHidden(10);
 	}
 
-
 	/**
 	 * @summary Method 'to click on Cart Check Out 
 	 * @author Lalitha Banda
@@ -312,6 +298,25 @@ public class MainNav {
 		clickCartItemsLink();
 		saveCartPopUp();
 		CheckOut();
-		
+
 	}
+
+	/**
+	 * @summary Verify Cart Items 
+	 * @author Praveen Namburi
+	 * @date 30-09-2016
+	 **/
+	public boolean verifyCartItemsCount(String ItemType){
+		boolean statsuFlag = false;
+		pl.isDomComplete(driver);
+		TestReporter.logStep("Cart Having [" + lblCartValue.getText()+"] Items!!");
+		if(Integer.parseInt(lblCartValue.getText())>0){
+			statsuFlag = true;
+		}else{
+			statsuFlag = false;
+		}
+		return statsuFlag;
+	}
+
+
 }

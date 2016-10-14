@@ -3,6 +3,7 @@ package com.xeeva.catalog;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import org.apache.poi.xslf.usermodel.Placeholder;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -17,6 +18,7 @@ import com.orasi.core.interfaces.impl.internal.ElementFactory;
 import com.orasi.utils.AlertHandler;
 import com.orasi.utils.Constants;
 import com.orasi.utils.OrasiDriver;
+import com.orasi.utils.PageLoaded;
 import com.orasi.utils.Sleeper;
 import com.orasi.utils.TestReporter;
 import com.xeeva.catalog.SearchItems.LocalItemsTab;
@@ -26,7 +28,7 @@ import com.xeeva.catalog.SearchItems.LocalItemsTab;
  * @author praveen varma,@version: Created 8-9-2016
  */
 public class CartInformationPage {
-
+	PageLoaded pageLoad = new PageLoaded();
 	private OrasiDriver driver = null;
 	private ResourceBundle userCredentialRepo = ResourceBundle.getBundle(Constants.USER_CREDENTIALS_PATH);
 
@@ -36,6 +38,9 @@ public class CartInformationPage {
 	@FindBy(xpath="//a[@id='fancybox-close']") private Link lnkCloseCartInfo;
 	@FindBy(xpath ="//div/table[@id='customfa2']/tbody/tr/td") private Label lblCartEmptyText;
 	@FindBy(xpath="//input[@name='Button'][@value='Save Cart']") private Button btnSaveCart;
+	@FindBy(xpath="//table[@id='tblCartInfo']/tbody/tr") private List<WebElement> tblCartInformation;
+	@FindBy(xpath="//table[@id='tblCartInfo']/tbody/tr/td[5]/input") private List<WebElement> cartItemsList;
+	@FindBy(xpath="//div[@id='divAppInfoMsg'][@class='addMessage']") private Label lblCartAddItemMessage;
 	
 	/**Constructor**/
 	public CartInformationPage(OrasiDriver driver){
@@ -111,7 +116,6 @@ public class CartInformationPage {
 	 * @author: Praveen Namburi, @version: Created 12-09-2016
 	 */
 	public void closeCartInfoPage(){
-		driver.setPageTimeout(2);
 		lnkCloseCartInfo.isDisplayed();
 		//driver.setElementTimeout(Constants.ELEMENT_TIMEOUT);
 		//driver.executeJavaScript("arguments[0].click();", lnkCloseCartInfo);
@@ -223,8 +227,8 @@ public class CartInformationPage {
 				visibilityOfElementLocated(By.xpath("//div[@id='divAppInfoMsg'][@class='addMessage']")));
 		String getUpdatedQuantityMessage = lblCartAddItemMessage.getText();
 		TestReporter.logStep("Message after updating the quantity in cartInfo page: "+ getUpdatedQuantityMessage);
-		TestReporter.assertTrue(getUpdatedQuantityMessage.contains("updated successfully"), 
-				"The Records have been updated successfully!");
+		TestReporter.assertTrue(getUpdatedQuantityMessage.contains("updated successfully") || getUpdatedQuantityMessage.contains("saved successfully"), 
+				"Quantity updated successfully!");
 
 	}
 	
@@ -252,7 +256,7 @@ public class CartInformationPage {
 			   }
 			   verify_DeleteCartItems();
 			 }
-		   driver.setElementTimeout(Constants.ELEMENT_TIMEOUT);
+		   //driver.setElementTimeout(Constants.ELEMENT_TIMEOUT);
 		}
 		
 	}
@@ -273,5 +277,40 @@ public class CartInformationPage {
 				"The item has been removed successfully!");
 
 	}
+	
+	/**
+	 * @summary: Method to update the quantity values for cart-items in cart-info page.
+	 * @author: Praveen Namburi, @version: Created 29-09-2016
+	 */
+	public void UpdateQuantityAndSaveCart(String Quantity){
+		int evenNum=0;
+		pageLoaded();
+		List<WebElement> cartInfoTblRows = tblCartInformation;
+		int getRows = cartInfoTblRows.size();
+		TestReporter.log("Total no. of rows in Cart-Info table: " + getRows);
+		List<WebElement> cartItems = cartItemsList;
+		TestReporter.log("Total Items to be updated in cart: " + cartItems.size());
+		//Iterate even number rows	
+		for(int rows=1; rows<=getRows-1; rows++){
+			if(rows % 2 == 0){
+		       evenNum = rows;
+		       String getItemNumber = driver.findElement(By.xpath("//table[@id='tblCartInfo']/tbody/"
+		    		  + "tr["+rows+"]/td[1]")).getText();
+		       TestReporter.log("Updating the quantity value for the Item Number - [" + getItemNumber + "].");
+		       driver.setElementTimeout(Constants.ELEMENT_TIMEOUT);
+		       driver.findElement(By.xpath("//table[@id='tblCartInfo']/tbody/tr["+rows+"]/td[5]/input")).clear();
+		       driver.findElement(By.xpath("//table[@id='tblCartInfo']/tbody/tr["+rows+"]/td[5]/input")).sendKeys(Quantity);
+		       btnSaveCart.syncEnabled(30);
+		       btnSaveCart.click();
+		       //Handle Alert if present
+			   if(AlertHandler.isAlertPresent(driver, 2)){
+				   AlertHandler.handleAlert(driver, 2);
+			   }
+		       verify_UpdatedQuantity();
+			}
+		}
+	}
+	
+	
 	
 }

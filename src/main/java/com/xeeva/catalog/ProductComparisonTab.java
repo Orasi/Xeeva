@@ -23,7 +23,7 @@ public class ProductComparisonTab {
 	private OrasiDriver driver = null;
 	private ResourceBundle userCredentialRepo = ResourceBundle.getBundle(Constants.USER_CREDENTIALS_PATH);
 
-	/**Page Elements**/
+	//**Page Elements**//*
 	@FindBy(css = ".GridsubHeading>div") private Label lblProductComparison;
 	@FindBy(xpath = "//i[@title='Add To Cart']") private List<WebElement> lstAddToCart;
 	@FindBy(xpath = "//select[@class='textFieldList width90Px']") private Listbox ddSelectUOM;
@@ -43,12 +43,11 @@ public class ProductComparisonTab {
 	}
 
 	/**Page Interactions**/
-
 	/**
 	 * @summary Method To select UOM vale in Product Comparison Screen 
 	 * @author Lalitha Banda
 	 * @date 14/9/16
-	 **/
+	 */
 	public void select_UOM(String UOM){
 		ddSelectUOM.syncEnabled(30, false);
 		ddSelectUOM.select(UOM);
@@ -58,7 +57,7 @@ public class ProductComparisonTab {
 	 * @summary Method To read Item Number before going to ADD item into Cart 
 	 * @author Lalitha Banda
 	 * @date 14/9/16
-	 **/
+	 */
 	public String ReadItemNumber(){
 		TestReporter.logStep( "Item Number from Comparision Screen : "+eleItemNumber.getText());
 		return eleItemNumber.getText();
@@ -68,17 +67,15 @@ public class ProductComparisonTab {
 	 * @summary  Method to Click on Add to Cart - Product Comparison Screen
 	 * @author Lalitha Banda
 	 * @date 14/9/16
-	 **/
+	 */
 	public void click_AddToCart(String UOM){
 		pageLoaded();
 		select_UOM(UOM);
 		driver.executeJavaScript("arguments[0].click();", lstAddToCart.get(0));
-		driver.setPageTimeout(3);
-		lblCartItemAddedMessage.isDisplayed();
+		if(lblCartItemAddedMessage.isDisplayed()){
 		TestReporter.logStep( "Confirmation Message : " +lblCartItemAddedMessage.getText());
 		TestReporter.assertTrue(lblCartItemAddedMessage.getText().contains("added successfully!"), "Item Added to Cart !!");
+		}
 	}
 
 }
-
-

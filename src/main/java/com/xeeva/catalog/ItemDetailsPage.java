@@ -93,12 +93,12 @@ public class ItemDetailsPage {
 	 * @summary Method to add non price agreement item to cart 
 	 * @author Lalitha Banda
 	 * @date 14/9/16
-	 **/
+	 */
 	public void selectUOMValueAndAddNonPriceItemToCart(String strUOMValue){
 		if(lstSelectUOM.isDisplayed()){
 			lstSelectUOM.select(strUOMValue);
 			btnAddToCart.click();
-			driver.setElementTimeout(Constants.ELEMENT_TIMEOUT);
+			//driver.setElementTimeout(Constants.ELEMENT_TIMEOUT);
 			lblCartItemAddedMessage.syncVisible(20, false);
 			String getCartItemAddedMessage = lblCartItemAddedMessage.getText();
 			System.out.println("Message after adding item to cart : "+ getCartItemAddedMessage);
@@ -115,7 +115,7 @@ public class ItemDetailsPage {
 	 */
 	public void addPriceAgreementItemToCart_And_Verify(){
 		btnAddToCart.jsClick();
-		driver.setElementTimeout(Constants.ELEMENT_TIMEOUT);
+		//driver.setElementTimeout(Constants.ELEMENT_TIMEOUT);
 		lblCartItemAddedMessage.syncVisible(15, false);
 		String getCartItemAddedMessage = lblCartItemAddedMessage.getText();
 		TestReporter.logStep("Message after adding item to cart : "+ getCartItemAddedMessage);
@@ -127,11 +127,10 @@ public class ItemDetailsPage {
 	 * @summary Method to modify Item details for UOM,UP and quantity 
 	 * @author Lalitha Banda
 	 * @date 14/9/16
-	 **/
-
+	 */
 	public void  modify_ItemDetails(String UP,String Qty,String UOM){
 		txtunitPrice.clear();
-		txtunitPrice.isDisplayed();
+		txtunitPrice.syncVisible(10);
 		txtunitPrice.safeSet(UP);
 		txtQuantity.clear();
 		txtQuantity.safeSet(Qty);
@@ -143,13 +142,11 @@ public class ItemDetailsPage {
 	 * @summary Method modify Item details - Global Search Records
 	 * @author Lalitha Banda
 	 * @date 14/9/16
-	 **/
-
+	 */
 	public void modifyItemDetails(String UnitPrice, String Quantity, String strUOMValue){
 		modify_ItemDetails(UnitPrice,Quantity,strUOMValue);
-		btnAddToCart.isDisplayed();
+		btnAddToCart.syncVisible(5);
 		btnAddToCart.click();
-		driver.setElementTimeout(Constants.ELEMENT_TIMEOUT);
 		lblCartItemAddedMessage.syncVisible(15, false);
 		String getCartItemAddedMessage = lblCartItemAddedMessage.getText();
 		TestReporter.assertTrue(getCartItemAddedMessage.equalsIgnoreCase("The item has been added successfully!"), "Item added to the cart.");
@@ -161,7 +158,7 @@ public class ItemDetailsPage {
 	 *  if cart having less than two items , this method will add two different items into the cart 
 	 * @author Lalitha Banda
 	 * @date 14/9/16
-	 **/
+	 */
 	public void add_TwoDiffrent_ItemsToCart(String UP,String Qty,String UOM){
 		TestReporter.logStep("UOM "+lstUOMGlobalCart.size());
 		TestReporter.logStep("Add To Cart Items : "+btnIAddToCartItems.size());
