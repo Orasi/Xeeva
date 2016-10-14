@@ -87,25 +87,13 @@ public class QuotePage {
 	@FindBy(xpath="//table[@id='tblRFQ']/tbody/tr") private List<WebElement> tblRFQ;
 
 	//RFQ Information
-	//@FindBy(id="ddlUOM") private Listbox lstUOM;
 	@FindBy(xpath="//table/tbody/tr[2]/td/table/tbody/tr[3]/td[4]/i") private Link lnkRequiredByCalender;
-	//@FindBy(xpath="//table/tbody/tr[2]/td/table/tbody/tr[3]/td[6]/i") private Link lnkQuoteDueCalender;
-	//@FindBy(id="btnApply") private Button btnApply;
-	//@FindBy(id="tblRFQLines") private Webtable tblRFQLines;
-	//@FindBy(id="chkAll") private Checkbox chkALLRFQLines;
-	//@FindBy(xpath="//div[@id='divAppInfoMsg'][@class='addMessage']") private Label lblInfoMsg;
 	@FindBy(xpath="//table[@id='tblRFQ']/tbody/tr") private Webtable tblRFQLine;
 	@FindBy(xpath="//*[@title='Edit RFQ Detail']") private List<WebElement> lstEditRFQs;
 
 	// Select supplier
-	//@FindBy(id="txtSearchSupplier") private Textbox txtSelectSupplier;
 	@FindBy(xpath="//table[@id='tblLeftManuRFQLine']/tbody/tr[1]/td[1]/input") private Checkbox chkSelectAll;
-	//@FindBy(xpath="//div[@id='DivSupplierFilters']/table/tbody/tr") private List<WebElement> tblSupplierDetails;
-	//@FindBy(id="btnAddSupplier") private Button btnAddSupplier;
-	//@FindBy(id="btnSubmit") private Button btnSubmit;
-	//@FindBy(id="btnSend") private Button btnSend;
 	@FindBy(id="btnContinue") private Button btnContinue;
-	//@FindBy(xpath="//table[@id='tblRFQ']/tbody/tr") private List<WebElement> tblRFQ;
 
 	@FindBy(id="ddlUOM") private Listbox lstUOM;
 	@FindBy(xpath="//table/tbody/tr[2]/td/table/tbody/tr[3]/td[6]/i") private Link lnkQuoteDueCalender;
@@ -116,7 +104,6 @@ public class QuotePage {
 
 	// Select supplier
 	@FindBy(id="txtSearchSupplier") private Textbox txtSelectSupplier;
-	//@FindBy(xpath="//table[@id='tblLeftManuRFQLine']/tbody/tr[1]/td[1]/input") private Checkbox chkSelectAll;
 	@FindBy(xpath="//div[@id='DivSupplierFilters']/table/tbody/tr") private List<WebElement> tblSupplierDetails;
 	@FindBy(id="btnAddSupplier") private Button btnAddSupplier;
 	@FindBy(id="btnSubmit") private Button btnSubmit;
