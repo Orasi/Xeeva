@@ -21,12 +21,11 @@ import com.xeeva.review.ReviewPage;
 
 
 /**
- * @summary Test To verify SubTotal, GrandTotalTax and Grand Total Values in Confirm Request Page
+ * @summary Test to Verify Buyer Pre-Approval Process
  * @author  Lalitha Banda
  * @version	05/10/2016
  * *
  */
-
 public class Verify_Buyer_PreApprovalProcess extends TestEnvironment{
 
 	public String RequisitionType = "serviceRequestGeneral";
