@@ -241,8 +241,8 @@ public class RequisitioningPage {
 	 * @date 14/9/16
 	 **/
 	public void Verify_SmartFormItem(){
-		Sleeper.sleep(2000);
-		lblCartItemAddedMessage.syncVisible(15, false);
+		Sleeper.sleep(3000);
+		lblCartItemAddedMessage.syncVisible(20, false);
 		String getCartItemAddedMessage = lblCartItemAddedMessage.getText();
 		TestReporter.logStep(getCartItemAddedMessage);
 		TestReporter.assertTrue(getCartItemAddedMessage.equalsIgnoreCase("The item has been added successfully!"), "Item added to the cart.");
@@ -549,6 +549,7 @@ public class RequisitioningPage {
 
 
 	/**
+<<<<<<< HEAD
 	 * @summary: Method to cancel the requisition record and verify them.
 	 * @author praveen namburi, @Version: Created 23-09-2016
 	 * @param comments
@@ -589,6 +590,8 @@ public class RequisitioningPage {
 	}
 */
 	/**
+=======
+>>>>>>> e23ec331c50e301739afa76c6742a2a109298e34
 	 * @Summary: Method to get the Cart number from Rejected Orders.
 	 * @author: Praveen Namburi, @version: Created 26-09-2016
 	 * @return getCartValue

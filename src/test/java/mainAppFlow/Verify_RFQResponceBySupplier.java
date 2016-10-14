@@ -1,5 +1,6 @@
 package mainAppFlow;
 
+import java.text.ParseException;
 import org.testng.ITestContext;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
@@ -7,7 +8,6 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
-
 import com.orasi.utils.TestEnvironment;
 import com.orasi.utils.TestReporter;
 import com.orasi.utils.dataProviders.ExcelDataProvider;
@@ -17,15 +17,17 @@ import com.xeeva.catalog.ConfirmRequestPage;
 import com.xeeva.catalog.CostCenterPage;
 import com.xeeva.catalog.RequisitioningPage;
 import com.xeeva.login.LoginPage;
+import com.xeeva.marketPlace.Supplier;
 import com.xeeva.navigation.MainNav;
 import com.xeeva.quote.QuotePage;
-import com.xeeva.review.ReviewPage;
 
 /**
- * @Summary: To verify buyer is able to submits RFQ to suppliers.
- * @author Praveen Namburi, @version: Created 10-10-2016
+ * @summary Test to Verify RFQ Responce by Supplier
+ * @author  Lalitha Banda
+ * @version	14/10/2016
+ * *
  */
-public class VerifyBuyer_submitsRFQtoSuppliers extends TestEnvironment{
+public class Verify_RFQResponceBySupplier extends TestEnvironment{
 
 	public String RequisitionType = "serviceRequestGeneral";
 
@@ -45,41 +47,30 @@ public class VerifyBuyer_submitsRFQtoSuppliers extends TestEnvironment{
 		return new Object[][] {{}};
 	}
 
-	/**
-	 * @Description: To initialize the driver and setup the environment.
-	 * @param runLocation,browserUnderTest,@param browserVersion
-	 * @param operatingSystem,@param environment
-	 */
 	@BeforeTest
 	@Parameters({ "runLocation", "browserUnderTest", "browserVersion","operatingSystem", "environment" })
-	public void setup(@Optional String runLocation, String browserUnderTest,String browserVersion, String operatingSystem, String environment) {
+	public void setup(@Optional String runLocation, String browserUnderTest,String browserVersion, 
+			String operatingSystem, String environment) {
 		setApplicationUnderTest("XEEVA");
 		setBrowserUnderTest(browserUnderTest);
 		setBrowserVersion(browserVersion);
 		setOperatingSystem(operatingSystem);
 		setRunLocation(runLocation);
 		setTestEnvironment(environment);
-		testStart("Add_PriceAgreementItem_InCart");
+		testStart("Verify_RFQResponceBySupplier");
 	}
 
-	/**
-	 * @Description: Close the driver instance.
-	 * @param testResults
-	 */
 	@AfterTest
 	public void close(ITestContext testResults){
 		endTest("TestAlert", testResults);
 	}
 
-	/**
-	 * @Description: Main business-logic of the test-case resides here.
-	 * @param role,location
-	 */
 	@Test(dataProvider = "dataScenario")
 	public void verifybuyerSubmitsRFQtoSuppliers(String role, String location,String ItemDescription,String UNSPSCCode,String SS,
 			String CategoryType,String Category,String SubCategory,String MN,String MPN,
 			String Quantity,String UnitofMeasure,String Price,String changeType,String selectCC,String BuyerRole,String Taxtype,
-			String TaxCode,String ItemName,String ExpectedMsg,String ExpectedStatus,String supplier){
+			String TaxCode,String ItemName,String ExpectedMsg,String ExpectedStatus,String supplier,
+			String SupplierRole,String price,String quantity,String leadTime,String frieghtID) throws ParseException{
 
 		String[] QuantityArray = Quantity.split(";");
 		String[] UOMArray = UnitofMeasure.split(";");
@@ -145,10 +136,6 @@ public class VerifyBuyer_submitsRFQtoSuppliers extends TestEnvironment{
 		TestReporter.logStep("Login as Buyer");
 		loginPage.loginWithCredentials(BuyerRole,location);
 
-		// ReviewPage - Reviewing the RFQNumber
-		TestReporter.logStep("Reviewing the RFQNumber");
-		ReviewPage rPage = new ReviewPage(getDriver());
-
 		// QuotePage - Clicking on QuoteTab 
 		TestReporter.logStep("Clicking on QuoteTab");
 		QuotePage qPage = new QuotePage(getDriver());
@@ -165,6 +152,7 @@ public class VerifyBuyer_submitsRFQtoSuppliers extends TestEnvironment{
 		//Reading Approver Role
 		TestReporter.logStep("Reading Approver Role");
 		qPage.enter_RFQNumber(RFQ_Number);
+
 		String approverRole = qPage.getApproverEmail();
 		TestReporter.logStep("Approver Role : " + approverRole);
 
@@ -212,7 +200,7 @@ public class VerifyBuyer_submitsRFQtoSuppliers extends TestEnvironment{
 		TestReporter.logStep("RFQ Search");
 		approvalPage.perform_RFQSearch(rfqNumber);
 
-		//REading RFQ Status
+		//Reading RFQ Status
 		String getStatus  = approvalPage.read_RFQStatus();
 		TestReporter.logStep("RFQ Status  : "+getStatus);
 
@@ -258,6 +246,42 @@ public class VerifyBuyer_submitsRFQtoSuppliers extends TestEnvironment{
 		TestReporter.logStep("Application Logout");
 		mainNav.clickLogout();
 
-	}
+		// Closing current Application Driver
+		driver.close();
 
+		TestReporter.logStep("********************************************************************************");
+		TestReporter.logStep("Login as Supplier to submit RFQ Response ");
+		TestReporter.logStep("********************************************************************************");
+
+		setApplicationUnderTest("XEEVAMKT");
+		setBrowserUnderTest(browserUnderTest);
+		setBrowserVersion(browserVersion);
+		setOperatingSystem(operatingSystem);
+		setRunLocation(runLocation);
+		setTestEnvironment(environment);
+		testStart("Add_PriceAgreementItem_InCart");
+
+		// Application Login  - Market Place
+		TestReporter.logStep("Login into Market Place application");
+		LoginPage loginPageMp = new LoginPage(getDriver());
+		loginPageMp.loginWithSupplierCredentials(SupplierRole);
+
+		// Clicking on OpportunitiesTab 
+		TestReporter.logStep("Clicking on OpportunitiesTab");
+		Supplier sPage = new Supplier(getDriver());
+		sPage.click_OpportunitiesTab();
+
+		// Performing the RFQ Search functionality 
+		TestReporter.logStep("Performing the RFQ Search functionality in OpportunitiesTab ");
+		sPage.perform_RFQSearch(RFQ_Number);
+
+		// Performing the Submit Response functionality
+		TestReporter.logStep("Performing the Submit Response functionality in OpportunitiesTab ");
+		sPage.submit_Response(price, quantity, leadTime, frieghtID);
+
+		// SupplierPage - Supplier Application Logout
+		TestReporter.logStep("Application Logout");
+		sPage.supplierLogout();
+		
+	}
 }

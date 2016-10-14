@@ -7,8 +7,6 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.concurrent.TimeUnit;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -131,6 +129,9 @@ public class QuotePage {
 	@FindBy(xpath=".//*[@for='chkAll']") private Checkbox chkAll;
 	@FindBy(id="btnProcess") private Button btnProcess;
 
+	@FindBy(xpath=".//*[@id='btnRestoreSearch']") private Button btnapplySavedSearch;
+	//
+
 	//**Constructor**//*
 
 	public QuotePage(OrasiDriver driver){
@@ -151,8 +152,13 @@ public class QuotePage {
 	 */
 	public void click_quoteTab(){
 		pl.isDomComplete(driver);
+		quoteTab.syncVisible(10, false);
 		driver.executeJavaScript("arguments[0].click();",quoteTab);
-		driver.manage().timeouts().implicitlyWait(Constants.PAGE_TIMEOUT, TimeUnit.SECONDS);
+		quoteTab.syncHidden(5, false);
+		// Verify Quote Page Loaded 
+		btnapplySavedSearch.syncVisible(10, false);
+		TestReporter.assertTrue(btnapplySavedSearch.isDisplayed(), "Quote Landing Page Loaded Succsesfully");
+
 	}
 
 
@@ -185,6 +191,7 @@ public class QuotePage {
 	public void click_TakeOwnership(){
 		pageLoaded();
 		pl.isDomComplete();
+		TestReporter.logStep("Ownership links Size :"+lstTakeOwnership.size());
 		if(lnkRevertOwnership.isDisplayed()){
 			driver.executeJavaScript("arguments[0].click();",lnkRevertOwnership);
 		}
@@ -199,7 +206,10 @@ public class QuotePage {
 	public void click_EditRFQDetail(){
 		pageLoaded();
 		pl.isDomComplete(driver);
-		driver.executeJavaScript("arguments[0].click();",lstEditRFQDetail.get(0));
+		for(WebElement input :lstEditRFQDetail){
+			driver.executeJavaScript("arguments[0].click();",input);
+			break;
+		}		
 	}
 
 
@@ -209,9 +219,12 @@ public class QuotePage {
 	 * @date    10/10/16
 	 */
 	public void enter_RFQNumber(String text){
+		txtRFQNumber.syncVisible(7, false);
 		txtRFQNumber.clear();
-		Sleeper.sleep(2000);
+		driver.setElementTimeout(5);
 		txtRFQNumber.sendKeys(text);
+		driver.setElementTimeout(Constants.ELEMENT_TIMEOUT);
+		btnRFQSearch.syncVisible(5,false);
 		driver.executeJavaScript("arguments[0].click();",btnRFQSearch);
 	}
 
@@ -223,11 +236,11 @@ public class QuotePage {
 	 * @date    10/10/16
 	 */
 	public void perform_Requisition(String text){
+		pl.isDomComplete(driver);
+		Sleeper.sleep(5000);
 		txtRFQNumber.clear();
 		txtRFQNumber.sendKeys(text);
-		btnRFQSearch.syncVisible(10);
 		driver.executeJavaScript("arguments[0].click();",btnRFQSearch);
-		Sleeper.sleep(2000);
 		pl.isDomComplete(driver);
 		click_TakeOwnership();
 		click_EditRFQDetail();
@@ -249,36 +262,6 @@ public class QuotePage {
 
 	}
 
-	/**
-	 * @summary: Method to verify the message after taking the ownership in .
-	 * @author: Praveen Namburi, @version: Created 10-04-2016.
-	 *//*
-	public void verify_LineItemsSaved(){
-		WebDriverWait wait = new WebDriverWait(driver,3);
-		WebElement lblLineItemsSaved =wait.until(ExpectedConditions.
-				visibilityOfElementLocated(By.xpath("//div[@id='divAppInfoMsg'][@class='addMessage']")));
-		String getLineItemsSaved = lblLineItemsSaved.getText();
-		TestReporter.assertTrue(getLineItemsSaved.contains("The Line Items "), 
-				"The Line Items have been saved successfully!");
-
-	}*/
-
-
-	/**
-	 * @summary: Method to verify the message after RFQ Info Submitted
-	 * @author: Praveen Namburi, @version: Created 10-04-2016.
-	 *//*
-	public void verify_RFQSubmitted(){
-		pl.isDomComplete(driver);
-		WebDriverWait wait = new WebDriverWait(driver,3);
-		WebElement lblRFQSubmittedMessage =wait.until(ExpectedConditions.
-				visibilityOfElementLocated(By.xpath("//div[@id='divAppInfoMsg'][@class='addMessage']")));
-		String getRFQSubmittedMessage = lblRFQSubmittedMessage.getText();
-		TestReporter.assertTrue(getRFQSubmittedMessage.contains("The RFQ has been submitted"), 
-				"The RFQ has been submitted for pre-approval successfully!");
-
-	}
-	  */
 
 	/**
 	 * @summary Method to perform Submit RFQ
@@ -287,6 +270,7 @@ public class QuotePage {
 	 */
 	public void SubmitRFQ(String inputRFQ){
 		pl.isDomComplete(driver);
+		chkSelect.syncVisible(5,false);
 		driver.executeJavaScript("arguments[0].click();",chkSelect);
 		click_Save();
 		click_SubmitForPreApproval(inputRFQ);
@@ -350,6 +334,7 @@ public class QuotePage {
 	 * @date    10/10/16
 	 */
 	public void click_Save(){
+		btnSave.syncVisible(5, false);
 		driver.executeJavaScript("arguments[0].click();",btnSave);
 	}
 
@@ -363,6 +348,7 @@ public class QuotePage {
 	public void click_SubmitForPreApproval(String inputRFQ){
 		btnSubmitForPreApproval.syncVisible(10);
 		if(btnSubmitForPreApproval.isDisplayed()){
+			btnSubmitForPreApproval.syncVisible(5, false);
 			driver.executeJavaScript("arguments[0].click();",btnSubmitForPreApproval);
 		}else{
 			btnBack.syncVisible(5);
@@ -385,7 +371,7 @@ public class QuotePage {
 		String xpath = ".//*[@id='tblRFQList']/tbody/tr[2]/td[5]";
 		click_MaximizeRFQ();
 		Sleeper.sleep(5000);
-		WebDriverWait wait = new WebDriverWait(driver, 5);
+		WebDriverWait wait = new WebDriverWait(driver, 15);
 		WebElement element = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(xpath)));
 		element.click();
 		Sleeper.sleep(2000);
@@ -513,6 +499,7 @@ public class QuotePage {
 		pl.isDomComplete(driver);
 		String getSupplierName = supplierTable.get(0).getText().trim();
 		TestReporter.log("Selected the supplier:" + getSupplierName);
+		Sleeper.sleep(1000);
 		supplierTable.get(0).click();
 		chkSelectAll.syncEnabled(5, false);
 		chkSelectAll.jsClick();
@@ -523,19 +510,20 @@ public class QuotePage {
 	}
 
 	/**
-	 * @summary: Method to verify the supplier has been added successfully.
-	 * @author: Praveen Namburi, @version: Created 07-10-2016.
-	 */
-	public void verify_SupplierIsAdded(){
-		WebDriverWait wait = new WebDriverWait(driver,5);
-		wait.until(ExpectedConditions.
-				visibilityOfElementLocated(By.xpath("//div[@id='divAppInfoMsg'][@class='addMessage']")));
-		String getSupplierAddedMessage = lblInfoMsg.getText();
-		TestReporter.logStep("Message after adding the Supplier: "+ getSupplierAddedMessage);
-		TestReporter.assertTrue(getSupplierAddedMessage.contains("added successfully") , 
-				"The supplier has been added successfully!");
+	  * @summary: Method to verify the supplier has been added successfully.
+	  * @author: Praveen Namburi, @version: Created 07-10-2016.
+	  */
+	 public void verify_SupplierIsAdded(){
+	  WebDriverWait wait = new WebDriverWait(driver,10);
+	  wait.until(ExpectedConditions.
+	    visibilityOfElementLocated(By.xpath("//div[@id='divAppInfoMsg'][@class='addMessage']")));
+	  String getSupplierAddedMessage = lblInfoMsg.getText();
+	  TestReporter.logStep("Message after adding the Supplier: "+ getSupplierAddedMessage);
+	  TestReporter.assertTrue(getSupplierAddedMessage.contains("added successfully") , 
+	    "The supplier has been added successfully!");
+	  lblInfoMsg.syncHidden(9, false);
 
-	}
+	 }
 
 	/**
 	 * @Summary: Method to click on Submit button in Supplier selection screen.
@@ -586,10 +574,10 @@ public class QuotePage {
 			if(row % 2 == 0){
 				String getRFQNumber = driver.findElement(By.xpath("//table[@id='tblRFQ']/tbody/"
 						+ "tr["+row+"]/td[4]/span")).getText();
-				TestReporter.log("RFQ Number is: " + getRFQNumber);
+				//TestReporter.log("RFQ Number is: " + getRFQNumber);
 				String getStatus = driver.findElement(By.xpath("//table[@id='tblRFQ']/tbody/"
 						+ "tr["+row+"]/td[9]")).getText().trim();
-				TestReporter.log("RFQ Number is: " + getStatus);
+				//TestReporter.log("RFQ Number is: " + getStatus);
 				if(getRFQNumber.equalsIgnoreCase(RFQNumber) && getStatus.contains("Active") ){
 					TestReporter.assertTrue(getStatus.contains("Active"), "RFQ Status is 'Active'.");
 					break;
@@ -609,10 +597,10 @@ public class QuotePage {
 		lstStatus.isEnabled();
 		driver.executeJavaScript("arguments[0].click();", lstStatus);
 		driver.setElementTimeout(Constants.ELEMENT_TIMEOUT);
-		lstStatuses.get(0).click();
+		driver.executeJavaScript("arguments[0].click();", lstStatuses.get(0));
 		Sleeper.sleep(1000);
 		// Select input Status 
-		lstStatuses.get(Integer.parseInt(inputOption)).click();
+		driver.executeJavaScript("arguments[0].click();", lstStatuses.get(Integer.parseInt(inputOption)));
 		driver.executeJavaScript("arguments[0].click();",btnRFQSearch);
 	}
 
@@ -623,10 +611,10 @@ public class QuotePage {
 	 */
 	public void click_Respond(){
 		lnkRespond.syncVisible(5);
-		lnkRespond.click();
+		try{lnkRespond.jsClick();}catch(Exception e){driver.executeJavaScript("arguments[0].click();",lnkRespond);}
 		lnkRespond.syncHidden(5);
 	}
-	
+
 	/**
 	 * @summary Method to Click View Responces
 	 * @author  Lalitha Banda
@@ -635,8 +623,9 @@ public class QuotePage {
 	public void click_ViewResponces(){
 		btnViewResponces.syncVisible(5);
 		btnViewResponces.click();
+		try{btnViewResponces.jsClick();}catch(Exception e){driver.executeJavaScript("arguments[0].click();",btnViewResponces);}
 	}
-	
+
 	/**
 	 * @summary Method to clcik Check all - Supplier Responces
 	 * @author  Lalitha Banda
@@ -646,8 +635,8 @@ public class QuotePage {
 		chkAll.syncVisible(5);
 		chkAll.click();
 	}
-	
-	
+
+
 	/**
 	 * @summary  Method to click on Process 
 	 * @author  Lalitha Banda
@@ -659,5 +648,6 @@ public class QuotePage {
 	}
 
 }
+
 
 

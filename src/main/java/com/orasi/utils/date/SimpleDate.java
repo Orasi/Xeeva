@@ -1,6 +1,8 @@
 package com.orasi.utils.date;
 
 import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -106,5 +108,21 @@ public class SimpleDate {
     
     public int compareCalendarTo(Calendar calendar) {
         return this.calendar.compareTo(calendar);
+    }
+    
+    public long daysOut(String two) throws ParseException { 
+     DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+     Date currentDate = df.parse(getCurrentDate());
+     Date dueDate = df.parse(two);
+     long difference = (currentDate.getTime()-dueDate.getTime())/(24 * 60 * 60 * 1000); 
+     return Math.abs(difference); 
+    }
+    
+    public String getCurrentDate(){
+     Date date = new Date();
+        String DATE_FORMAT = "MM/dd/yyyy";
+        SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
+     return sdf.format(date);
+        
     }
 }
