@@ -29,9 +29,6 @@ import com.xeeva.quote.QuotePage;
 public class VerifyBuyerAwards_OR_RecommendsRFQ extends TestEnvironment{
 
 	public String RequisitionType = "serviceRequestGeneral";
-	/*String inputComments = "Awarded";
-	String inputCurrentView = "Myview";
-	String activeIndexCount = "3";*/
 
 	// **************
 	// Data Provider
@@ -168,14 +165,14 @@ public class VerifyBuyerAwards_OR_RecommendsRFQ extends TestEnvironment{
 		qPage.enter_RFQNumber(RFQ_Number);
 
 		String approverRole = qPage.getApproverEmail();
-		TestReporter.logStep("Approver Role : " + approverRole);
+		TestReporter.logStep("Pre Approver Role : " + approverRole);
 
 		//Application Logout
 		TestReporter.logStep("Application Logout");
 		mainNav.clickLogout();
 
 		TestReporter.logStep("********************************************************************************");
-		TestReporter.logStep("Login as Approver to  Verify Finance Approver Approves Request");
+		TestReporter.logStep("Login as Approver to  pre-Approve RFQ ");
 		TestReporter.logStep("********************************************************************************");
 
 		// Application Login 
@@ -325,6 +322,16 @@ public class VerifyBuyerAwards_OR_RecommendsRFQ extends TestEnvironment{
 		// Performing Awards/Recommends RFQ
 		TestReporter.logStep("Perform Award RFQ");
 		qPage1.processAddComments(CurrentView,RFQ_Number,inputComments,ActiveStatusIndex);
+
+		// QuotePage - Clicking on QuoteTab 
+		TestReporter.logStep("Clicking on QuoteTab");
+		qPage1.click_quoteTab();
+		qPage1.click_Reset();
+		
+		TestReporter.logStep("Search RFQ and read Approvals Email "); 
+		qPage1.enter_RFQNumber(RFQ_Number);
+		String approverRole1 = qPage1.getApproverEmail();
+		TestReporter.logStep("Approver Role : " + approverRole1); 
 
 		//Application Logout
 		TestReporter.logStep("Application Logout");

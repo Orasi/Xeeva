@@ -139,6 +139,8 @@ public class QuotePage {
 	@FindBy(id="btnRecommend") private Button btnRecommend;
 	@FindBy(xpath="//*[@id='btnViewResponses'][@value='Respond']") private Button btnRespond;
 	@FindBy(id="fancybox-close") private WebElement eleClose;
+	
+	@FindBy(id="btnRFQReset") private Button btnRFQReset;
 
 
 	//**Constructor**//*
@@ -762,6 +764,15 @@ public class QuotePage {
 
 	}
 
+	/**
+	 * @summary Method to click Reset
+	 * @author  Lalitha Banda
+	 * @date    17/10/16
+	 */	
+	public void click_Reset(){
+		btnRFQReset.syncVisible(5, false);
+		try{btnRFQReset.click();}catch(Exception e){driver.executeJavaScript("arguments[0].click();",btnRFQReset);}
+	}
 }
 
 

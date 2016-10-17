@@ -35,6 +35,7 @@ public class ApprovalsPage {
 
 	//**Page Elements**//*
 	@FindBy(id = "lnkAMS")	private Link approvalsTab;
+	@FindBy(partialLinkText = "Approvals")	private Link approvalsSubTab;
 	@FindBy(xpath= "//*[@id='divREQList']/div/input[1]")private Button btnApproveSelected;
 	@FindBy(xpath = "//*[@id='divREQList'][@class='Datagridborder']/tbody/tr") private List<WebElement> ReqDetailsGrid;
 	@FindBy(xpath = ".//*[@for='chkApproveAll'][@class='css-label']") private Label chkApprove;
@@ -66,6 +67,14 @@ public class ApprovalsPage {
 	}
 
 	//**Page Interactions**//*
+	
+	public void click_ApprovalsSubTab(){
+		pl.isDomComplete(driver,2);
+		approvalsSubTab.syncVisible(20, false);
+		driver.executeJavaScript("arguments[0].click();", approvalsSubTab);
+		driver.manage().timeouts().implicitlyWait(Constants.PAGE_TIMEOUT, TimeUnit.SECONDS);
+	}
+	
 
 	/**
 	 * @summary  Method to clcik on Approvals Tab
