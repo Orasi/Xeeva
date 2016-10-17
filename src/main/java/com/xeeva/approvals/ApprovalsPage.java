@@ -73,7 +73,7 @@ public class ApprovalsPage {
 	 * @date  04/10/16
 	 **/
 	public void click_ApprovalsTab(){
-		approvalsTab.syncVisible(30, false);
+		approvalsTab.syncVisible(40, false);
 		driver.executeJavaScript("arguments[0].click();", approvalsTab);
 		driver.manage().timeouts().implicitlyWait(Constants.PAGE_TIMEOUT, TimeUnit.SECONDS);
 	}
@@ -292,7 +292,7 @@ public class ApprovalsPage {
 			}
 			// Reading REQ Status  			
 			do{
-				Sleeper.sleep(3000);
+				Sleeper.sleep(5000);
 				click_ApprovalsTab();
 				pl.isDomComplete(driver);
 				String requiredStatus = driver.findElement(By.xpath(ReqRow+"["+iterator+"]/td[14]")).getText().trim();
