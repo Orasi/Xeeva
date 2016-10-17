@@ -1,6 +1,7 @@
 package mainAppFlow;
 
 import java.text.ParseException;
+
 import org.testng.ITestContext;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
@@ -8,6 +9,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
+
 import com.orasi.utils.TestEnvironment;
 import com.orasi.utils.TestReporter;
 import com.orasi.utils.dataProviders.ExcelDataProvider;
@@ -70,7 +72,7 @@ public class Verify_RFQResponceBySupplier extends TestEnvironment{
 			String CategoryType,String Category,String SubCategory,String MN,String MPN,
 			String Quantity,String UnitofMeasure,String Price,String changeType,String selectCC,String BuyerRole,String Taxtype,
 			String TaxCode,String ItemName,String ExpectedMsg,String ExpectedStatus,String supplier,
-			String SupplierRole,String price,String quantity,String leadTime,String frieghtID) throws ParseException{
+			String SupplierRole,String price,String quantity,String leadTime,String frieghtID,String inputComments,String CurrentView,String ActiveStatusIndex) throws ParseException{
 
 		String[] QuantityArray = Quantity.split(";");
 		String[] UOMArray = UnitofMeasure.split(";");
