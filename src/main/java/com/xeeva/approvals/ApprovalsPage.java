@@ -35,6 +35,7 @@ public class ApprovalsPage {
 
 	//**Page Elements*
 	@FindBy(id = "lnkAMS")	private Link approvalsTab;
+	@FindBy(partialLinkText = "Approvals")	private Link approvalsSubTab;
 	@FindBy(xpath= "//*[@id='divREQList']/div/input[1]")private Button btnApproveSelected;
 	@FindBy(xpath = "//*[@id='divREQList'][@class='Datagridborder']/tbody/tr") private List<WebElement> ReqDetailsGrid;
 	@FindBy(xpath = ".//*[@for='chkApproveAll'][@class='css-label']") private Label chkApprove;
@@ -65,7 +66,15 @@ public class ApprovalsPage {
 		btnApproveSelected.syncVisible(20, false);
 	}
 
-	//**Page Interactions*
+	//**Page Interactions**//*
+	
+	public void click_ApprovalsSubTab(){
+		pl.isDomComplete(driver,2);
+		approvalsSubTab.syncVisible(20, false);
+		driver.executeJavaScript("arguments[0].click();", approvalsSubTab);
+		driver.manage().timeouts().implicitlyWait(Constants.PAGE_TIMEOUT, TimeUnit.SECONDS);
+	}
+	
 
 	/**
 	 * @summary  Method to clcik on Approvals Tab
@@ -73,7 +82,7 @@ public class ApprovalsPage {
 	 * @date  04/10/16
 	 **/
 	public void click_ApprovalsTab(){
-		approvalsTab.syncVisible(30, false);
+		approvalsTab.syncVisible(40, false);
 		driver.executeJavaScript("arguments[0].click();", approvalsTab);
 	}
 
@@ -289,7 +298,7 @@ public class ApprovalsPage {
 			}
 			// Reading REQ Status  			
 			do{
-				Sleeper.sleep(3000);
+				Sleeper.sleep(5000);
 				click_ApprovalsTab();
 				pl.isDomComplete(driver);
 				String requiredStatus = driver.findElement(By.xpath(ReqRow+"["+iterator+"]/td[14]")).getText().trim();

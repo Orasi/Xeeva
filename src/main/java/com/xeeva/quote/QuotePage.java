@@ -7,10 +7,12 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
 import java.util.List;
 import java.util.ResourceBundle;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.orasi.core.interfaces.Button;
@@ -130,7 +132,16 @@ public class QuotePage {
 	@FindBy(id="btnProcess") private Button btnProcess;
 
 	@FindBy(xpath=".//*[@id='btnRestoreSearch']") private Button btnapplySavedSearch;
-	//
+	@FindBy(id="ddlSupplier") private WebElement lstCurrentView;
+	@FindBy(xpath="//span[@class='radioPlace']") private WebElement eleSupplier;
+	@FindBy(id="txtAwardComments") private Textbox txtAwardComments;
+	@FindBy(id="btnAward") private Button btnAward;
+	@FindBy(id="btnRecommend") private Button btnRecommend;
+	@FindBy(xpath="//*[@id='btnViewResponses'][@value='Respond']") private Button btnRespond;
+	@FindBy(id="fancybox-close") private WebElement eleClose;
+	
+	@FindBy(id="btnRFQReset") private Button btnRFQReset;
+
 
 	//**Constructor**//*
 
@@ -152,7 +163,7 @@ public class QuotePage {
 	 */
 	public void click_quoteTab(){
 		pl.isDomComplete(driver);
-		quoteTab.syncVisible(10, false);
+		quoteTab.syncVisible(20, false);
 		driver.executeJavaScript("arguments[0].click();",quoteTab);
 		quoteTab.syncHidden(5, false);
 		// Verify Quote Page Loaded 
@@ -219,6 +230,7 @@ public class QuotePage {
 	 * @date    10/10/16
 	 */
 	public void enter_RFQNumber(String text){
+		pl.isDomComplete(driver);
 		txtRFQNumber.syncVisible(7, false);
 		txtRFQNumber.clear();
 		driver.setElementTimeout(5);
@@ -270,7 +282,7 @@ public class QuotePage {
 	 */
 	public void SubmitRFQ(String inputRFQ){
 		pl.isDomComplete(driver);
-		chkSelect.syncVisible(5,false);
+		chkSelect.syncVisible(10,false);
 		driver.executeJavaScript("arguments[0].click();",chkSelect);
 		click_Save();
 		click_SubmitForPreApproval(inputRFQ);
@@ -510,20 +522,20 @@ public class QuotePage {
 	}
 
 	/**
-	  * @summary: Method to verify the supplier has been added successfully.
-	  * @author: Praveen Namburi, @version: Created 07-10-2016.
-	  */
-	 public void verify_SupplierIsAdded(){
-	  WebDriverWait wait = new WebDriverWait(driver,10);
-	  wait.until(ExpectedConditions.
-	    visibilityOfElementLocated(By.xpath("//div[@id='divAppInfoMsg'][@class='addMessage']")));
-	  String getSupplierAddedMessage = lblInfoMsg.getText();
-	  TestReporter.logStep("Message after adding the Supplier: "+ getSupplierAddedMessage);
-	  TestReporter.assertTrue(getSupplierAddedMessage.contains("added successfully") , 
-	    "The supplier has been added successfully!");
-	  lblInfoMsg.syncHidden(9, false);
+	 * @summary: Method to verify the supplier has been added successfully.
+	 * @author: Praveen Namburi, @version: Created 07-10-2016.
+	 */
+	public void verify_SupplierIsAdded(){
+		WebDriverWait wait = new WebDriverWait(driver,15);
+		wait.until(ExpectedConditions.
+				visibilityOfElementLocated(By.xpath("//div[@id='divAppInfoMsg'][@class='addMessage']")));
+		String getSupplierAddedMessage = lblInfoMsg.getText();
+		TestReporter.logStep("Message after adding the Supplier: "+ getSupplierAddedMessage);
+		TestReporter.assertTrue(getSupplierAddedMessage.contains("added successfully") , 
+				"The supplier has been added successfully!");
+		lblInfoMsg.syncHidden(9, false);
 
-	 }
+	}
 
 	/**
 	 * @Summary: Method to click on Submit button in Supplier selection screen.
@@ -598,10 +610,12 @@ public class QuotePage {
 		driver.executeJavaScript("arguments[0].click();", lstStatus);
 		driver.setElementTimeout(Constants.ELEMENT_TIMEOUT);
 		driver.executeJavaScript("arguments[0].click();", lstStatuses.get(0));
-		Sleeper.sleep(1000);
+		pl.isDomComplete(driver,3);
 		// Select input Status 
 		driver.executeJavaScript("arguments[0].click();", lstStatuses.get(Integer.parseInt(inputOption)));
+		pl.isDomComplete(driver,3);
 		driver.executeJavaScript("arguments[0].click();",btnRFQSearch);
+		btnRFQSearch.syncHidden(5,false);
 	}
 
 	/**
@@ -610,9 +624,8 @@ public class QuotePage {
 	 * @date    12/10/16
 	 */
 	public void click_Respond(){
-		lnkRespond.syncVisible(5);
+		lnkRespond.syncVisible(5,false);
 		try{lnkRespond.jsClick();}catch(Exception e){driver.executeJavaScript("arguments[0].click();",lnkRespond);}
-		lnkRespond.syncHidden(5);
 	}
 
 	/**
@@ -621,9 +634,8 @@ public class QuotePage {
 	 * @date    12/10/16
 	 */
 	public void click_ViewResponces(){
-		btnViewResponces.syncVisible(5);
-		btnViewResponces.click();
-		try{btnViewResponces.jsClick();}catch(Exception e){driver.executeJavaScript("arguments[0].click();",btnViewResponces);}
+		btnViewResponces.syncVisible(5,false);
+		try{btnViewResponces.click();}catch(Exception e){driver.executeJavaScript("arguments[0].click();",btnViewResponces);}
 	}
 
 	/**
@@ -632,8 +644,9 @@ public class QuotePage {
 	 * @date    12/10/16
 	 */
 	public void check_AllSupplierResponces(){
-		chkAll.syncVisible(5);
-		chkAll.click();
+		chkAll.syncVisible(5,false);
+		//chkAll.click();
+		try{chkAll.click();}catch(Exception e){driver.executeJavaScript("arguments[0].click();",chkAll);}
 	}
 
 
@@ -643,10 +656,123 @@ public class QuotePage {
 	 * @date    12/10/16
 	 */
 	public void clcik_Process(){
-		btnProcess.syncVisible(5);
-		btnProcess.click();
+		btnProcess.syncVisible(5,false);
+		//btnProcess.click();
+		try{btnProcess.click();}catch(Exception e){driver.executeJavaScript("arguments[0].click();",btnProcess);}
 	}
 
+
+	/**
+	 * @summary  Method to click on Supplier Radio button  
+	 * @author  Lalitha Banda
+	 * @date    17/10/16
+	 */
+	public void check_Supplier(){
+		if(eleSupplier.isDisplayed()){
+			//eleSupplier.click();
+			try{eleSupplier.click();}catch(Exception e){driver.executeJavaScript("arguments[0].click();",eleSupplier);}
+			clcik_Process();
+		}else{
+			clcik_Process();
+		}
+	}
+
+	/**
+	 * @summary   Method for award comments
+	 * @author  Lalitha Banda
+	 * @date    17/10/16
+	 */
+	public void addAwardComments(String input){
+		Sleeper.sleep(5000);
+		txtAwardComments.set(input);
+		btnAward.click();
+		try{btnAward.click();}catch(Exception e){driver.executeJavaScript("arguments[0].click();",btnAward);}
+		try{eleClose.click();}catch(Exception e){driver.executeJavaScript("arguments[0].click();",eleClose);}
+	}
+
+	/**
+	 * @summary Method for Recommend comments
+	 * @author  Lalitha Banda
+	 * @date    17/10/16
+	 */
+	public void addRecommendComments(String input){
+		pl.isDomComplete(driver);
+		txtAwardComments.set(input);
+		try{btnRecommend.click();}catch(Exception e){driver.executeJavaScript("arguments[0].click();",btnRecommend);}
+		try{eleClose.click();}catch(Exception e){driver.executeJavaScript("arguments[0].click();",eleClose);}
+	}
+
+	/**
+	 * @summary Method to select current view 
+	 * @author  Lalitha Banda
+	 * @date    17/10/16
+	 */
+	public void select_CurrentView(String inputCurrentView){
+		pl.isDomComplete(driver);
+		switch(inputCurrentView.toLowerCase()){
+		case "myview":
+			new Select (lstCurrentView).selectByIndex(0);
+			click_ViewResponces();
+			break;
+		case "supplier":
+			new Select (lstCurrentView).selectByIndex(1);
+			click_ViewResponces();
+			break;
+		default : System.out.println();
+		}
+	}
+
+
+	/**
+	 * @summary Method to perform Responce Process
+	 * @author  Lalitha Banda
+	 * @date    17/10/16
+	 */
+	public void buyerResponceProcess(String inputCurrentView,String inputRFQ,String activeIndexCount){
+		performSearch_ByStatus(activeIndexCount);
+		enter_RFQNumber(inputRFQ);
+		click_Respond();
+		select_CurrentView(inputCurrentView);
+		check_AllSupplierResponces();
+		check_Supplier();
+	}
+
+	/**
+	 * @summary Method to read Pop up header after Process
+	 * @author  Lalitha Banda
+	 * @date    17/10/16
+	 */
+	public String readProcessComments(){
+		pl.isDomComplete(driver);
+		String readComments = driver.findElement(By.xpath(".//*[@id='tdAwardHead']")).getText();
+		TestReporter.logStep(" PopUp Header : "+readComments);
+		return driver.findElement(By.xpath(".//*[@id='tdAwardHead']")).getText();
+	}
+
+	/**
+	 * @summary Method for Award/Recommend Comments Functionality 
+	 * @author  Lalitha Banda
+	 * @date    17/10/16
+	 */	
+	public void processAddComments(String inputCurrentView,String inputRFQ,String inputComments,String activeIndexCount){
+		buyerResponceProcess(inputCurrentView,inputRFQ,activeIndexCount);
+		if(readProcessComments().contains("Recommend")){
+			addRecommendComments(inputComments);
+		}else{
+			addAwardComments(inputComments);
+		}
+
+	}
+
+	/**
+	 * @summary Method to click Reset
+	 * @author  Lalitha Banda
+	 * @date    17/10/16
+	 */	
+	public void click_Reset(){
+		btnRFQReset.syncVisible(5, false);
+		try{btnRFQReset.click();}catch(Exception e){driver.executeJavaScript("arguments[0].click();",btnRFQReset);}
+	}
 }
 
 

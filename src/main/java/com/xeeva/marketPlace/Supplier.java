@@ -196,7 +196,8 @@ public class Supplier {
 			try{lblResponse.click();}catch(Exception e){ driver.executeJavaScript("arguments[0].click();", lblResponse);}
 		}else{
 		}
-		btnSubmitResponse.click();
+		btnSubmitResponse.syncVisible(5, false);
+		try{btnSubmitResponse.click();}catch(Exception e){ driver.executeJavaScript("arguments[0].click();", btnSubmitResponse);}
 		verify_RFQResponse();
 	}
 
