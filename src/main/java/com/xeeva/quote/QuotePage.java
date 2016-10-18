@@ -807,4 +807,3 @@ public class QuotePage {
 }
 
 
-

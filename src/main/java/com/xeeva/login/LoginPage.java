@@ -89,7 +89,7 @@ public class LoginPage {
 		if (lstLocation.syncVisible(20, false)){
 			lstLocation.select(location);
 		}
-		btnLogin.syncVisible(90, false);
+		btnLogin.syncVisible(50, false);
 		btnLogin.jsClick();
 	}
 
@@ -111,4 +111,24 @@ public class LoginPage {
 		btnlogin.syncVisible(10, false);
 		btnlogin.click();
 	}
+	
+	/**
+	 * @Summary: This method logins to the Market Place application with captured Supplier credentials.  
+	 * @author Praveen Namburi,@Version: Created 17-10-2016
+	 * @param SupplierRole
+	 * @param location
+	 */
+	public void loginWithRuntimeSupplierCredentials(String SupplierRole, String location){
+		pl.isDomComplete(driver);
+		WebDriverWait wait = new WebDriverWait(driver,10);
+		wait.until(ExpectedConditions.elementToBeClickable(By.className("dropdown-toggle")));
+		driver.findElement(By.cssSelector(".dropdown-menu>li>a")).jsClick();
+		pl.isDomComplete(driver);
+		txtEmail.set(SupplierRole);
+		txtPasswrd.set(userCredentialRepo.getString("PASSWORD"));
+		btnlogin.syncVisible(10, false);
+		btnlogin.click();
+	}
+	
 }
+
