@@ -89,7 +89,7 @@ public class LoginPage {
 		if (lstLocation.syncVisible(20, false)){
 			lstLocation.select(location);
 		}
-		btnLogin.syncVisible(90, false);
+		btnLogin.syncVisible(50, false);
 		btnLogin.jsClick();
 	}
 
