@@ -117,8 +117,11 @@ public class ApprovalsPage {
 	 **/
 	public void click_Approve(){
 		pageLoaded();
-		pl.isDomComplete(driver);
-		chkApprove.click();
+		pl.isDomComplete(driver,5);
+		Sleeper.sleep(3000);
+		try{chkApprove.click();}catch(Exception e){
+			driver.executeJavaScript("arguments[0].click();", chkApprove);	
+		}
 	}
 
 
@@ -331,6 +334,12 @@ public class ApprovalsPage {
 			click_Search();
 			pl.isDomComplete(driver, 5);
 			System.out.println("Record Status : "+expectedStatus);
+			
+			if(expectedStatus.equalsIgnoreCase("Waiting for Approval")){
+				// Performing Approval Process
+				click_ApprovalsSubTab();
+				performApprovalProcess();	
+			}
 						
 			// Reading REQ Status  			
 			do{

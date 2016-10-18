@@ -148,12 +148,10 @@ public class SupplierCollaborator {
 	 */
 	public void search_PONumber(){
 		txtPONumber.set(getPONumber());
-		pl.isDomComplete(driver,5);
-		lstOrderStatus.click();
-		//try{lstOrderStatus.click();}catch(Exception e){driver.executeJavaScript("arguments[0].click();",lstOrderStatus);}
 		Sleeper.sleep(5000);
-		lstOrderStatuses.get(0).click();
-		//try{lstOrderStatuses.get(0).click();}catch(Exception e){driver.executeJavaScript("arguments[0].click();",lstOrderStatuses.get(0));}
+		try{lstOrderStatus.click();}catch(Exception e){driver.executeJavaScript("arguments[0].click();",lstOrderStatus);}
+		Sleeper.sleep(5000);
+		try{lstOrderStatuses.get(0).click();}catch(Exception e){driver.executeJavaScript("arguments[0].click();",lstOrderStatuses.get(0));}
 		try{btnSearch.click();}catch(Exception e){driver.executeJavaScript("arguments[0].click();",btnSearch);}
 	}
 	/**
