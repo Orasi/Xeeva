@@ -6,9 +6,9 @@
 	<parameter name="runLocation" value="local" />
 	<parameter name="browserVersion" value="" />
 	<parameter name="operatingSystem" value="windows" />
- 	<test name="VerifyBuyer_AwardsTheRFQ">
+ 	<test name="Verify_createInvoiceBySupplier">
 		<classes>
-			<class name="sandbox.VerifyBuyer_AwardsTheRFQ" />
+			<class name="sandbox.Verify_createInvoiceBySupplier" />
 		</classes>
 	</test> 
 </suite> <!-- Suite -->
