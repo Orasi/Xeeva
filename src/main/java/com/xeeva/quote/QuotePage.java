@@ -777,6 +777,33 @@ public class QuotePage {
 		btnRFQReset.syncVisible(5, false);
 		try{btnRFQReset.click();}catch(Exception e){driver.executeJavaScript("arguments[0].click();",btnRFQReset);}
 	}
+
+	// Method to Read Status 
+	public String readStatus_RFQ(String inputRFQ){
+		String status = null;
+		pl.isDomComplete(driver,5);
+		click_quoteTab();
+		// Search RFq
+		enter_RFQNumber(inputRFQ);
+		// Read RFQ status 
+		String expectedStatus = driver.findElement(By.xpath(".//*[@id='tblRFQ']/tbody/tr/td[9]")).getText();
+		TestReporter.logStep("Status : "+expectedStatus);
+		do{
+			Sleeper.sleep(5000);
+			pl.isDomComplete(driver);
+			click_quoteTab();
+			String requiredStatus = driver.findElement(By.xpath(".//*[@id='tblRFQ']/tbody/tr/td[9]")).getText();
+			System.out.println("Required Record Status : "+requiredStatus);
+			if(requiredStatus.equalsIgnoreCase("RFQ-Awarded")){
+				status = requiredStatus;
+				break;
+			}
+		}while(expectedStatus.equalsIgnoreCase("Active"));
+
+		return status;
+	}
+
+
 }
 
 

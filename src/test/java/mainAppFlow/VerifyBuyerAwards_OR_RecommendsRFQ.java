@@ -323,6 +323,11 @@ public class VerifyBuyerAwards_OR_RecommendsRFQ extends TestEnvironment{
 		TestReporter.logStep("Perform Award RFQ");
 		qPage1.processAddComments(CurrentView,RFQ_Number,inputComments,ActiveStatusIndex);
 
+		// Read RFQ status 
+		TestReporter.logStep("Read RFQ status");
+		String getStatus1 = qPage1.readStatus_RFQ(RFQ_Number);
+		TestReporter.logStep("RFQ status"+getStatus1);
+
 		//Application Logout
 		TestReporter.logStep("Application Logout");
 		MainNav mainPage = new MainNav(getDriver());
@@ -361,8 +366,8 @@ public class VerifyBuyerAwards_OR_RecommendsRFQ extends TestEnvironment{
 		approvalPage1.perform_RFQSearch(rfqNumber);
 
 		//Reading RFQ Status
-		String getStatus1  = approvalPage1.read_RFQStatus();
-		TestReporter.logStep("RFQ Status  : "+getStatus1);
+		String getStatus2  = approvalPage1.read_RFQStatus_ApprovalProcess();
+		TestReporter.logStep("RFQ Status  : "+getStatus2);
 
 		//Application Logout
 		TestReporter.logStep("Application Logout");

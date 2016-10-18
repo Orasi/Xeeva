@@ -1,7 +1,7 @@
 package mainAppFlow;
 
-
 import java.text.ParseException;
+
 import org.testng.ITestContext;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
@@ -9,6 +9,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
+
 import com.orasi.utils.TestEnvironment;
 import com.orasi.utils.TestReporter;
 import com.orasi.utils.dataProviders.ExcelDataProvider;
@@ -326,6 +327,11 @@ public class VerifyRequestor_RecnUnrecieve_MultipleLines extends TestEnvironment
 		TestReporter.logStep("Perform Award RFQ");
 		qPage1.processAddComments(CurrentView,RFQ_Number,inputComments,ActiveStatusIndex);
 
+		// Read RFQ status 
+		TestReporter.logStep("Read RFQ status");
+		String getStatus1 = qPage1.readStatus_RFQ(RFQ_Number);
+		TestReporter.logStep("RFQ status"+getStatus1);
+
 		//Application Logout
 		TestReporter.logStep("Application Logout");
 		MainNav mainPage = new MainNav(getDriver());
@@ -364,8 +370,8 @@ public class VerifyRequestor_RecnUnrecieve_MultipleLines extends TestEnvironment
 		approvalPage1.perform_RFQSearch(rfqNumber);
 
 		//Reading RFQ Status
-		String getStatus1  = approvalPage1.read_RFQStatus();
-		TestReporter.logStep("RFQ Status  : "+getStatus1);
+		String getStatus2  = approvalPage1.read_RFQStatus_ApprovalProcess();
+		TestReporter.logStep("RFQ Status  : "+getStatus2);
 
 		//Application Logout
 		TestReporter.logStep("Application Logout");
