@@ -133,13 +133,13 @@ public class QuotePage {
 
 	@FindBy(xpath=".//*[@id='btnRestoreSearch']") private Button btnapplySavedSearch;
 	@FindBy(id="ddlSupplier") private WebElement lstCurrentView;
-	@FindBy(xpath="//span[@class='radioPlace']") private WebElement eleSupplier;
+	@FindBy(xpath="//span[@class='radioPlace']") private List<WebElement> eleSupplier;
 	@FindBy(id="txtAwardComments") private Textbox txtAwardComments;
 	@FindBy(id="btnAward") private Button btnAward;
 	@FindBy(id="btnRecommend") private Button btnRecommend;
 	@FindBy(xpath="//*[@id='btnViewResponses'][@value='Respond']") private Button btnRespond;
 	@FindBy(id="fancybox-close") private WebElement eleClose;
-	
+
 	@FindBy(id="btnRFQReset") private Button btnRFQReset;
 
 
@@ -511,7 +511,7 @@ public class QuotePage {
 		pl.isDomComplete(driver);
 		String getSupplierName = supplierTable.get(0).getText().trim();
 		TestReporter.log("Selected the supplier:" + getSupplierName);
-		Sleeper.sleep(1000);
+		Sleeper.sleep(3000);
 		supplierTable.get(0).click();
 		chkSelectAll.syncEnabled(5, false);
 		chkSelectAll.jsClick();
@@ -668,9 +668,12 @@ public class QuotePage {
 	 * @date    17/10/16
 	 */
 	public void check_Supplier(){
-		if(eleSupplier.isDisplayed()){
-			//eleSupplier.click();
-			try{eleSupplier.click();}catch(Exception e){driver.executeJavaScript("arguments[0].click();",eleSupplier);}
+		List<WebElement> input = eleSupplier;
+		TestReporter.logStep("Radio Buttons Size : "+input.size());
+		if(eleSupplier.size()>0){
+			for(WebElement inputele :input){
+				try{inputele.click();}catch(Exception e){driver.executeJavaScript("arguments[0].click();",inputele);}	
+			}
 			clcik_Process();
 		}else{
 			clcik_Process();
@@ -711,6 +714,7 @@ public class QuotePage {
 		pl.isDomComplete(driver);
 		switch(inputCurrentView.toLowerCase()){
 		case "myview":
+			pl.isDomComplete(driver);
 			new Select (lstCurrentView).selectByIndex(0);
 			click_ViewResponces();
 			break;

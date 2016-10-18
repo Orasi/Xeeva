@@ -563,6 +563,7 @@ public class CostCenterPage {
 	 */
 	public void verify_CostCenterUpdatedAtHeaderLevel(){
 		//Added wait statement to wait until the Cart item added successfull message to be displayed.
+		pl.isDomComplete(driver,3);
 		WebDriverWait wait = new WebDriverWait(driver,5);
 		WebElement lblCartAddItemMessage =wait.until(ExpectedConditions.
 				visibilityOfElementLocated(By.xpath("//div[@id='divAppInfoMsg'][@class='addMessage']")));
