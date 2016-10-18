@@ -270,7 +270,7 @@ public class VerifyBuyerAwards_OR_RecommendsRFQ extends TestEnvironment{
 		setOperatingSystem(operatingSystem);
 		setRunLocation(runLocation);
 		setTestEnvironment(environment);
-		testStart("Add_PriceAgreementItem_InCart");
+		testStart("VerifyBuyerAwards_OR_RecommendsRFQ");
 
 		// Application Login  - Market Place
 		TestReporter.logStep("Login into Market Place application");
@@ -307,7 +307,7 @@ public class VerifyBuyerAwards_OR_RecommendsRFQ extends TestEnvironment{
 		setOperatingSystem(operatingSystem);
 		setRunLocation(runLocation);
 		setTestEnvironment(environment);
-		testStart("Add_PriceAgreementItem_InCart");
+		testStart("VerifyBuyerAwards_OR_RecommendsRFQ");
 
 		// Application Login 
 		TestReporter.logStep("Login into application");
@@ -323,19 +323,49 @@ public class VerifyBuyerAwards_OR_RecommendsRFQ extends TestEnvironment{
 		TestReporter.logStep("Perform Award RFQ");
 		qPage1.processAddComments(CurrentView,RFQ_Number,inputComments,ActiveStatusIndex);
 
-		// QuotePage - Clicking on QuoteTab 
-		TestReporter.logStep("Clicking on QuoteTab");
-		qPage1.click_quoteTab();
-		qPage1.click_Reset();
-		
-		TestReporter.logStep("Search RFQ and read Approvals Email "); 
-		qPage1.enter_RFQNumber(RFQ_Number);
-		String approverRole1 = qPage1.getApproverEmail();
-		TestReporter.logStep("Approver Role : " + approverRole1); 
-
 		//Application Logout
 		TestReporter.logStep("Application Logout");
 		MainNav mainPage = new MainNav(getDriver());
+		mainPage.clickLogout();
+
+		TestReporter.logStep("********************************************************************************");
+		TestReporter.logStep("Login as approver to Approve RFQ ");
+		TestReporter.logStep("********************************************************************************");
+
+		// Application Login 
+		TestReporter.logStep("Login into application");
+		TestReporter.logStep("Approvals Role : "+approverRole);
+		LoginPage loginPage2 = new LoginPage(getDriver());
+		loginPage2.loginWithRuntimeUsername(approverRole.trim(),location);
+
+		// Navigating to Approvals Page
+		TestReporter.logStep("Clicking the Approvals Tab");
+		ApprovalsPage approvalPage1 = new ApprovalsPage(getDriver());
+		approvalPage1.click_ApprovalsSubTab();
+
+		// Reading Available Row for Approval Process
+		int selectedRow1 = approvalPage1.selectOrderToApprove();
+		TestReporter.logStep("Row Number : "+selectedRow1);
+
+		// Perform Approval Process
+		TestReporter.logStep("Perform Approval Process");
+		approvalPage1.performApprovalProcess();
+
+		// Click Approval Tab 
+		TestReporter.logStep("Clicking on Approval Tab");
+		approvalPage1.click_ApprovalsTab();
+		approvalPage1.click_ApprovalsSubTab();
+
+		// Perform RFQ search 
+		TestReporter.logStep("RFQ Search");
+		approvalPage1.perform_RFQSearch(rfqNumber);
+
+		//Reading RFQ Status
+		String getStatus1  = approvalPage1.read_RFQStatus();
+		TestReporter.logStep("RFQ Status  : "+getStatus1);
+
+		//Application Logout
+		TestReporter.logStep("Application Logout");
 		mainPage.clickLogout();
 
 	}
