@@ -67,7 +67,7 @@ public class LoginPage {
 		txtUsername.set(userCredentialRepo.getString(role));
 		txtPassword.set(userCredentialRepo.getString("PASSWORD"));
 
-		if (lstLocation.syncVisible(10, false)){
+		if (lstLocation.syncVisible(20, false)){
 			lstLocation.select(location);
 		}
 		btnLogin.syncVisible(90, false);
@@ -86,7 +86,7 @@ public class LoginPage {
 		txtUsername.set(role);
 		txtPassword.set(userCredentialRepo.getString("PASSWORD"));
 
-		if (lstLocation.syncVisible(10, false)){
+		if (lstLocation.syncVisible(20, false)){
 			lstLocation.select(location);
 		}
 		btnLogin.syncVisible(90, false);
@@ -131,3 +131,4 @@ public class LoginPage {
 	}
 	
 }
+

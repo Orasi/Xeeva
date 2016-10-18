@@ -123,7 +123,7 @@ public class RequisitioningPage {
 
 	@FindBy(xpath="//*[@class='QtyNumericTextBoxClass']") private Textbox txtQuantityREQ;
 	@FindBy(xpath=".//*[@class='add-to-cart-box']") private Button btnaddToCart;
-	
+
 	//**Constructor**//*
 
 	public RequisitioningPage(OrasiDriver driver){
@@ -230,7 +230,7 @@ public class RequisitioningPage {
 		selectRequisitionType(RequisitionType);
 		createMaterialRequest(ItemDescription,UNSPS,SS,CategoryType,Category,SubCategory,MN,MPN,Quantity,UnitofMeasure,UnitPrice );
 		click_Submit();
-		Verify_SmartFormItem();
+		//Verify_SmartFormItem();
 
 	}
 
@@ -241,11 +241,13 @@ public class RequisitioningPage {
 	 * @date 14/9/16
 	 **/
 	public void Verify_SmartFormItem(){
-		Sleeper.sleep(3000);
-		lblCartItemAddedMessage.syncVisible(20, false);
+		Sleeper.sleep(5000);
+		lblCartItemAddedMessage.syncVisible(60, false);
 		String getCartItemAddedMessage = lblCartItemAddedMessage.getText();
 		TestReporter.logStep(getCartItemAddedMessage);
 		TestReporter.assertTrue(getCartItemAddedMessage.equalsIgnoreCase("The item has been added successfully!"), "Item added to the cart.");
+		
+
 	}
 
 
@@ -502,50 +504,50 @@ public class RequisitioningPage {
 			TestReporter.assertTrue(false," 'No Records Found !!' in Local Items tab. ");
 		}
 		return getItemNumber;
-	  
-	  }	
-	  
-	  /**
-	   * @summary: Method to cancel the requisition record and verify them.
-	   * @author praveen namburi, @Version: Created 23-09-2016
-	   * @param comments
-	   */
-	  public void cancelRequisitionFromRecentOrders(String comments){
-		  tblRecentOrdersGrid.syncVisible();
-		  btnSeeMore.syncEnabled(5);
-		  //btnSeeMore.click();
-		  driver.executeJavaScript("arguments[0].click();", btnSeeMore);
-		  List<WebElement> getRows = tblMainRecentOrdersGrid;
-		  int rowsCount = getRows.size();
-		  TestReporter.log("Total rows in RecentOrders Grid table: "+ rowsCount);
-			  
-		    for(int row=1; row<=rowsCount; row++){
-				String getStatus = driver.findElement(By.xpath("//*[@id='gvRecentOdersGrid']/tbody/"
+
+	}	
+
+	/**
+	 * @summary: Method to cancel the requisition record and verify them.
+	 * @author praveen namburi, @Version: Created 23-09-2016
+	 * @param comments
+	 */
+	public void cancelRequisitionFromRecentOrders(String comments){
+		tblRecentOrdersGrid.syncVisible();
+		btnSeeMore.syncEnabled(5);
+		//btnSeeMore.click();
+		driver.executeJavaScript("arguments[0].click();", btnSeeMore);
+		List<WebElement> getRows = tblMainRecentOrdersGrid;
+		int rowsCount = getRows.size();
+		TestReporter.log("Total rows in RecentOrders Grid table: "+ rowsCount);
+
+		for(int row=1; row<=rowsCount; row++){
+			String getStatus = driver.findElement(By.xpath("//*[@id='gvRecentOdersGrid']/tbody/"
+					+ "tr["+ row +"]/td[8]/span")).getText();
+			if(!getStatus.contains("Canceled By Requester")){
+				driver.setElementTimeout(2);
+				driver.findElement(By.xpath("//*[@id='gvRecentOdersGrid']/tbody"
+						+ "/tr["+ row +"]/td[13]/div/a/i")).jsClick();
+				//Handle Alert if present
+				if(AlertHandler.isAlertPresent(driver, 6)){
+					AlertHandler.handleAlert(driver, 6);
+				}
+				txtComments.syncVisible(5);
+				txtComments.safeSet(comments);
+				btnCommentsSubmit.syncVisible(5);
+				btnCommentsSubmit.click();
+				Sleeper.sleep(5000);
+				String getStatusAfterCancelReqLink = driver.findElement(By.xpath("//*[@id='gvRecentOdersGrid']/tbody/"
 						+ "tr["+ row +"]/td[8]/span")).getText();
-				if(!getStatus.contains("Canceled By Requester")){
-					driver.setElementTimeout(2);
-					driver.findElement(By.xpath("//*[@id='gvRecentOdersGrid']/tbody"
-							+ "/tr["+ row +"]/td[13]/div/a/i")).jsClick();
-					//Handle Alert if present
-					if(AlertHandler.isAlertPresent(driver, 6)){
-						AlertHandler.handleAlert(driver, 6);
-					}
-					txtComments.syncVisible(5);
-					txtComments.safeSet(comments);
-					btnCommentsSubmit.syncVisible(5);
-					btnCommentsSubmit.click();
-					Sleeper.sleep(5000);
-					String getStatusAfterCancelReqLink = driver.findElement(By.xpath("//*[@id='gvRecentOdersGrid']/tbody/"
-							+ "tr["+ row +"]/td[8]/span")).getText();
-					TestReporter.logStep("Get Status After Cancel Requisition: "+getStatusAfterCancelReqLink);
-					TestReporter.assertTrue(getStatusAfterCancelReqLink.contains("Canceled By Requester"), 
-							"Cancelled the requisition record sucessfully.");
-					break;
-		       }
-		    }
-	  }
-	 
-	  
+				TestReporter.logStep("Get Status After Cancel Requisition: "+getStatusAfterCancelReqLink);
+				TestReporter.assertTrue(getStatusAfterCancelReqLink.contains("Canceled By Requester"), 
+						"Cancelled the requisition record sucessfully.");
+				break;
+			}
+		}
+	}
+
+
 
 
 	/**
@@ -663,7 +665,7 @@ public class RequisitioningPage {
 		driver.setElementTimeout(3);
 		//driver.manage().timeouts().implicitlyWait(Constants.PAGE_TIMEOUT, TimeUnit.SECONDS);
 	}
-	
+
 	/**
 	 * @summary: Method to click Cart number with valid REQ Number
 	 * @author praveen namburi, @Version: Created 28-09-2016
@@ -702,7 +704,7 @@ public class RequisitioningPage {
 		//TestReporter.log( "Quantity : "+quantity);
 		return quantity;
 	} 
-	
+
 	/**
 	 * @summary This Method re-enters the Quantity in Requisition Page
 	 * @author  Praveen Varma, @date 28/09/16
@@ -715,15 +717,15 @@ public class RequisitioningPage {
 		txtQuantityREQ.safeSet(Qty);
 		addToCart();
 	}
-	
+
 	/**
 	 * @summary Method to click on Add-to-cart button.
 	 * @author  Praveen Varma, @date 28/09/16 
 	 */
 	public void addToCart(){
-	    btnaddToCart.syncVisible();
-	    btnaddToCart.click();
-	    lblCartItemAddedMessage.syncVisible(20, false);
-    }
-	
+		btnaddToCart.syncVisible();
+		btnaddToCart.click();
+		lblCartItemAddedMessage.syncVisible(20, false);
+	}
+
 }

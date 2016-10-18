@@ -1,7 +1,6 @@
 package mainAppFlow;
 
 import java.text.ParseException;
-
 import org.testng.ITestContext;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
@@ -9,7 +8,6 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
-
 import com.orasi.utils.TestEnvironment;
 import com.orasi.utils.TestReporter;
 import com.orasi.utils.dataProviders.ExcelDataProvider;
@@ -24,12 +22,11 @@ import com.xeeva.navigation.MainNav;
 import com.xeeva.quote.QuotePage;
 
 /**
- * @summary Test to Verify RFQ Responce by Supplier
- * @author  Lalitha Banda
- * @version	14/10/2016
- * *
+ * @Summary: Test To verify buyer Awards RFQ
+ * @author : Lalitha Banda
+ * @version: Created 12/10/2016
  */
-public class Verify_RFQResponceBySupplier extends TestEnvironment{
+public class VerifyBuyerAwards_OR_RecommendsRFQ extends TestEnvironment{
 
 	public String RequisitionType = "serviceRequestGeneral";
 
@@ -49,30 +46,42 @@ public class Verify_RFQResponceBySupplier extends TestEnvironment{
 		return new Object[][] {{}};
 	}
 
+	/**
+	 * @Description: To initialize the driver and setup the environment.
+	 * @param runLocation,browserUnderTest,@param browserVersion
+	 * @param operatingSystem,@param environment
+	 */
 	@BeforeTest
 	@Parameters({ "runLocation", "browserUnderTest", "browserVersion","operatingSystem", "environment" })
-	public void setup(@Optional String runLocation, String browserUnderTest,String browserVersion, 
-			String operatingSystem, String environment) {
+	public void setup(@Optional String runLocation, String browserUnderTest,String browserVersion, String operatingSystem, String environment) {
 		setApplicationUnderTest("XEEVA");
 		setBrowserUnderTest(browserUnderTest);
 		setBrowserVersion(browserVersion);
 		setOperatingSystem(operatingSystem);
 		setRunLocation(runLocation);
 		setTestEnvironment(environment);
-		testStart("Verify_RFQResponceBySupplier");
+		testStart("Add_PriceAgreementItem_InCart");
 	}
 
+	/**
+	 * @Description: Close the driver instance.
+	 * @param testResults
+	 */
 	@AfterTest
 	public void close(ITestContext testResults){
 		endTest("TestAlert", testResults);
 	}
 
+	/**
+	 * @Description: Main business-logic of the test-case resides here.
+	 * @param role,location
+	 */
 	@Test(dataProvider = "dataScenario")
 	public void verifybuyerSubmitsRFQtoSuppliers(String role, String location,String ItemDescription,String UNSPSCCode,String SS,
 			String CategoryType,String Category,String SubCategory,String MN,String MPN,
 			String Quantity,String UnitofMeasure,String Price,String changeType,String selectCC,String BuyerRole,String Taxtype,
 			String TaxCode,String ItemName,String ExpectedMsg,String ExpectedStatus,String supplier,
-			String SupplierRole,String price,String quantity,String leadTime,String frieghtID,String inputComments,String CurrentView,String ActiveStatusIndex) throws ParseException{
+			String SupplierRole,String price,String quantity,String leadTime,String frieghtID,String inputComments,String CurrentView,String ActiveStatusIndex)throws ParseException{
 
 		String[] QuantityArray = Quantity.split(";");
 		String[] UOMArray = UnitofMeasure.split(";");
@@ -156,14 +165,14 @@ public class Verify_RFQResponceBySupplier extends TestEnvironment{
 		qPage.enter_RFQNumber(RFQ_Number);
 
 		String approverRole = qPage.getApproverEmail();
-		TestReporter.logStep("Approver Role : " + approverRole);
+		TestReporter.logStep("Pre Approver Role : " + approverRole);
 
 		//Application Logout
 		TestReporter.logStep("Application Logout");
 		mainNav.clickLogout();
 
 		TestReporter.logStep("********************************************************************************");
-		TestReporter.logStep("Login as Approver to  Verify Finance Approver Approves Request");
+		TestReporter.logStep("Login as Approver to  pre-Approve RFQ ");
 		TestReporter.logStep("********************************************************************************");
 
 		// Application Login 
@@ -261,7 +270,7 @@ public class Verify_RFQResponceBySupplier extends TestEnvironment{
 		setOperatingSystem(operatingSystem);
 		setRunLocation(runLocation);
 		setTestEnvironment(environment);
-		testStart("Add_PriceAgreementItem_InCart");
+		testStart("VerifyBuyerAwards_OR_RecommendsRFQ");
 
 		// Application Login  - Market Place
 		TestReporter.logStep("Login into Market Place application");
@@ -284,6 +293,81 @@ public class Verify_RFQResponceBySupplier extends TestEnvironment{
 		// SupplierPage - Supplier Application Logout
 		TestReporter.logStep("Application Logout");
 		sPage.supplierLogout();
-		
+
+		// Closing current Application Driver
+		driver.close();
+
+		TestReporter.logStep("********************************************************************************");
+		TestReporter.logStep("Login as Buyer to Award/Recommends  RFQ ");
+		TestReporter.logStep("********************************************************************************");
+
+		setApplicationUnderTest("XEEVA");
+		setBrowserUnderTest(browserUnderTest);
+		setBrowserVersion(browserVersion);
+		setOperatingSystem(operatingSystem);
+		setRunLocation(runLocation);
+		setTestEnvironment(environment);
+		testStart("VerifyBuyerAwards_OR_RecommendsRFQ");
+
+		// Application Login 
+		TestReporter.logStep("Login into application");
+		LoginPage loginPage1 = new LoginPage(getDriver());
+		loginPage1.loginWithCredentials(BuyerRole,location);
+
+		// QuotePage - Clicking on QuoteTab 
+		TestReporter.logStep("Clicking on QuoteTab");
+		QuotePage qPage1 = new QuotePage(getDriver());
+		qPage1.click_quoteTab();
+
+		// Performing Awards/Recommends RFQ
+		TestReporter.logStep("Perform Award RFQ");
+		qPage1.processAddComments(CurrentView,RFQ_Number,inputComments,ActiveStatusIndex);
+
+		//Application Logout
+		TestReporter.logStep("Application Logout");
+		MainNav mainPage = new MainNav(getDriver());
+		mainPage.clickLogout();
+
+		TestReporter.logStep("********************************************************************************");
+		TestReporter.logStep("Login as approver to Approve RFQ ");
+		TestReporter.logStep("********************************************************************************");
+
+		// Application Login 
+		TestReporter.logStep("Login into application");
+		TestReporter.logStep("Approvals Role : "+approverRole);
+		LoginPage loginPage2 = new LoginPage(getDriver());
+		loginPage2.loginWithRuntimeUsername(approverRole.trim(),location);
+
+		// Navigating to Approvals Page
+		TestReporter.logStep("Clicking the Approvals Tab");
+		ApprovalsPage approvalPage1 = new ApprovalsPage(getDriver());
+		approvalPage1.click_ApprovalsSubTab();
+
+		// Reading Available Row for Approval Process
+		int selectedRow1 = approvalPage1.selectOrderToApprove();
+		TestReporter.logStep("Row Number : "+selectedRow1);
+
+		// Perform Approval Process
+		TestReporter.logStep("Perform Approval Process");
+		approvalPage1.performApprovalProcess();
+
+		// Click Approval Tab 
+		TestReporter.logStep("Clicking on Approval Tab");
+		approvalPage1.click_ApprovalsTab();
+		approvalPage1.click_ApprovalsSubTab();
+
+		// Perform RFQ search 
+		TestReporter.logStep("RFQ Search");
+		approvalPage1.perform_RFQSearch(rfqNumber);
+
+		//Reading RFQ Status
+		String getStatus1  = approvalPage1.read_RFQStatus();
+		TestReporter.logStep("RFQ Status  : "+getStatus1);
+
+		//Application Logout
+		TestReporter.logStep("Application Logout");
+		mainPage.clickLogout();
+
 	}
+
 }
