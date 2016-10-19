@@ -201,7 +201,7 @@ public class VerifyBuyerAwards_OR_RecommendsRFQ extends TestEnvironment{
 
 		// Perform Approval Process
 		TestReporter.logStep("Perform Approval Process");
-		approvalPage.performApprovalProcess();
+		approvalPage.performApprovalProcess(rfqNumber);
 
 		// Click Approval Tab 
 		TestReporter.logStep("Clicking on Approval Tab");
@@ -212,7 +212,7 @@ public class VerifyBuyerAwards_OR_RecommendsRFQ extends TestEnvironment{
 		approvalPage.perform_RFQSearch(rfqNumber);
 
 		//Reading RFQ Status
-		String getStatus  = approvalPage.read_RFQStatus();
+		String getStatus  = approvalPage.read_RFQStatus(rfqNumber);
 		TestReporter.logStep("RFQ Status  : "+getStatus);
 
 		//Application Logout
@@ -354,7 +354,7 @@ public class VerifyBuyerAwards_OR_RecommendsRFQ extends TestEnvironment{
 
 		// Perform Approval Process
 		TestReporter.logStep("Perform Approval Process");
-		approvalPage1.performApprovalProcess();
+		approvalPage1.performApprovalProcess(rfqNumber);
 
 		// Click Approval Tab 
 		TestReporter.logStep("Clicking on Approval Tab");
@@ -366,7 +366,7 @@ public class VerifyBuyerAwards_OR_RecommendsRFQ extends TestEnvironment{
 		approvalPage1.perform_RFQSearch(rfqNumber);
 
 		//Reading RFQ Status
-		String getStatus2  = approvalPage1.read_RFQStatus_ApprovalProcess();
+		String getStatus2  = approvalPage1.read_RFQStatus_ApprovalProcess(rfqNumber);
 		TestReporter.logStep("RFQ Status  : "+getStatus2);
 
 		//Application Logout

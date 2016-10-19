@@ -147,11 +147,13 @@ public class SupplierCollaborator {
 	 * @date    18/10/16
 	 */
 	public void search_PONumber(){
-		txtPONumber.set(getPONumber());
-		Sleeper.sleep(5000);
-		try{lstOrderStatus.click();}catch(Exception e){driver.executeJavaScript("arguments[0].click();",lstOrderStatus);}
-		Sleeper.sleep(5000);
-		try{lstOrderStatuses.get(0).click();}catch(Exception e){driver.executeJavaScript("arguments[0].click();",lstOrderStatuses.get(0));}
+		driver.executeJavaScript("arguments[0].click();",supplierCollaboratorTab);
+		pl.isDomComplete(driver,5);
+		//btnReset.jsClick();
+		try{btnReset.click();}catch(Exception e){driver.executeJavaScript("arguments[0].click();",btnReset);}
+		pl.isDomComplete(driver);
+		txtPONumber.syncVisible(10, false);
+		txtPONumber.sendKeys(getPONumber());
 		try{btnSearch.click();}catch(Exception e){driver.executeJavaScript("arguments[0].click();",btnSearch);}
 	}
 	/**

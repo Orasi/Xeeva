@@ -1,7 +1,6 @@
 package mainAppFlow;
 
 import java.text.ParseException;
-
 import org.testng.ITestContext;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
@@ -9,7 +8,6 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
-
 import com.orasi.utils.TestEnvironment;
 import com.orasi.utils.TestReporter;
 import com.orasi.utils.dataProviders.ExcelDataProvider;
@@ -205,7 +203,7 @@ public class VerifyRequestor_RecnUnrecieve_MultipleLines extends TestEnvironment
 
 		// Perform Approval Process
 		TestReporter.logStep("Perform Approval Process");
-		approvalPage.performApprovalProcess();
+		approvalPage.performApprovalProcess(rfqNumber);
 
 		// Click Approval Tab 
 		TestReporter.logStep("Clicking on Approval Tab");
@@ -216,7 +214,7 @@ public class VerifyRequestor_RecnUnrecieve_MultipleLines extends TestEnvironment
 		approvalPage.perform_RFQSearch(rfqNumber);
 
 		//Reading RFQ Status
-		String getStatus  = approvalPage.read_RFQStatus();
+		String getStatus  = approvalPage.read_RFQStatus(rfqNumber);
 		TestReporter.logStep("RFQ Status  : "+getStatus);
 
 		//Application Logout
@@ -358,7 +356,7 @@ public class VerifyRequestor_RecnUnrecieve_MultipleLines extends TestEnvironment
 
 		// Perform Approval Process
 		TestReporter.logStep("Perform Approval Process");
-		approvalPage1.performApprovalProcess();
+		approvalPage1.performApprovalProcess(RFQ_Number);
 
 		// Click Approval Tab 
 		TestReporter.logStep("Clicking on Approval Tab");
@@ -370,7 +368,7 @@ public class VerifyRequestor_RecnUnrecieve_MultipleLines extends TestEnvironment
 		approvalPage1.perform_RFQSearch(rfqNumber);
 
 		//Reading RFQ Status
-		String getStatus2  = approvalPage1.read_RFQStatus_ApprovalProcess();
+		String getStatus2  = approvalPage1.read_RFQStatus_ApprovalProcess(rfqNumber);
 		TestReporter.logStep("RFQ Status  : "+getStatus2);
 
 		//Application Logout
