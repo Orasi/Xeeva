@@ -191,7 +191,7 @@ public class VerifyApproverAbleToPerformAction extends TestEnvironment{
 
 		// Perform Approval Process
 		TestReporter.logStep("Perform Approval Process");
-		approvalPage.performApprovalProcess();
+		approvalPage.performApprovalProcess(rfqNumber);
 
 		// Click Approval Tab 
 		TestReporter.logStep("Clicking on Approval Tab");
@@ -202,7 +202,7 @@ public class VerifyApproverAbleToPerformAction extends TestEnvironment{
 		approvalPage.perform_RFQSearch(rfqNumber);
 		
 		//Reading RFQ Status
-		String getStatus  = approvalPage.read_RFQStatus();
+		String getStatus  = approvalPage.read_RFQStatus(rfqNumber);
 		TestReporter.logStep("RFQ Status  : "+getStatus);
 
 		//Application Logout

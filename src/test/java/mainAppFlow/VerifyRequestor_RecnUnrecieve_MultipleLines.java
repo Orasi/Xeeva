@@ -205,7 +205,7 @@ public class VerifyRequestor_RecnUnrecieve_MultipleLines extends TestEnvironment
 
 		// Perform Approval Process
 		TestReporter.logStep("Perform Approval Process");
-		approvalPage.performApprovalProcess();
+		approvalPage.performApprovalProcess(rfqNumber);
 
 		// Click Approval Tab 
 		TestReporter.logStep("Clicking on Approval Tab");
@@ -216,7 +216,7 @@ public class VerifyRequestor_RecnUnrecieve_MultipleLines extends TestEnvironment
 		approvalPage.perform_RFQSearch(rfqNumber);
 
 		//Reading RFQ Status
-		String getStatus  = approvalPage.read_RFQStatus();
+		String getStatus  = approvalPage.read_RFQStatus(rfqNumber);
 		TestReporter.logStep("RFQ Status  : "+getStatus);
 
 		//Application Logout
@@ -358,7 +358,7 @@ public class VerifyRequestor_RecnUnrecieve_MultipleLines extends TestEnvironment
 
 		// Perform Approval Process
 		TestReporter.logStep("Perform Approval Process");
-		approvalPage1.performApprovalProcess();
+		approvalPage1.performApprovalProcess(RFQ_Number);
 
 		// Click Approval Tab 
 		TestReporter.logStep("Clicking on Approval Tab");
@@ -370,7 +370,7 @@ public class VerifyRequestor_RecnUnrecieve_MultipleLines extends TestEnvironment
 		approvalPage1.perform_RFQSearch(rfqNumber);
 
 		//Reading RFQ Status
-		String getStatus2  = approvalPage1.read_RFQStatus_ApprovalProcess();
+		String getStatus2  = approvalPage1.read_RFQStatus_ApprovalProcess(rfqNumber);
 		TestReporter.logStep("RFQ Status  : "+getStatus2);
 
 		//Application Logout
@@ -408,7 +408,7 @@ public class VerifyRequestor_RecnUnrecieve_MultipleLines extends TestEnvironment
 
 		// Supplier Collaborator Page - Searching with PO Number
 		TestReporter.logStep("Searching with PO Number");
-		sCPage.search_PONumber();
+		sCPage.search_PONumber(PO_Number);
 		
 		//Reading Supplier Role
 		TestReporter.logStep("Reading Supplier Role");

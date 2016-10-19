@@ -202,7 +202,7 @@ public class VerifyBuyer_submitsRFQtoSuppliers extends TestEnvironment{
 
 		// Perform Approval Process
 		TestReporter.logStep("Perform Approval Process");
-		approvalPage.performApprovalProcess();
+		approvalPage.performApprovalProcess(rfqNumber);
 
 		// Click Approval Tab 
 		TestReporter.logStep("Clicking on Approval Tab");
@@ -213,7 +213,7 @@ public class VerifyBuyer_submitsRFQtoSuppliers extends TestEnvironment{
 		approvalPage.perform_RFQSearch(rfqNumber);
 
 		//REading RFQ Status
-		String getStatus  = approvalPage.read_RFQStatus();
+		String getStatus  = approvalPage.read_RFQStatus(rfqNumber);
 		TestReporter.logStep("RFQ Status  : "+getStatus);
 
 		//Application Logout

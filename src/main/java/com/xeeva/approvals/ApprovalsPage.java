@@ -67,14 +67,14 @@ public class ApprovalsPage {
 	}
 
 	//**Page Interactions**//*
-	
+
 	public void click_ApprovalsSubTab(){
 		pl.isDomComplete(driver,5);
 		approvalsSubTab.syncVisible(50, false);
 		driver.executeJavaScript("arguments[0].click();", approvalsSubTab);
 		Sleeper.sleep(5000);
 	}
-	
+
 
 	/**
 	 * @summary  Method to clcik on Approvals Tab
@@ -92,12 +92,36 @@ public class ApprovalsPage {
 	 * @author Lalitha Banda
 	 * @date  05/10/16
 	 **/
-	public void click_REQ(){
+	/*public void click_REQ(){
 		pl.isDomComplete(driver,5);
+		Sleeper.sleep(7000);
+		driver.executeJavaScript("arguments[0].click();", 
+				driver.findElement(By.xpath(ReqRow+"["+selectOrderToApprove()+"]//td[7]/div/a")));
+		//driver.findElement(By.xpath(ReqRow+"["+selectOrderToApprove()+"]//td[7]/div/a")).click();
+	}*/
+
+	public void click_REQ(String inputRFQ){
+		pl.isDomComplete(driver,5);
+		Sleeper.sleep(3000);
+		// Waiting till Record gets updated 
+		String Rfq = driver.findElement(By.xpath(".//*[@id='divREQList']/tbody/tr[1]/td[8]/span")).getText();
+		TestReporter.logStep("RFQ : "+Rfq);
+		do{
+			Sleeper.sleep(5000);
+			click_Search();
+			String requiredRFQ =  driver.findElement(By.xpath(".//*[@id='divREQList']/tbody/tr[1]/td[8]/span")).getText();
+			if(requiredRFQ.equalsIgnoreCase(inputRFQ)){
+				break;
+			}
+		}while(!Rfq.equalsIgnoreCase(inputRFQ));
+		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+		pl.isDomComplete(driver, 5);
+		// Clcik First Record to Approve 
 		driver.executeJavaScript("arguments[0].click();", 
 				driver.findElement(By.xpath(ReqRow+"["+selectOrderToApprove()+"]//td[7]/div/a")));
 		//driver.findElement(By.xpath(ReqRow+"["+selectOrderToApprove()+"]//td[7]/div/a")).click();
 	}
+
 	public String ReadRFQNumber(){
 		String returnValue = null;
 		if(selectOrderToApprove()!=0){
@@ -258,8 +282,8 @@ public class ApprovalsPage {
 	 * @author  Lalitha Banda
 	 * @date    10/10/2016
 	 */
-	public void performApprovalProcess(){
-		click_REQ();
+	public void performApprovalProcess(String inputRFQ){
+		click_REQ(inputRFQ);
 		click_Approve();
 		click_Process();
 	}
@@ -284,7 +308,7 @@ public class ApprovalsPage {
 	 * @author  Lalitha Banda
 	 * @date    10/10/2016
 	 */
-	public String read_RFQStatus(){
+	public String read_RFQStatus(String inputRFQ){
 		String status =null;
 		pageLoaded();
 		click_ApprovalsTab();
@@ -297,10 +321,10 @@ public class ApprovalsPage {
 			click_Search();
 			pl.isDomComplete(driver, 5);
 			System.out.println("Record Status : "+expectedStatus);
-			
+
 			if(expectedStatus.equalsIgnoreCase("Waiting for Approval")){
 				// Performing Approval Process
-				performApprovalProcess();	
+				performApprovalProcess(inputRFQ);	
 			}
 			// Reading REQ Status  			
 			do{
@@ -318,10 +342,10 @@ public class ApprovalsPage {
 		}
 		return status;
 	}
-	
-	
+
+
 	// Method for Reading status For Approval Tab Approving Process
-	public String read_RFQStatus_ApprovalProcess(){
+	public String read_RFQStatus_ApprovalProcess(String inputRFQ){
 		String status =null;
 		pageLoaded();
 		click_ApprovalsSubTab();
@@ -334,13 +358,15 @@ public class ApprovalsPage {
 			click_Search();
 			pl.isDomComplete(driver, 5);
 			System.out.println("Record Status : "+expectedStatus);
-			
+
 			if(expectedStatus.equalsIgnoreCase("Waiting for Approval")){
 				// Performing Approval Process
+				driver.manage().timeouts().implicitlyWait(50, TimeUnit.SECONDS);
+				click_ApprovalsTab();
 				click_ApprovalsSubTab();
-				performApprovalProcess();	
+				performApprovalProcess(inputRFQ);	
 			}
-						
+
 			// Reading REQ Status  			
 			do{
 				Sleeper.sleep(5000);
