@@ -1,4 +1,3 @@
-
 package com.xeeva.login;
 
 import java.util.ResourceBundle;
@@ -67,11 +66,10 @@ public class LoginPage {
 	public void loginWithCredentials(String role, String location){
 		txtUsername.set(userCredentialRepo.getString(role));
 		txtPassword.set(userCredentialRepo.getString("PASSWORD"));
-
-		if (lstLocation.syncVisible(10, false)){
+		if (lstLocation.syncVisible(30, false)){
 			lstLocation.select(location);
 		}
-		btnLogin.syncVisible(90, false);
+		btnLogin.syncVisible(30, false);
 		btnLogin.jsClick();
 	}
 
@@ -87,10 +85,10 @@ public class LoginPage {
 		txtUsername.set(role);
 		txtPassword.set(userCredentialRepo.getString("PASSWORD"));
 
-		if (lstLocation.syncVisible(10, false)){
+		if (lstLocation.syncVisible(20, false)){
 			lstLocation.select(location);
 		}
-		btnLogin.syncVisible(90, false);
+		btnLogin.syncVisible(20, false);
 		btnLogin.jsClick();
 	}
 
@@ -103,6 +101,7 @@ public class LoginPage {
 	 */
 	public void loginWithSupplierCredentials(String role){
 		pl.isDomComplete(driver);
+		Sleeper.sleep(5000);
 		WebDriverWait wait = new WebDriverWait(driver,10);
 		wait.until(ExpectedConditions.elementToBeClickable(By.className("dropdown-toggle")));
 		driver.findElement(By.cssSelector(".dropdown-menu>li>a")).jsClick();
@@ -112,4 +111,25 @@ public class LoginPage {
 		btnlogin.syncVisible(10, false);
 		btnlogin.click();
 	}
+	
+	/**
+	 * @Summary: This method logins to the Market Place application with captured Supplier credentials.  
+	 * @author Praveen Namburi,@Version: Created 17-10-2016
+	 * @param SupplierRole
+	 * @param location
+	 */
+	public void loginWithRuntimeSupplierCredentials(String SupplierRole, String location){
+		pl.isDomComplete(driver);
+		Sleeper.sleep(5000);
+		WebDriverWait wait = new WebDriverWait(driver,10);
+		wait.until(ExpectedConditions.elementToBeClickable(By.className("dropdown-toggle")));
+		driver.findElement(By.cssSelector(".dropdown-menu>li>a")).jsClick();
+		pl.isDomComplete(driver);
+		txtEmail.set(SupplierRole);
+		txtPasswrd.set(userCredentialRepo.getString("PASSWORD"));
+		btnlogin.syncVisible(10, false);
+		btnlogin.click();
+	}
+	
 }
+

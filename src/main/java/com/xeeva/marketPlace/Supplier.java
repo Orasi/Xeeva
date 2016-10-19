@@ -198,7 +198,7 @@ public class Supplier {
 		}
 		btnSubmitResponse.syncVisible(5, false);
 		try{btnSubmitResponse.click();}catch(Exception e){ driver.executeJavaScript("arguments[0].click();", btnSubmitResponse);}
-		verify_RFQResponse();
+		//verify_RFQResponse();
 	}
 
 	
@@ -209,7 +209,7 @@ public class Supplier {
 	 *
 	 */
 	public void verify_RFQResponse(){
-		WebDriverWait wait = new WebDriverWait(driver,5);
+		WebDriverWait wait = new WebDriverWait(driver,15);
 		wait.until(ExpectedConditions.
 				visibilityOfElementLocated(By.xpath("//*[@id='toast-container']/div/div[2]")));
 		String getRFQResponseMessage = lblInfoMsg.getText();

@@ -6,9 +6,9 @@
 	<parameter name="runLocation" value="local" />
 	<parameter name="browserVersion" value="" />
 	<parameter name="operatingSystem" value="windows" />
- 	<test name="VerifyBuyerRecommendsRFQ">
+ 	<test name="Verify_createInvoiceBySupplier">
 		<classes>
-			<class name="mainAppFlow.VerifyBuyerAwards_OR_RecommendsRFQ" />
+			<class name="mainAppFlow.Verify_createInvoiceBySupplier" />
 		</classes>
 	</test> 
 </suite> <!-- Suite -->

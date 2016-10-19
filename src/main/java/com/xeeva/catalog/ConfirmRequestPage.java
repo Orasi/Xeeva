@@ -203,7 +203,7 @@ public class ConfirmRequestPage {
 		}else if (chkNonBudgeted.isDisplayed()) {
 			click_NonBudgeted();
 		}else {
-			btnConfirm.syncVisible(2, false);
+			btnConfirm.syncVisible(5, false);
 			driver.executeJavaScript("arguments[0].click();", btnConfirm);
 			driver.setElementTimeout(5);
 			//driver.manage().timeouts().implicitlyWait(Constants.PAGE_TIMEOUT, TimeUnit.SECONDS);
