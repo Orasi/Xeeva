@@ -67,10 +67,10 @@ public class LoginPage {
 		txtUsername.set(userCredentialRepo.getString(role));
 		txtPassword.set(userCredentialRepo.getString("PASSWORD"));
 
-		if (lstLocation.syncVisible(20, false)){
+		if (lstLocation.syncVisible(30, false)){
 			lstLocation.select(location);
 		}
-		btnLogin.syncVisible(90, false);
+		btnLogin.syncVisible(30, false);
 		btnLogin.jsClick();
 	}
 
@@ -89,7 +89,7 @@ public class LoginPage {
 		if (lstLocation.syncVisible(20, false)){
 			lstLocation.select(location);
 		}
-		btnLogin.syncVisible(50, false);
+		btnLogin.syncVisible(20, false);
 		btnLogin.jsClick();
 	}
 
@@ -102,6 +102,7 @@ public class LoginPage {
 	 */
 	public void loginWithSupplierCredentials(String role){
 		pl.isDomComplete(driver);
+		Sleeper.sleep(5000);
 		WebDriverWait wait = new WebDriverWait(driver,10);
 		wait.until(ExpectedConditions.elementToBeClickable(By.className("dropdown-toggle")));
 		driver.findElement(By.cssSelector(".dropdown-menu>li>a")).jsClick();
@@ -120,6 +121,7 @@ public class LoginPage {
 	 */
 	public void loginWithRuntimeSupplierCredentials(String SupplierRole, String location){
 		pl.isDomComplete(driver);
+		Sleeper.sleep(5000);
 		WebDriverWait wait = new WebDriverWait(driver,10);
 		wait.until(ExpectedConditions.elementToBeClickable(By.className("dropdown-toggle")));
 		driver.findElement(By.cssSelector(".dropdown-menu>li>a")).jsClick();

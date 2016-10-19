@@ -354,7 +354,7 @@ public class VerifyBuyerAwards_OR_RecommendsRFQ extends TestEnvironment{
 
 		// Perform Approval Process
 		TestReporter.logStep("Perform Approval Process");
-		approvalPage1.performApprovalProcess(rfqNumber);
+		approvalPage1.performApprovalProcess(RFQ_Number);
 
 		// Click Approval Tab 
 		TestReporter.logStep("Clicking on Approval Tab");

@@ -399,11 +399,15 @@ public class VerifyRequestor_RecnUnrecieve_MultipleLines extends TestEnvironment
 		// Supplier Collaborator Page - Performing Receive Purchase Order
 		TestReporter.logStep("Performing Receive Purchase Order");
 		sCPage.perform_RecPurchaseOrder(PkgSlipNo);
+		
+		//Get PO_Number.
+		String PO_Number = sCPage.getPONumber();
+		TestReporter.log("Supplier Role : " + PO_Number);
 
 		// Supplier Collaborator Page - Searching with PO Number
 		TestReporter.logStep("Searching with PO Number");
-		sCPage.search_PONumber();
-
+		sCPage.search_PONumber(PO_Number);
+		
 		//Reading Supplier Role
 		TestReporter.logStep("Reading Supplier Role");
 		String Supplier_Role = sCPage.getSupplierEmail();

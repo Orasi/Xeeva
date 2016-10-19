@@ -51,9 +51,11 @@ public class SupplierCollaborator {
 	@FindBy(xpath="//*[@id='tblSCMultipleRecieving']/tbody/tr[1]/th[11]/label/span")	private Checkbox chkCopyToAll;
 	@FindBy(id="btnSaveMulti")	private Button btnSave;
 	@FindBy(id="fancybox-close")	private Button btnClose;
-	@FindBy(xpath="//*[@id='tblSCMultipleRecieving']/tbody/tr/td[2]/span")	private Label lblPONumber;
-
+	//@FindBy(xpath="//*[@id='tblSCMultipleRecieving']/tbody/tr/td[2]/span")	private Label lblPONumber;
+	@FindBy(xpath="//*[@id='tblSCMultipleRecieving']/tbody/tr[2]/td[2]/span")	private Element lblPONumber;
 	@FindBy(id="txtPO")	private Textbox txtPONumber;
+	@FindBy(xpath="//*[@id='tblSCList']/tbody/tr[2]/td[18]/div/span")	private Element elemousehover;
+	
 
 
 	//**Constructor**//*
@@ -112,7 +114,9 @@ public class SupplierCollaborator {
 	 * @date    18/10/16
 	 */
 	public String getPONumber(){
-		return lblPONumber.getText().trim();
+		String PoNum = lblPONumber.getText().trim();
+		TestReporter.log("PO Number : "+PoNum);
+		return PoNum;
 	}
 
 
@@ -146,15 +150,17 @@ public class SupplierCollaborator {
 	 * @author  Lalitha Banda
 	 * @date    18/10/16
 	 */
-	public void search_PONumber(){
+	public void search_PONumber(String poNum){
 		driver.executeJavaScript("arguments[0].click();",supplierCollaboratorTab);
-		pl.isDomComplete(driver,5);
-		//btnReset.jsClick();
-		try{btnReset.click();}catch(Exception e){driver.executeJavaScript("arguments[0].click();",btnReset);}
 		pl.isDomComplete(driver);
+		btnReset.syncHidden(5,false);
+		driver.executeJavaScript("arguments[0].click();",btnReset);
+		btnSearch.syncHidden(3, false);
 		txtPONumber.syncVisible(10, false);
-		txtPONumber.sendKeys(getPONumber());
-		try{btnSearch.click();}catch(Exception e){driver.executeJavaScript("arguments[0].click();",btnSearch);}
+		txtPONumber.click();
+		txtPONumber.sendKeys(poNum);
+		Sleeper.sleep(2000);
+		driver.executeJavaScript("arguments[0].click();",btnSearch);
 	}
 	/**
 	 * @summary Method for grabbing Supplier email 
@@ -163,19 +169,22 @@ public class SupplierCollaborator {
 	 */
 	public String getSupplierEmail() {
 		String returnValue = null;
-		String xpath = "//*[@id='tblSCList']/tbody/tr[2]/td[18]/div/span";
 		Sleeper.sleep(5000);
-		WebDriverWait wait = new WebDriverWait(driver, 10);
-		WebElement element = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(xpath)));
+		WebDriverWait wait = new WebDriverWait(driver, 15);
+		WebElement element = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@id='tblSCList']/tbody/tr[2]/td[22]/div/span")));
 		element.click();
+		Sleeper.sleep(4000);
+		WebDriverWait wait1 = new WebDriverWait(driver, 15);
+		WebElement element1 = wait1.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@id='tblSCList']/tbody/tr[2]/td[18]/div/span")));
+		element1.click();
 		Sleeper.sleep(5000);
 		List<WebElement> totTable = driver.findElements(By.cssSelector(".DataGridrowa>td"));
+		TestReporter.logStep("size : "+totTable.size());
 		for(WebElement inputTable :totTable){
 			if(inputTable.getText().contains("@")){
 				returnValue =inputTable.getText();
 				break;
 			}
-
 		}
 		return returnValue;
 	}
